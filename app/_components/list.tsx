@@ -133,7 +133,7 @@ const ProductList = ({ product }: ProductListProps) => {
 
   return (
     <div className="flex flex-col gap-2 ">
-      <div className="flex justify-between gap-1 lg:justify-end lg:gap-4 text-sm">
+      {/* <div className="flex justify-between gap-1 lg:justify-end lg:gap-4 text-sm">
         <select
           onChange={handleSortChange}
           value={sortOrder}
@@ -266,7 +266,7 @@ const ProductList = ({ product }: ProductListProps) => {
         >
           {itemOrientation ? <Columns /> : <Rows />}
         </Button>
-      </div>
+      </div> */}
       <div
         className={`grid ${
           itemOrientation ? "grid-cols-1 gap-1" : "lg:grid-cols-4 grid-cols-2 gap-2"
