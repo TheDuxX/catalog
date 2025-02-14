@@ -26,7 +26,7 @@ const Header = () => {
     <>
       <div className="w-full h-auto shadow-md  flex flex-col justify-center items-center">
         <div className="w-full shadow-md max-h-24 flex flex-row justify-center items-center z-10 bg-background">
-          <div className="relative lg:w-[300px] w-[200px] h-svh">
+          <div className="relative lg:w-[300px] w-[200px] h-24">
             <Image
               src={"/logo.png"}
               alt="logo"
