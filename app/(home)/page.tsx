@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import ProductList from "../_components/list";
 import { createClient } from "../_utils/supabase/server";
-import Header from "./_component/header";
+import Header from "../_components/header";
 import SlideBanner from "./_component/slide-banner";
 import Search from "../_components/search";
 import BrandTags from "./_component/tags";
@@ -36,7 +36,6 @@ const Home = async () => {
 
   return (
     <main className="flex flex-col gap-2 justify-center items-center">
-      <Header />
 
       <div className="space-y-4 w-full p-2 lg:max-w-[1150px]">
         <SlideBanner />
