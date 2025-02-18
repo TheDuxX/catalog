@@ -41,7 +41,7 @@ const Home = async () => {
         <SlideBanner />
         {/* <BrandTags /> */}
       </div>
-      <div className="relative w-full max-w-[1154px]">
+      <div className="relative w-full max-w-[1150px] ">
         <h2 className="font-semibold text-lg px-2">Mais Vistos</h2>
         <div className="flex gap-2 overflow-x-auto flex-nowrap [&::-webkit-scrollbar]:hidden p-2">
           {mostViewsProducts.slice(0, 5).map((product) => (
@@ -49,7 +49,7 @@ const Home = async () => {
           ))}
         </div>
       </div>
-      <div className="relative w-full max-w-[1154px]">
+      <div className="relative w-full max-w-[1150px]">
         <h2 className="font-semibold text-lg px-2">Adiconados Recentemente</h2>
         <div className="flex gap-2 overflow-x-auto flex-nowrap [&::-webkit-scrollbar]:hidden p-2">
           {recentProducts.slice(0, 5).map((product) => (

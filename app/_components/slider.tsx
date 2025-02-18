@@ -16,21 +16,15 @@ const Slider = ({ width, height }: SliderProps) => {
     {
       id: 1,
       name: "Valtra",
-      src: "/logo.png",
+      src: "/banner_home.png",
       alt: "Logo 1",
-    },
-    {
-      id: 2,
-      name: "Fiat",
-      src: "/logo.png",
-      alt: "Logo 2",
     },
   ];
 
   return (
     <>
       <Carousel
-        className="w-full h-full rounded-md shadow-md p-2"
+        className="w-full h-full rounded-md shadow-md overflow-hidden"
         opts={{
           align: "start",
           loop: true,
@@ -42,7 +36,8 @@ const Slider = ({ width, height }: SliderProps) => {
               src={photo.src}
               alt={photo.alt}
               sizes="(max-width: 768px) 100vw, (min-width: 768px) 50vw, 33vw"
-              className="object-contain object-center rounded-md"
+              className="w-full h-full object-cover break-inside-auto
+"
             />
           ))}
         </CarouselContent>

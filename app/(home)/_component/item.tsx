@@ -77,11 +77,11 @@ const Item = ({ product }: ProductItemProps) => {
             <h2 className={`font-medium line-clamp-1 text-lg`}>
               {product.name}
             </h2>
-            <small>
+            <small className="text-secondary">
               {product.mark ? product.mark.name : "Marca não disponível"}
             </small>
           </div>
-          <h3 className={`scroll-m-20 text-lg font-semibold tracking-tight`}>
+          <h3 className={`scroll-m-20 text-lg lg:text-2xl font-semibold tracking-tight`}>
             {formattedPrice}
           </h3>
         </div>
