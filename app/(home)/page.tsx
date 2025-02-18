@@ -1,12 +1,7 @@
 import toast from "react-hot-toast";
-import ProductList from "../_components/list";
 import { createClient } from "../_utils/supabase/server";
-import Header from "../_components/header";
-import SlideBanner from "./_component/slide-banner";
-import Search from "../_components/search";
-import BrandTags from "./_component/tags";
-import MostViews from "./_component/most-views";
 import Item from "./_component/item";
+import ResponsiveCarousel from "./_component/responsive_carossel";
 
 const Home = async () => {
   const supabase = await createClient();
@@ -36,14 +31,12 @@ const Home = async () => {
 
   return (
     <main className="flex flex-col gap-2 justify-center items-center">
-
       <div className="space-y-4 w-full p-2 lg:max-w-[1150px]">
-        <SlideBanner />
-        {/* <BrandTags /> */}
+        <ResponsiveCarousel />
       </div>
       <div className="relative w-full max-w-[1150px] ">
         <h2 className="font-semibold text-lg px-2">Mais Vistos</h2>
-        <div className="flex gap-2 overflow-x-auto flex-nowrap [&::-webkit-scrollbar]:hidden p-2">
+        <div className="flex gap-2 overflow-x-auto flex-nowrap [&::-webkit-scrollbar]:hidden p-2 pr-0">
           {mostViewsProducts.slice(0, 5).map((product) => (
             <Item key={product.id} product={product} />
           ))}
@@ -51,7 +44,7 @@ const Home = async () => {
       </div>
       <div className="relative w-full max-w-[1150px]">
         <h2 className="font-semibold text-lg px-2">Adiconados Recentemente</h2>
-        <div className="flex gap-2 overflow-x-auto flex-nowrap [&::-webkit-scrollbar]:hidden p-2">
+        <div className="flex gap-2 overflow-x-auto flex-nowrap [&::-webkit-scrollbar]:hidden p-2 pr-0">
           {recentProducts.slice(0, 5).map((product) => (
             <Item key={product.id} product={product} />
           ))}
