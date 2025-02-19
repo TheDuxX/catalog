@@ -4,9 +4,17 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { createSupabaseClient } from "@/app/_utils/supabase/client";
 
+type BannersProps = {
+  id?: string;
+  name: string;
+  image_url: string;
+  is_visible: boolean;
+  created_at: Date;
+};
+
 const ResponsiveCarousel = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const [bannerImages, setBannerImages] = useState<string[]>([]);
+  const [banners, setBanners] = useState<BannersProps[]>([]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -16,23 +24,26 @@ const ResponsiveCarousel = () => {
   }, []);
 
   useEffect(() => {
-    const supabase = createSupabaseClient();
+    const fetchBanners = async () => {
+      const supabase = createSupabaseClient();
 
-    const fetchImages = async () => {
-      const { data: imageUrls, error } = await supabase
+      const { data, error } = await supabase
         .from("banners")
-        .select("*");
+        .select("*")
+        .eq("is_visible", true) // Filtra banners visíveis
+        .order("created_at", { ascending: false }); // Ordena pelos mais recentes
 
       if (error) {
-        console.error("Erro ao buscar imagens:", error);
+        console.error("Erro ao buscar banners:", error);
         return;
       }
 
-      setBannerImages(imageUrls);
-      console.log(imageUrls);
+      if (data) {
+        setBanners(data);
+      }
     };
 
-    fetchImages();
+    fetchBanners();
   }, []);
 
   return (
@@ -45,13 +56,13 @@ const ResponsiveCarousel = () => {
       showStatus={false}
       showIndicators={isMobile ? false : true}
       emulateTouch
-      className="lg:max-w-[1150px] lg:max-h-[240px] sm:max-w-full sm:max-h-[160px] rounded-md overflow-hidden p-0 shadow"
+      className="lg:max-w-[1150px] lg:max-h-[240px] sm:max-w-full sm:max-h-[160px] rounded-md overflow-hidden p-0 shadow "
     >
-      {bannerImages.map((image, index) => (
+      {banners.map((banner, index) => (
         <img
           key={index}
-          src={image}
-          alt={`Banner ${index + 1}`}
+          src={banner.image_url}
+          alt={banner.name}
           className="w-full object-cover"
         />
       ))}
