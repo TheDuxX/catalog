@@ -4,13 +4,13 @@ import { Button } from "./ui/button";
 
 const Search = () => {
   return (
-    <div className="flex flex-row gap-2 items-center justify-center">
+    <div className="w-full flex flex-row items-center justify-center gap-2 border border-solid rounded-md bg-white pr-2">
       <Input
         type="search"
-        placeholder="Digite aqui sua pesquisa"
-        className="rounded-full lg:min-h-12"
+        placeholder="Busque aqui a peça que deseja"
+        className="border-none shadow-none active:"
       />
-      <Button className="rounded-full" >
+      <Button variant="ghost" className="hover:bg-transparent hover:text-accent-foreground">
         <SearchIcon />
       </Button>
     </div>

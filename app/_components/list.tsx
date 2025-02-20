@@ -17,6 +17,7 @@ import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
 import { Label } from "./ui/label";
 import toast from "react-hot-toast";
 import { createSupabaseClient } from "../_utils/supabase/client";
+import Search from "./search";
 
 interface ProductListProps {
   product: {
@@ -133,11 +134,12 @@ const ProductList = ({ product }: ProductListProps) => {
 
   return (
     <div className="flex flex-col gap-2 ">
-      {/* <div className="flex justify-between gap-1 lg:justify-end lg:gap-4 text-sm">
+      <div className="flex justify-between gap-1 lg:gap-2 text-sm">
+        <Search />
         <select
           onChange={handleSortChange}
           value={sortOrder}
-          className="rounded-md border border-solid px-1"
+          className="rounded-md px-1 bg-primary text-white"
         >
           <option value="ascending">Preço: Crescente</option>
           <option value="descending">Preço: Decrescente</option>
@@ -146,7 +148,7 @@ const ProductList = ({ product }: ProductListProps) => {
         <select
           onChange={handleSelectChange}
           value={itemCount}
-          className="px-2 rounded-md border border-solid"
+          className="px-2 rounded-md bg-primary text-white"
         >
           <option value="10">10</option>
           <option value="20">20</option>
@@ -154,9 +156,9 @@ const ProductList = ({ product }: ProductListProps) => {
           <option value="100">100</option>
         </select>
         <Sheet>
-          <SheetTrigger className="flex items-center px-2 rounded-md border border-solid bg-white">
+          <SheetTrigger className="flex items-center px-2 rounded-md bg-primary text-white">
             <div className="flex items-center">
-              <FilterIcon size={18} className="fill-primary stroke-none" />
+              <FilterIcon size={18} className="fill-white stroke-none" />
               Filtros
             </div>
           </SheetTrigger>
@@ -261,15 +263,17 @@ const ProductList = ({ product }: ProductListProps) => {
         </Sheet>
         <Button
           onClick={toggleOrientation}
-          className="m-0 px-2"
+          className="m-0 aspect-square p-2 bg-primary text-white border-none"
           variant="outline"
         >
           {itemOrientation ? <Columns /> : <Rows />}
         </Button>
-      </div> */}
+      </div>
       <div
         className={`grid ${
-          itemOrientation ? "grid-cols-1 gap-1" : "lg:grid-cols-4 grid-cols-2 gap-2"
+          itemOrientation
+            ? "grid-cols-1 gap-1"
+            : "lg:grid-cols-4 grid-cols-2 gap-2"
         } `}
       >
         {sortedProducts.slice(0, itemCount).map((product) => (
