@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
 import { createSupabaseClient } from "../_utils/supabase/client";
+import SaleButton from "../(pages)/product/[id]/_component/sale-button";
 
 interface ProductItemProps {
   product: {
@@ -63,7 +64,7 @@ const Item = ({ product, itemOrientation }: ProductItemProps) => {
       onClick={handleProductClick}
     >
       <CardContent
-        className={`p-1 flex ${
+        className={`p-2 flex ${
           itemOrientation ? "flex-row " : "flex-col justify-between"
         } `}
       >
@@ -103,11 +104,12 @@ const Item = ({ product, itemOrientation }: ProductItemProps) => {
           </div>
           <h3
             className={`scroll-m-20 ${
-              itemOrientation ? "text-xl" : "text-lg"
+              itemOrientation ? "text-3xl" : "text-3xl"
             } font-semibold tracking-tight`}
           >
             {formattedPrice}
           </h3>
+          {/* <SaleButton product={product} /> */}
         </div>
       </CardContent>
     </Card>

@@ -17,7 +17,7 @@ import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
 import { Label } from "./ui/label";
 import toast from "react-hot-toast";
 import { createSupabaseClient } from "../_utils/supabase/client";
-import Search from "./search";
+import SearchBar from "./search";
 
 interface ProductListProps {
   product: {
@@ -135,7 +135,7 @@ const ProductList = ({ product }: ProductListProps) => {
   return (
     <div className="flex flex-col gap-2 ">
       <div className="flex justify-between gap-1 lg:gap-2 text-sm">
-        <Search />
+        <SearchBar />
         <select
           onChange={handleSortChange}
           value={sortOrder}
@@ -271,9 +271,7 @@ const ProductList = ({ product }: ProductListProps) => {
       </div>
       <div
         className={`grid ${
-          itemOrientation
-            ? "grid-cols-1 gap-1"
-            : "lg:grid-cols-4 grid-cols-2 gap-2"
+          itemOrientation ? "grid-cols-1 gap-1" : "lg:grid-cols-5 md:grid-cols-2 gap-2"
         } `}
       >
         {sortedProducts.slice(0, itemCount).map((product) => (
