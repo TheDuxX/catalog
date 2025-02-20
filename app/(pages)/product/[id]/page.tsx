@@ -9,6 +9,7 @@ import { Button } from "@/app/_components/ui/button";
 import { FindUniqueProduct } from "@/app/_lib/utils";
 import { Minus, Plus } from "lucide-react";
 import ResponsiveCarousel from "./_component/responsive_carossel";
+import SaleButton from "./_component/sale-button";
 
 interface ProdctDetailsPageProps {
   params: {
@@ -87,9 +88,7 @@ const ProductDetailPage = async ({ params }: ProdctDetailsPageProps) => {
                     <Minus className="opacity-50" />
                   </div>
                 </div>
-                <Button className="" variant="secondary">
-                  <p className="">Fazer pedido</p>
-                </Button>
+                <SaleButton product={product}/>
               </div>
             </div>
           </div>
