@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import { useIsMobile } from "@/app/_lib/useIsMobile";
 
 type BannersProps = {
   id?: string;
@@ -36,20 +37,14 @@ interface ProductItemProps {
 }
 
 const ResponsiveCarousel = ({ product }: ProductItemProps) => {
-  const [isMobile, setIsMobile] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const isMobile = useIsMobile();
 
   return (
-    <div className="flex gap-4">
+    <div className={`flex gap-4 lg:flex-row flex-col-reverse`}>
       {/* Miniaturas na esquerda */}
-      <div className="flex flex-col gap-2 w-20">
+      <div className={`flex gap-2 w-20 ${isMobile ? "flex-row" : "flex-col"}`}>
         {product.imageUrls.map((src, index) => (
           <img
             key={index}
