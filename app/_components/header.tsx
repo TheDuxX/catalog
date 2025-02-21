@@ -25,8 +25,8 @@ const Header = () => {
   return (
     <>
       <div className="w-full h-auto shadow-md  flex flex-col justify-center items-center">
-        <div className="w-full shadow-md max-h-24 flex flex-row justify-center items-center z-10 bg-background">
-          <div className="relative lg:w-[300px] w-[200px] h-24">
+        <div className="w-full max-w-[1150px] max-h-24 flex justify-start md:justify-center px-2  items-center z-10 bg-background">
+          <div className="relative md:w-[300px] w-[200px] h-24">
             <Image
               src={"/logo.png"}
               alt="logo"
@@ -35,7 +35,7 @@ const Header = () => {
             />
           </div>
         </div>
-        <div className="w-full min-h-16 h-full flex flex-row items-center justify-center bg-secondary">
+        <div className="w-full min-h-16 h-full md:flex flex-row items-center justify-center bg-secondary hidden">
           <div className="lg:max-w-[1140px] w-full flex flex-row justify-center items-center gap-1">
             {link.map((link, index) => (
               <Link
