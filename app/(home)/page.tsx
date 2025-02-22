@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import { createClient } from "../_utils/supabase/server";
 import Item from "./_component/item";
 import ResponsiveCarousel from "./_component/responsive_carossel";
+import SearchBar from "../_components/search";
 
 const Home = async () => {
   const supabase = await createClient();
@@ -30,9 +31,12 @@ const Home = async () => {
   );
 
   return (
-    <main className="flex flex-col gap-2 justify-center items-center">
-      <div className="space-y-4 w-full p-2 lg:max-w-[1150px]">
+    <main className="flex flex-col gap-2 justify-center items-center py-2">
+      <div className="w-full px-2 lg:max-w-[1150px]">
         <ResponsiveCarousel />
+      </div>
+      <div className="w-full md:max-w-[1150px] px-2">
+        <SearchBar />
       </div>
       <div className="relative w-full max-w-[1150px] ">
         <h2 className="font-semibold text-lg px-2">Mais Vistos</h2>

@@ -15,24 +15,30 @@ const SearchBar = () => {
 
   return (
     <>
-      <div className="flex flex-row gap-2 w-full bg-white border border-solid rounded-md">
+      <div className="flex flex-row gap-2 w-full bg-white border border-solid rounded-full p-2 items-center justify-between">
         <Input
           type="search"
           placeholder="Digite aqui sua pesquisa"
           value={searchTerm}
           onChange={handleSearch}
-          className="border-none shadow-none"
+          className="border-none shadow-none w-full placeholder:text-lg"
         />
-        <Button
-          size="icon"
-          className="aspect-square"
+        {/* <Button
+          className="p-0 m-0"
+          size="lg"
           variant="ghost"
-          onClick={() =>
-            router.push(`/products/search?query=${encodeURIComponent(searchTerm)}`)
-          }
+          
         >
-          <SearchIcon size={18} />
-        </Button>
+        </Button> */}
+        <SearchIcon
+          size={24}
+          className="mx-2"
+          onClick={() =>
+            router.push(
+              `/products/search?query=${encodeURIComponent(searchTerm)}`
+            )
+          }
+        />
       </div>
     </>
   );
