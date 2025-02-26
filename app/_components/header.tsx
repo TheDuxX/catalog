@@ -37,12 +37,14 @@ const Header = () => {
       <div className="w-full h-auto shadow-md flex md:flex-col flex-row justify-center items-center bg-background">
         <div className="w-full max-w-[1150px] max-h-24 flex justify-start md:justify-center px-2  items-center z-10 ">
           <div className="relative md:w-[300px] w-[200px] h-24">
-            <Image
-              src={"/logo.png"}
-              alt="logo"
-              fill
-              className="object-contain"
-            />
+            <Link href={"/"}>
+              <Image
+                src={"/logo.png"}
+                alt="logo"
+                fill
+                className="object-contain"
+              />
+            </Link>
           </div>
         </div>
         <div className="block md:hidden px-4">
