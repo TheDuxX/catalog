@@ -129,7 +129,10 @@ const ContactForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" variant="secondary">Enviar</Button>
+          <div className="w-full flex gap-2">
+            <Button type="submit" variant="secondary" className="w-full">Enviar</Button>
+            <Button type="reset" variant="outline" className="w-full">Limpar</Button>
+          </div>
         </form>
       </Form>
     </>
