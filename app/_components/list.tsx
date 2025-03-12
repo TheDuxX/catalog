@@ -18,6 +18,7 @@ import { Label } from "./ui/label";
 import toast from "react-hot-toast";
 import { createSupabaseClient } from "../_utils/supabase/client";
 import SearchBar from "./search";
+import Filters from "./filters";
 
 interface ProductListProps {
   product: {
@@ -136,7 +137,7 @@ const ProductList = ({ product }: ProductListProps) => {
     <div className="flex flex-col gap-2 item">
       <div className="flex md:flex-row flex-col px-2 justify-between gap-1 lg:gap-2 text-sm">
         <SearchBar />
-        <div className="flex flex-row gap-2 md:w-auto w-full justify-between">
+        {/* <div className="flex flex-row gap-2 md:w-auto w-full justify-between">
           <select
             onChange={handleSortChange}
             value={sortOrder}
@@ -268,7 +269,8 @@ const ProductList = ({ product }: ProductListProps) => {
           >
             {itemOrientation ? <Columns /> : <Rows />}
           </Button>
-        </div>
+        </div> */}
+        <Filters product={product}/>
       </div>
       <div
         className={`grid ${
