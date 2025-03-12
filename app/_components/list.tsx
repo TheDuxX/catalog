@@ -133,145 +133,146 @@ const ProductList = ({ product }: ProductListProps) => {
   });
 
   return (
-    <div className="flex flex-col gap-2 ">
-      <div className="flex justify-between gap-1 lg:gap-2 text-sm">
+    <div className="flex flex-col gap-2 item">
+      <div className="flex md:flex-row flex-col px-2 justify-between gap-1 lg:gap-2 text-sm">
         <SearchBar />
-        <select
-          onChange={handleSortChange}
-          value={sortOrder}
-          className="rounded-md px-1 bg-primary text-white"
-        >
-          <option value="ascending">Preço: Crescente</option>
-          <option value="descending">Preço: Decrescente</option>
-          <option value="alphabetical">Ordem alfabética</option>
-        </select>
-        <select
-          onChange={handleSelectChange}
-          value={itemCount}
-          className="px-2 rounded-md bg-primary text-white"
-        >
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>
-        <Sheet>
-          <SheetTrigger className="flex items-center px-2 rounded-md bg-primary text-white">
-            <div className="flex items-center">
-              <FilterIcon size={18} className="fill-white stroke-none" />
-              Filtros
-            </div>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader className="text-left space-y-1 border-solid border-b-[1px] pb-2">
-              <SheetTitle>Filtros</SheetTitle>
-              <SheetDescription>
-                Selecione os filtros que deseja.
-              </SheetDescription>
-            </SheetHeader>
-            <div className="mt-2 flex flex-col">
-              <h2 className="font-semibold">Status do Produto</h2>
-              <RadioGroup defaultValue="all" onValueChange={setFilterStatus}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="activated" id="r1" />
-                  <Label
-                    htmlFor="r1"
-                    className="text-sm leading-none font-normal"
-                  >
-                    Ativos
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="disabled" id="r2" />
-                  <Label
-                    htmlFor="r2"
-                    className="text-sm leading-none font-normal"
-                  >
-                    Desativados
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="all" id="r3" />
-                  <Label
-                    htmlFor="r3"
-                    className="text-sm leading-none font-normal"
-                  >
-                    Todos
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-            <div className="mt-2 flex flex-col">
-              <h2 className="font-semibold">Categorias</h2>
-              {categories?.length > 0 ? (
-                categories.map((category) => (
-                  <div className="flex gap-2 py-2" key={category.id}>
-                    <Checkbox
-                      id={category.id}
-                      checked={selectedCategory === category.id}
-                      onCheckedChange={() =>
-                        setSelectedCategory(
-                          selectedCategory === category.id ? null : category.id
-                        )
-                      }
-                    />
+        <div className="flex flex-row gap-2 md:w-auto w-full justify-between">
+          <select
+            onChange={handleSortChange}
+            value={sortOrder}
+            className="rounded-md px-1 md:w-auto w-full bg-primary text-white"
+          >
+            <option value="ascending">Preço: Crescente</option>
+            <option value="descending">Preço: Decrescente</option>
+            <option value="alphabetical">Ordem alfabética</option>
+          </select>
+          <select
+            onChange={handleSelectChange}
+            value={itemCount}
+            className="px-2 rounded-md bg-primary md:w-auto w-full text-white"
+          >
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+          <Sheet>
+            <SheetTrigger asChild className="flex items-center px-2 rounded-md bg-primary text-white">
+              <div className="flex items-center md:w-auto w-full">
+                <FilterIcon size={18} className="fill-white stroke-none" />
+                Filtros
+              </div>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader className="text-left space-y-1 border-solid border-b-[1px] pb-2">
+                <SheetTitle>Filtros</SheetTitle>
+                <SheetDescription>
+                  Selecione os filtros que deseja.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="mt-2 flex flex-col">
+                <h2 className="font-semibold">Status do Produto</h2>
+                <RadioGroup defaultValue="all" onValueChange={setFilterStatus}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="activated" id="r1" />
                     <Label
-                      htmlFor={category.id}
+                      htmlFor="r1"
                       className="text-sm leading-none font-normal"
                     >
-                      {category.name}
+                      Ativos
                     </Label>
                   </div>
-                ))
-              ) : (
-                <p>Carregando...</p>
-              )}
-            </div>
-
-            <div className="mt-2 flex flex-col">
-              <h2 className="font-semibold">Marcas</h2>
-              {marks?.length > 0 ? (
-                marks.map((mark) => (
-                  <div className="flex gap-2 py-2" key={mark.id}>
-                    <Checkbox
-                      id={mark.id}
-                      checked={selectedMark === mark.id}
-                      onCheckedChange={() =>
-                        setSelectedMark(
-                          selectedMark === mark.id ? null : mark.id
-                        )
-                      }
-                    />
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="disabled" id="r2" />
                     <Label
-                      htmlFor={mark.id}
+                      htmlFor="r2"
                       className="text-sm leading-none font-normal"
                     >
-                      {mark.name}
+                      Desativados
                     </Label>
                   </div>
-                ))
-              ) : (
-                <p>Carregando...</p>
-              )}
-            </div>
-            <SheetClose className="w-full flex justify-end">
-              <Button className="mt-4" onClick={resetFilters}>
-                Limpar Filtros
-              </Button>
-            </SheetClose>
-          </SheetContent>
-        </Sheet>
-        <Button
-          onClick={toggleOrientation}
-          className="m-0 aspect-square p-2 bg-primary text-white border-none"
-          variant="outline"
-        >
-          {itemOrientation ? <Columns /> : <Rows />}
-        </Button>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="all" id="r3" />
+                    <Label
+                      htmlFor="r3"
+                      className="text-sm leading-none font-normal"
+                    >
+                      Todos
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+              <div className="mt-2 flex flex-col">
+                <h2 className="font-semibold">Categorias</h2>
+                {categories?.length > 0 ? (
+                  categories.map((category) => (
+                    <div className="flex gap-2 py-2" key={category.id}>
+                      <Checkbox
+                        id={category.id}
+                        checked={selectedCategory === category.id}
+                        onCheckedChange={() =>
+                          setSelectedCategory(
+                            selectedCategory === category.id ? null : category.id
+                          )
+                        }
+                      />
+                      <Label
+                        htmlFor={category.id}
+                        className="text-sm leading-none font-normal"
+                      >
+                        {category.name}
+                      </Label>
+                    </div>
+                  ))
+                ) : (
+                  <p>Carregando...</p>
+                )}
+              </div>
+              <div className="mt-2 flex flex-col">
+                <h2 className="font-semibold">Marcas</h2>
+                {marks?.length > 0 ? (
+                  marks.map((mark) => (
+                    <div className="flex gap-2 py-2" key={mark.id}>
+                      <Checkbox
+                        id={mark.id}
+                        checked={selectedMark === mark.id}
+                        onCheckedChange={() =>
+                          setSelectedMark(
+                            selectedMark === mark.id ? null : mark.id
+                          )
+                        }
+                      />
+                      <Label
+                        htmlFor={mark.id}
+                        className="text-sm leading-none font-normal"
+                      >
+                        {mark.name}
+                      </Label>
+                    </div>
+                  ))
+                ) : (
+                  <p>Carregando...</p>
+                )}
+              </div>
+              <SheetClose className="w-full flex justify-end">
+                <Button className="mt-4" onClick={resetFilters}>
+                  Limpar Filtros
+                </Button>
+              </SheetClose>
+            </SheetContent>
+          </Sheet>
+          <Button
+            onClick={toggleOrientation}
+            className="p-2 h-auto aspect-square bg-primary text-white border-none"
+            variant="outline"
+          >
+            {itemOrientation ? <Columns /> : <Rows />}
+          </Button>
+        </div>
       </div>
       <div
         className={`grid ${
-          itemOrientation ? "grid-cols-1 gap-1" : "lg:grid-cols-5 md:grid-cols-2 gap-2"
+          itemOrientation ? "grid-cols-1 gap-1" : "lg:grid-cols-5 grid-cols-2 gap-2"
         } `}
       >
         {sortedProducts.slice(0, itemCount).map((product) => (
