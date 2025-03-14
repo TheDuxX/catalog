@@ -1,3 +1,4 @@
+"use client";
 import { Columns, FilterIcon, Rows } from "lucide-react";
 import {
   Sheet,
@@ -10,9 +11,9 @@ import {
 } from "@/app/_components/ui/sheet";
 import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
 import { Label } from "@/app/_components/ui/label";
-import { useEffect, useState } from "react";
 import { Checkbox } from "@/app/_components/ui/checkbox";
 import { Button } from "@/app/_components/ui/button";
+import { useFilters } from "@/app/_utils/filters-context";
 
 interface Category {
   id: string;
@@ -38,46 +39,32 @@ const fetchCategoriesAndMarks = async () => {
 };
 
 const Filters = () => {
-  const [itemOrientation, setItemOrientation] = useState(false);
-  const [itemCount, setItemCount] = useState(10);
-  const [sortOrder, setSortOrder] = useState("ascending");
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [marks, setMarks] = useState<Mark[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedMark, setSelectedMark] = useState<string | null>(null);
-  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const {
+    categories,
+    marks,
+    itemOrientation,
+    setItemOrientation,
+    sortOrder,
+    setSortOrder,
+    itemCount,
+    setItemCount,
+    selectedCategories,
+    setSelectedCategories,
+    selectedMarks,
+    setSelectedMarks,
+    filterStatus,
+    setFilterStatus,
+    resetFilters,
+  } = useFilters();
 
-  useEffect(() => {
-    fetchCategoriesAndMarks().then((data) => {
-      setCategories(data.categories);
-      setMarks(data.marks);
-    });
-  }, []);
-
-  const toggleOrientation = () => {
-    setItemOrientation(!itemOrientation);
-  };
-
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setItemCount(parseInt(event.target.value));
-  };
-
-  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOrder(event.target.value);
-  };
-
-  const resetFilters = () => {
-    setSelectedCategory(null);
-    setSelectedMark(null);
-    setFilterStatus("all");
-  };
+  const toggleOrientation = () => setItemOrientation(!itemOrientation);
 
   return (
     <>
       <div className="w-auto md:mr-2">
         <div className="flex flex-row gap-1 items-center h-full">
           <select
-            onChange={handleSortChange}
+            onChange={(e) => setSortOrder(e.target.value)}
             value={sortOrder}
             className="rounded-md px-1 md:w-auto min-h-[32px] md:h-full w-full bg-primary text-white"
           >
@@ -86,7 +73,7 @@ const Filters = () => {
             <option value="alphabetical">Ordem alfabética</option>
           </select>
           <select
-            onChange={handleSelectChange}
+            onChange={(e) => setItemCount(Number(e.target.value))}
             value={itemCount}
             className="px-2 rounded-md bg-primary min-h-[32px] md:h-full md:w-auto w-full text-white"
           >
@@ -151,10 +138,10 @@ const Filters = () => {
                     <div className="flex gap-2 py-2" key={category.id}>
                       <Checkbox
                         id={category.id}
-                        checked={selectedCategory === category.id}
+                        checked={selectedCategories === category.id}
                         onCheckedChange={() =>
-                          setSelectedCategory(
-                            selectedCategory === category.id
+                          setSelectedCategories(
+                            selectedCategories === category.id
                               ? null
                               : category.id
                           )
@@ -179,10 +166,10 @@ const Filters = () => {
                     <div className="flex gap-2 py-2" key={mark.id}>
                       <Checkbox
                         id={mark.id}
-                        checked={selectedMark === mark.id}
+                        checked={selectedMarks === mark.id}
                         onCheckedChange={() =>
-                          setSelectedMark(
-                            selectedMark === mark.id ? null : mark.id
+                          setSelectedMarks(
+                            selectedMarks === mark.id ? null : mark.id
                           )
                         }
                       />

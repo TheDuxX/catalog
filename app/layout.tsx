@@ -3,6 +3,7 @@ import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/header";
 import Footer from "./_components/footer";
+import { FiltersProvider } from "./_utils/filters-context";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -20,12 +21,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${montserrat.variable} antialiased`}>
-        <Header />
-        {children}
-        {/* <Footer /> */}
-      </body>
-    </html>
+    <FiltersProvider>
+      <html lang="pt-br">
+        <body className={`${montserrat.variable} antialiased`}>
+          <Header />
+          {children}
+          {/* <Footer /> */}
+        </body>
+      </html>
+    </FiltersProvider>
   );
 }

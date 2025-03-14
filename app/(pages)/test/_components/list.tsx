@@ -5,6 +5,7 @@ import Filters from "./filters";
 import { createSupabaseClient } from "@/app/_utils/supabase/client";
 import SearchBar from "@/app/_components/search";
 import Item from "@/app/_components/item";
+import { useFilters } from "@/app/_utils/filters-context";
 
 interface ProductListProps {
   product: {
@@ -41,69 +42,44 @@ interface Mark {
 }
 
 const ProductList = ({ product }: ProductListProps) => {
-  const [itemOrientation, setItemOrientation] = useState(false); // Salva o valor da orientação
-  const [itemCount, setItemCount] = useState(10); // Estado para armazenar o valor selecionado de quantidade de produtos mostrados
-  const [sortOrder, setSortOrder] = useState("ascending"); // Salva a ordenação da lista de produtos
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [marks, setMarks] = useState<Mark[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedMark, setSelectedMark] = useState<string | null>(null);
-  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const {
+    categories,
+    marks,
+    itemOrientation,
+    setItemOrientation,
+    sortOrder,
+    setSortOrder,
+    itemCount,
+    setItemCount,
+    selectedCategories,
+    setSelectedCategories,
+    selectedMarks,
+    setSelectedMarks,
+    filterStatus,
+    setFilterStatus,
+    resetFilters,
+  } = useFilters();
 
-  useEffect(() => {
-    const supabase = createSupabaseClient();
+  console.log({
+    categories,
+    marks,
+    itemOrientation,
+    sortOrder,
+    itemCount,
+    selectedCategories,
+    selectedMarks,
+    filterStatus,
+  });
 
-    const fetchCategoriesAndMarks = async () => {
-      try {
-        const [
-          { data: categories, error: categoriesError },
-          { data: marks, error: marksError },
-        ] = await Promise.all([
-          supabase.from("category").select("id, name"),
-          supabase.from("mark").select("id, name"),
-        ]);
-
-        if (categoriesError || marksError) {
-          toast("Erro ao tentar buscar Categorias ou Marcas.");
-          return;
-        }
-
-        setCategories(categories || []);
-        setMarks(marks || []);
-      } catch (error) {
-        toast("Erro ao tentar buscar Categorias ou Marcas.");
-      }
-    };
-
-    fetchCategoriesAndMarks();
-  }, []);
-
-  const toggleOrientation = () => {
-    setItemOrientation(!itemOrientation);
-  };
-
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setItemCount(parseInt(event.target.value));
-  };
-
-  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOrder(event.target.value);
-  };
-
-  const resetFilters = () => {
-    setSelectedCategory(null);
-    setSelectedMark(null);
-    setFilterStatus("all");
-  };
-
-  const filteredProducts = product.filter((p) => {
+  const filteredProducts = (product || []).filter((p) => {
     const statusMatches =
+      !filterStatus ||
       filterStatus === "all" ||
       (filterStatus === "activated" && p.status) ||
       (filterStatus === "disabled" && !p.status);
     const categoryMatches =
-      !selectedCategory || p.categoryId === selectedCategory;
-    const markMatches = !selectedMark || p.markId === selectedMark;
+      !selectedCategories || p.categoryId === selectedCategories;
+    const markMatches = !selectedMarks || p.markId === selectedMarks;
 
     return statusMatches && categoryMatches && markMatches;
   });
