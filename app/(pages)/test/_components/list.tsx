@@ -121,7 +121,7 @@ const ProductList = ({ product }: ProductListProps) => {
 
   return (
     <div className="flex flex-col gap-2 item">
-      <div className="flex md:flex-row flex-col px-2 justify-between gap-1 lg:gap-2 text-sm">
+      <div className="flex md:flex-row flex-col md:p-0 px-2 gap-1 lg:gap-2">
         <SearchBar />
         <Filters product={product} />
       </div>
