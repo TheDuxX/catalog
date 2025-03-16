@@ -46,18 +46,11 @@ const ProductList = ({ product }: ProductListProps) => {
     categories,
     marks,
     itemOrientation,
-    setItemOrientation,
     sortOrder,
-    setSortOrder,
     itemCount,
-    setItemCount,
     selectedCategories,
-    setSelectedCategories,
     selectedMarks,
-    setSelectedMarks,
     filterStatus,
-    setFilterStatus,
-    resetFilters,
   } = useFilters();
 
   console.log({
@@ -78,8 +71,11 @@ const ProductList = ({ product }: ProductListProps) => {
       (filterStatus === "activated" && p.status) ||
       (filterStatus === "disabled" && !p.status);
     const categoryMatches =
-      !selectedCategories || p.categoryId === selectedCategories;
-    const markMatches = !selectedMarks || p.markId === selectedMarks;
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(p.categoryId);
+
+    const markMatches =
+      selectedMarks.length === 0 || selectedMarks.includes(p.markId);
 
     return statusMatches && categoryMatches && markMatches;
   });
@@ -99,7 +95,7 @@ const ProductList = ({ product }: ProductListProps) => {
     <div className="flex flex-col gap-2 item">
       <div className="flex md:flex-row flex-col md:p-0 px-2 gap-1 lg:gap-2">
         <SearchBar />
-        <Filters product={product} />
+        <Filters />
       </div>
       <div
         className={`grid ${

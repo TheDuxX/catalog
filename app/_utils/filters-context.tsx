@@ -20,10 +20,10 @@ interface FiltersContextProps {
   setSortOrder: (value: string) => void;
   itemCount: number;
   setItemCount: (value: number) => void;
-  selectedCategories: Set<string>;
-  setSelectedCategories: (value: Set<string>) => void;
-  selectedMarks: Set<string>;
-  setSelectedMarks: (value: Set<string>) => void;
+  selectedCategories: string[];
+  setSelectedCategories: (categories: string[]) => void;
+  selectedMarks: string[];
+  setSelectedMarks: (marks: string[]) => void;
   filterStatus: string;
   setFilterStatus: (value: "all" | "activated" | "disabled")=> void;
   resetFilters: () => void;
@@ -37,35 +37,47 @@ export const FiltersProvider = ({ children }: { children: React.ReactNode }) => 
   const [itemOrientation, setItemOrientation] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<string>("ascending");
   const [itemCount, setItemCount] = useState<number>(10);
-  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
-  const [selectedMarks, setSelectedMarks] = useState<Set<string>>(new Set());
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedMarks, setSelectedMarks] = useState<string[]>([]);
   const [filterStatus, setFilterStatus] = useState<"all" | "activated" | "disabled">("all");
 
   const resetFilters = () => {
-    setSelectedCategories(new Set());
-    setSelectedMarks(new Set());
+    setSelectedCategories([]);
+    setSelectedMarks([]);
     setFilterStatus("all");
   };
 
-  // useEffect(() => {
-  //   const fetchCategoriesAndMarks = async () => {
-  //     try {
-  //       const response = await fetch("/api/categories");
-  //       if (!response.ok) throw new Error("Erro ao buscar Categorias e Marcas");
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/category");
+        if (!response.ok) throw new Error("Erro ao buscar Categorias");
 
-  //       const data = await response.json();
-  //       console.log("teste",data);
-  //       setCategories(data.categories);
-  //       setMarks(data.marks);
-  //     } catch (error) {
-  //       console.error(error);
-  //       setCategories([]);
-  //       setMarks([]);
-  //     }
-  //   };
+        const data = await response.json();
+        console.log("teste",data);
+        setCategories(data);
+      } catch (error) {
+        console.error(error);
+        setCategories([]);
+      }
+    };
+    const fetchMarks = async () => {
+      try {
+        const response = await fetch("/api/mark");
+        if (!response.ok) throw new Error("Erro ao buscar marcas");
 
-  //   fetchCategoriesAndMarks();
-  // }, []);
+        const data = await response.json();
+        console.log("teste",data);
+        setMarks(data);
+      } catch (error) {
+        console.error(error);
+        setMarks([]);
+      }
+    };
+
+    fetchMarks();
+    fetchCategories();
+  }, []);
 
   return (
     <FiltersContext.Provider

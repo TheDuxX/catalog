@@ -15,29 +15,6 @@ import { Checkbox } from "@/app/_components/ui/checkbox";
 import { Button } from "@/app/_components/ui/button";
 import { useFilters } from "@/app/_utils/filters-context";
 
-interface Category {
-  id: string;
-  name: string;
-}
-
-interface Mark {
-  id: string;
-  name: string;
-}
-
-const fetchCategoriesAndMarks = async () => {
-  try {
-    const response = await fetch("/api/categories-marks");
-    if (!response.ok) throw new Error("Erro ao buscar Categorias e Marcas");
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    return { categories: [], marks: [] };
-  }
-};
-
 const Filters = () => {
   const {
     categories,
@@ -138,15 +115,20 @@ const Filters = () => {
                     <div className="flex gap-2 py-2" key={category.id}>
                       <Checkbox
                         id={category.id}
-                        checked={selectedCategories === category.id}
-                        onCheckedChange={() =>
-                          setSelectedCategories(
-                            selectedCategories === category.id
-                              ? null
-                              : category.id
+                        checked={selectedCategories.includes(category.id)}
+                        onCheckedChange={() => {
+                          const newCategories = selectedCategories.includes(
+                            category.id
                           )
-                        }
+                            ? selectedCategories.filter(
+                                (id) => id !== category.id
+                              )
+                            : [...selectedCategories, category.id];
+
+                          setSelectedCategories(newCategories);
+                        }}
                       />
+
                       <Label
                         htmlFor={category.id}
                         className="text-sm leading-none font-normal"
@@ -166,13 +148,16 @@ const Filters = () => {
                     <div className="flex gap-2 py-2" key={mark.id}>
                       <Checkbox
                         id={mark.id}
-                        checked={selectedMarks === mark.id}
-                        onCheckedChange={() =>
-                          setSelectedMarks(
-                            selectedMarks === mark.id ? null : mark.id
-                          )
-                        }
+                        checked={selectedMarks.includes(mark.id)}
+                        onCheckedChange={() => {
+                          const newMarks = selectedMarks.includes(mark.id)
+                            ? selectedMarks.filter((id) => id !== mark.id)
+                            : [...selectedMarks, mark.id];
+
+                          setSelectedMarks(newMarks);
+                        }}
                       />
+
                       <Label
                         htmlFor={mark.id}
                         className="text-sm leading-none font-normal"
