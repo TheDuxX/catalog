@@ -16,6 +16,8 @@ import { Button } from "@/app/_components/ui/button";
 import { useFilters } from "@/app/_utils/filters-context";
 
 const Filters = () => {
+  const params = new URLSearchParams();
+
   const {
     categories,
     marks,
@@ -36,6 +38,26 @@ const Filters = () => {
 
   const toggleOrientation = () => setItemOrientation(!itemOrientation);
 
+  const handleFilterApply = () => {
+    try {
+      if (selectedCategories.length) {
+        params.append("categories", selectedCategories.join(","));
+      }
+      if (selectedMarks.length) {
+        params.append("marks", selectedMarks.join(","));
+      }
+      if (filterStatus && filterStatus !== "all") {
+        params.append("status", filterStatus);
+      }
+      if (sortOrder) {
+        params.append("sort", sortOrder);
+      }
+      params.append("limit", itemCount.toString());
+    } catch (error) {
+      console.error("Erro ao adicionar parâmetros:", error);
+    }
+  };
+
   return (
     <>
       <div className="w-auto md:mr-2">
@@ -45,9 +67,9 @@ const Filters = () => {
             value={sortOrder}
             className="rounded-md px-1 md:w-auto min-h-[32px] md:h-full w-full bg-primary text-white"
           >
-            <option value="ascending">Preço: Crescente</option>
-            <option value="descending">Preço: Decrescente</option>
-            <option value="alphabetical">Ordem alfabética</option>
+            <option value="price:asc">Preço: Crescente</option>
+            <option value="price:des">Preço: Decrescente</option>
+            <option value="name:asc">Ordem alfabética</option>
           </select>
           <select
             onChange={(e) => setItemCount(Number(e.target.value))}
@@ -170,10 +192,15 @@ const Filters = () => {
                   <p>Carregando...</p>
                 )}
               </div>
-              <SheetClose className="w-full flex justify-end">
-                <Button className="mt-4" onClick={resetFilters}>
-                  Limpar Filtros
-                </Button>
+              <SheetClose asChild className="w-full flex justify-end">
+                <div>
+                  <Button className="mt-4" onClick={handleFilterApply}>
+                    Aplicar Filtros
+                  </Button>
+                  <Button className="mt-4" onClick={resetFilters}>
+                    Limpar Filtros
+                  </Button>
+                </div>
               </SheetClose>
             </SheetContent>
           </Sheet>

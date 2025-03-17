@@ -41,55 +41,25 @@ interface Mark {
   name: string;
 }
 
-const ProductList = ({ product }: ProductListProps) => {
-  const {
-    categories,
-    marks,
-    itemOrientation,
-    sortOrder,
-    itemCount,
-    selectedCategories,
-    selectedMarks,
-    filterStatus,
-  } = useFilters();
+const ProductList = () => {
+  const [products, setProducts] = useState<any[]>([]);
+  const { itemOrientation ,itemCount } = useFilters();
 
-  console.log({
-    categories,
-    marks,
-    itemOrientation,
-    sortOrder,
-    itemCount,
-    selectedCategories,
-    selectedMarks,
-    filterStatus,
-  });
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const params = new URLSearchParams();
 
-  const filteredProducts = (product || []).filter((p) => {
-    const statusMatches =
-      !filterStatus ||
-      filterStatus === "all" ||
-      (filterStatus === "activated" && p.status) ||
-      (filterStatus === "disabled" && !p.status);
-    const categoryMatches =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(p.categoryId);
+      try {
+        const response = await fetch(`/api/products/filter?${params.toString()}`);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Erro ao buscar produtos:", error);
+      }
+    };
 
-    const markMatches =
-      selectedMarks.length === 0 || selectedMarks.includes(p.markId);
-
-    return statusMatches && categoryMatches && markMatches;
-  });
-
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortOrder === "ascending") {
-      return a.price - b.price;
-    } else if (sortOrder === "descending") {
-      return b.price - a.price;
-    } else if (sortOrder === "alphabetical") {
-      return a.name.localeCompare(b.name);
-    }
-    return 0;
-  });
+    fetchProducts();
+  }, []);
 
   return (
     <div className="flex flex-col gap-2 item">
@@ -104,7 +74,7 @@ const ProductList = ({ product }: ProductListProps) => {
             : "lg:grid-cols-5 grid-cols-2 gap-2"
         } `}
       >
-        {sortedProducts.slice(0, itemCount).map((product) => (
+        {products.slice(0, itemCount).map((product) => (
           <Item
             key={product.id}
             product={product}
