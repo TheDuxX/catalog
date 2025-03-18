@@ -25,8 +25,7 @@ interface FiltersContextProps {
   selectedMarks: string[];
   setSelectedMarks: (marks: string[]) => void;
   filterStatus: string;
-  setFilterStatus: (value: "all" | "activated" | "disabled")=> void;
-  resetFilters: () => void;
+  setFilterStatus: (value: "all" | "active" | "disabled")=> void;
 }
 
 const FiltersContext = createContext<FiltersContextProps | undefined>(undefined);
@@ -35,11 +34,11 @@ export const FiltersProvider = ({ children }: { children: React.ReactNode }) => 
   const [categories, setCategories] = useState<Category[]>([]);
   const [marks, setMarks] = useState<Mark[]>([]);
   const [itemOrientation, setItemOrientation] = useState<boolean>(false);
-  const [sortOrder, setSortOrder] = useState<string>("ascending");
+  const [sortOrder, setSortOrder] = useState<string>("date:desc");
   const [itemCount, setItemCount] = useState<number>(10);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedMarks, setSelectedMarks] = useState<string[]>([]);
-  const [filterStatus, setFilterStatus] = useState<"all" | "activated" | "disabled">("all");
+  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "disabled">("active");
 
   const resetFilters = () => {
     setSelectedCategories([]);
@@ -54,7 +53,6 @@ export const FiltersProvider = ({ children }: { children: React.ReactNode }) => 
         if (!response.ok) throw new Error("Erro ao buscar Categorias");
 
         const data = await response.json();
-        console.log("teste",data);
         setCategories(data);
       } catch (error) {
         console.error(error);
@@ -67,7 +65,6 @@ export const FiltersProvider = ({ children }: { children: React.ReactNode }) => 
         if (!response.ok) throw new Error("Erro ao buscar marcas");
 
         const data = await response.json();
-        console.log("teste",data);
         setMarks(data);
       } catch (error) {
         console.error(error);
@@ -96,7 +93,6 @@ export const FiltersProvider = ({ children }: { children: React.ReactNode }) => 
         setSelectedMarks,
         filterStatus,
         setFilterStatus,
-        resetFilters,
       }}
     >
       {children}
