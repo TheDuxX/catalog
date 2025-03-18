@@ -60,7 +60,9 @@ const Item = ({ product, itemOrientation }: ProductItemProps) => {
 
   return (
     <Card
-      className={`p-0 ${itemOrientation ? "w-full" : "md:w-50% lg:w-50%"} bg-white`}
+      className={`p-0 ${
+        itemOrientation ? "w-full" : "md:w-50% lg:w-50%"
+      } bg-white`}
       onClick={handleProductClick}
     >
       <CardContent
@@ -68,9 +70,7 @@ const Item = ({ product, itemOrientation }: ProductItemProps) => {
           itemOrientation ? "flex-row " : "flex-col justify-between"
         } `}
       >
-        <div
-          className={`relative min-w-[120px] aspect-square bg-slate-400 rounded-md`}
-        >
+        <div className={`relative min-w-[120px] aspect-square rounded-md`}>
           <Image
             src={product.imageUrls[0]}
             alt={product.name}
@@ -97,19 +97,18 @@ const Item = ({ product, itemOrientation }: ProductItemProps) => {
             {itemOrientation ? (
               <small>{product.description}</small>
             ) : (
-              <small>
+              <small className="text-secondary">
                 {product.mark ? product.mark.name : "Marca não disponível"}
               </small>
             )}
           </div>
           <h3
             className={`scroll-m-20 ${
-              itemOrientation ? "text-3xl" : "text-3xl"
+              itemOrientation ? "text-2xl" : "text-2xl"
             } font-semibold tracking-tight`}
           >
             {formattedPrice}
           </h3>
-          {/* <SaleButton product={product} /> */}
         </div>
       </CardContent>
     </Card>
