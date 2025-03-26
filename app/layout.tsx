@@ -24,9 +24,11 @@ export default function RootLayout({
     <FiltersProvider>
       <html lang="pt-br">
         <body className={`${montserrat.variable} antialiased`}>
-          <Header />
-          {children}
-          {/* <Footer /> */}
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <div className="flex-grow">{children}</div>
+          </div>
+          <Footer />
         </body>
       </html>
     </FiltersProvider>
