@@ -6,7 +6,6 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,15 +14,29 @@ import {
 import { Input } from "@/app/_components/ui/input";
 import { Textarea } from "@/app/_components/ui/textarea";
 import { Button } from "@/app/_components/ui/button";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
-  name: z.string({required_error: "Nome é um campo obrigatório"}).min(2).max(50),
-  email: z.string({required_error: "E-mail é um campo obrigatório"}).email(),
-  phone: z.string({required_error: "Telefone é um campo obrigatório"}).min(9).max(15),
-  message: z.string({required_error: "Mensagem é um campo obrigatório"}).min(10).max(500),
+  name: z
+    .string({ required_error: "Nome é um campo obrigatório" })
+    .min(2)
+    .max(50),
+  email: z.string({ required_error: "E-mail é um campo obrigatório" }).email(),
+  phone: z
+    .string({ required_error: "Telefone é um campo obrigatório" })
+    .min(9)
+    .max(15),
+  message: z
+    .string({ required_error: "Mensagem é um campo obrigatório" })
+    .min(10)
+    .max(500),
 });
 
 const ContactForm = () => {
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,9 +47,25 @@ const ContactForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // TODO: enviar para db e criar alerta no dashboard
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/contacts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Erro ao enviar contato");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      toast.success("Contato enviado com sucesso");
+      setLoading(false);
+      form.reset();
+    }
   }
 
   const formatPhone = (value: string) => {
@@ -130,8 +159,19 @@ const ContactForm = () => {
             )}
           />
           <div className="w-full flex gap-2">
-            <Button type="submit" variant="secondary" className="w-full">Enviar</Button>
-            <Button type="reset" variant="outline" className="w-full">Limpar</Button>
+            {loading ? (
+              <Button type="submit" variant="secondary" className="w-full">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+              </Button>
+            ) : (
+              <Button type="submit" variant="secondary" className="w-full">
+                Enviar
+              </Button>
+            )}
+
+            <Button type="button" variant="outline" className="w-full" onClick={() => form.reset()}>
+              Limpar
+            </Button>
           </div>
         </form>
       </Form>
