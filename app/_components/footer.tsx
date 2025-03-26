@@ -1,39 +1,19 @@
-const Footer = () => {
-  const sections = [
-    {
-      title: "Seção",
-      items: ["Link"],
-      width: "w-[214px]",
-    },
-  ];
+import Link from "next/link";
+import { Facebook, Instagram, Twitter } from "lucide-react"; // Ícones
 
+const Footer = () => {
   return (
-    <>
-      <footer className="w-full h-auto bg-primary flex flex-col justify-start items-center py-2 gap-4 bottom-0 relative">
-        <div className="text-card max-w-[1150px] w-full h-auto grid grid-cols-5">
-          {sections.map((section, index) => (
-            <div key={index} className={section.width}>
-              <div className="flex flex-col">
-                <div className="text-sm font-bold tracking-normal">
-                  {section.title}
-                </div>
-                {section.items.map((item, index) => (
-                  <div key={index} className="mt-2.5 text-sm leading-none">
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+    <footer className="w-full bg-primary text-card py-4">
+      <div className="max-w-[1150px] mx-auto flex flex-col items-center gap-4">
+        <p className="text-xs text-center">
+          Alameda Washington Luiz, 799 - Telêmaco Borba - PR - Brasil
+        </p>
+        <div className="flex flex-row gap-2 items-center">
+          <p className="text-xs">&copy; 2025 Tratorino. Todos os direitos reservados.</p>
+          <Link href="/privacy" className="text-xs">Política de Privacidade</Link>
         </div>
-        <div className="text-card text-sm uppercase w-full max-w-[1150px] flex flex-row justify-center">
-          <p>
-            Alameda Washington Luiz, 799 Telêmaco Borba - PR - Brasil -
-            xx.xxx.xxx/xxxx-xx
-          </p>
-        </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 };
 
