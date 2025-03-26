@@ -5,13 +5,16 @@ import SearchBar from "@/app/_components/search";
 import Item from "@/app/_components/item";
 import { useFilters } from "@/app/_utils/filters-context";
 import { useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const ProductList = () => {
   const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const { itemOrientation, itemCount, sortOrder } = useFilters();
   const params = useSearchParams();
 
   useEffect(() => {
+    setLoading(true);
     const fetchProducts = async () => {
       try {
         const response = await fetch(`/api/filters?${params.toString()}`);
@@ -19,6 +22,8 @@ const ProductList = () => {
         setProducts(data);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -54,7 +59,9 @@ const ProductList = () => {
         <Filters />
       </div>
       <div
-        className={`grid ${
+        className={` ${
+          loading ? "w-full flex justify-center items-center" : ""
+        } grid ${
           sortedProducts.length != 0
             ? `${
                 itemOrientation
@@ -62,20 +69,27 @@ const ProductList = () => {
                   : "lg:grid-cols-5 grid-cols-2 gap-2"
               }`
             : "w-full"
-        }  `}
+        }   `}
       >
-        {sortedProducts.length === 0 && (
-          <div className="w-full text-center text-2xl mt-5 font-medium ">
-            <h2>Nenhum produto encontrado</h2>            
+        {loading ? (
+          <div className="w-full text-2xl mt-5 font-medium justify-center items-center">
+            <Loader2 size={40} className="w-full animate-spin" />
           </div>
+        ) : sortedProducts.length === 0 ? (
+          <div className="w-full text-center text-2xl mt-5 font-medium">
+            <h2>Nenhum produto encontrado</h2>
+          </div>
+        ) : (
+          sortedProducts
+            .slice(0, itemCount)
+            .map((product) => (
+              <Item
+                key={product.id}
+                product={product}
+                itemOrientation={itemOrientation}
+              />
+            ))
         )}
-        {sortedProducts.slice(0, itemCount).map((product) => (
-          <Item
-            key={product.id}
-            product={product}
-            itemOrientation={itemOrientation}
-          />
-        ))}
       </div>
     </div>
   );
