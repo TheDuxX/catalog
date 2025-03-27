@@ -1,8 +1,8 @@
 "use client"
-import Item from "./item";
 import { useEffect, useState } from "react";
+import Item from "./item";
 
-const MostViews = () => {
+const RecentProducts = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
@@ -22,16 +22,15 @@ const MostViews = () => {
     fetchProducts();
   }, []);
 
-  // Ordena os produtos pelos mais vistos
-  const sortedProducts = [...products!].sort(
-    (a, b) => (b.views || 0) - (a.views || 0)
+  const recentProducts = [...products!].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
   return (
     <>
       <h2 className="font-semibold text-lg px-2">Mais vistos</h2>
       <div className="rounded-md flex gap-2 lg:max-w-[1150px] overflow-x-auto flex-nowrap [&::-webkit-scrollbar]:hidden p-2">
-        {sortedProducts.slice(0, 5).map((product) => (
+        {recentProducts.slice(0, 5).map((product) => (
           <Item key={product.id} product={product} />
         ))}
       </div>
@@ -39,4 +38,4 @@ const MostViews = () => {
   );
 };
 
-export default MostViews;
+export default RecentProducts;

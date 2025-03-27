@@ -7,7 +7,7 @@ const ProductsList = () => {
         <ProductList />
       </div>
     </div>
-  ); // 🔥 Garantido que products sempre seja um array
+  ); 
 };
 
 export default ProductsList;

@@ -13,36 +13,18 @@ type BannersProps = {
 };
 
 const ResponsiveCarousel = () => {
-  const [isMobile, setIsMobile] = useState(false);
   const [banners, setBanners] = useState<BannersProps[]>([]);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
     const fetchBanners = async () => {
-      const supabase = createSupabaseClient();
-
-      const { data, error } = await supabase
-        .from("banners")
-        .select("*")
-        .eq("is_visible", true) // Filtra banners visíveis
-        .order("created_at", { ascending: false }); // Ordena pelos mais recentes
-
-      if (error) {
-        console.error("Erro ao buscar banners:", error);
-        return;
-      }
-
-      if (data) {
+      try {
+        const res = await fetch("/api/banners");
+        const data = await res.json();
         setBanners(data);
+      } catch (error) {
+        console.error(error);
       }
     };
-
     fetchBanners();
   }, []);
 
@@ -54,7 +36,6 @@ const ResponsiveCarousel = () => {
       stopOnHover
       showArrows={false}
       showStatus={false}
-      showIndicators={isMobile ? false : true}
       emulateTouch
       className="lg:max-w-[1150px] lg:max-h-[240px] sm:max-w-full sm:max-h-[160px] rounded-md overflow-hidden p-0 shadow "
     >

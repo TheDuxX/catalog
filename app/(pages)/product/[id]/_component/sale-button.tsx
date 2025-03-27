@@ -24,9 +24,10 @@ interface ProductProps {
       name: string;
     };
   };
+  quantity: number;
 }
 
-const SaleButton = ({ product }: ProductProps) => {
+const SaleButton = ({ product, quantity }: ProductProps) => {
   const pathname = usePathname();
   const siteUrl = typeof window !== "undefined" ? window.location.origin : "";
 
@@ -37,7 +38,7 @@ const SaleButton = ({ product }: ProductProps) => {
   }).format(product.price);
 
   const message = encodeURIComponent(
-    `Olá, tenho interesse no produto: ${product.name}, ${product.mark.name} ${formattedPrice}. Confira aqui: ${siteUrl}${pathname}`
+    `Olá, tenho interesse em comprar ${quantity} ${product.name}, ${product.mark.name} ${formattedPrice}. Confira aqui: ${siteUrl}${pathname}`
   );
 
   const whatsappUrl = `https://api.whatsapp.com/send?phone=+5542999114876&text=${message}`;

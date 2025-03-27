@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useIsMobile } from "@/app/_lib/useIsMobile";
@@ -39,12 +39,10 @@ interface ProductItemProps {
 const ResponsiveCarousel = ({ product }: ProductItemProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const isMobile = useIsMobile();
-
   return (
     <div className={`flex gap-4 lg:flex-row flex-col-reverse`}>
       {/* Miniaturas na esquerda */}
-      <div className={`flex gap-2 w-20 ${isMobile ? "flex-row" : "flex-col"}`}>
+      <div className={`flex gap-2 w-20 flex-row md:flex-col`}>
         {product.imageUrls.map((src, index) => (
           <img
             key={index}

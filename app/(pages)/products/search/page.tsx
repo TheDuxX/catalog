@@ -93,7 +93,7 @@ export default function SearchResults() {
           {loading && <p>Carregando...</p>}
           {!loading && error && <p className="text-red-500">{error}</p>}
           {!loading && !error && products?.length ? (
-            <ProductList product={products} />
+            <ProductList/>
           ) : (
             !loading && <p>Nenhum produto encontrado.</p>
           )}
