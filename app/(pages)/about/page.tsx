@@ -1,11 +1,13 @@
 const About = () => {
   return (
-    <div className="w-full flex items-center justify-center mt-2">
-      <div className="max-w-[1150px] w-full grid grid-cols-2 grid-rows-2 gap-2">
-        <div className="w-full h-full bg-gray-300 rounded-md">
-          <span className=" rounded-md h-20"></span>
-        </div>
-        <div className="w-full h-full ">
+    <div className="w-full flex items-center justify-center my-4 px-4">
+      <div className="w-full max-w-full md:max-w-[1150px] grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-2">
+        
+        {/* Imagem 1 */}
+        <div className="w-full h-48 md:h-full bg-gray-300 rounded-md order-1 md:order-none"></div>
+
+        {/* Texto 1 */}
+        <div className="w-full order-2 md:order-none">
           <p className="text-justify indent-10">
             Fundada em 2013 por José Casturino dos Santos, a Tratorino – Peças
             para Máquinas e Tratores nasceu com o propósito de oferecer soluções
@@ -16,7 +18,12 @@ const About = () => {
             clientes.
           </p>
         </div>
-        <div className="w-full h-full ">
+
+        {/* Imagem 2 */}
+        <div className="w-full h-48 md:h-full bg-gray-300 rounded-md order-3 md:order-none"></div>
+
+        {/* Texto 2 */}
+        <div className="w-full order-4 md:order-none">
           <p className="text-justify indent-10">
             Localizada em Telêmaco Borba, Paraná, a Tratorino se destaca pelo
             compromisso com o atendimento personalizado, buscando sempre
@@ -31,8 +38,7 @@ const About = () => {
             necessidades.
           </p>
         </div>
-        <div className="w-full h-full bg-gray-300 rounded-md">
-        </div>
+
       </div>
     </div>
   );
