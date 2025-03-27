@@ -23,13 +23,7 @@ export default function RootLayout({
   return (
     <FiltersProvider>
       <html lang="pt-br">
-        <body className={`${montserrat.variable} antialiased`}>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <div className="flex-grow">{children}</div>
-          </div>
-          <Footer />
-        </body>
+        <body className={`${montserrat.variable} antialiased`}>{children}</body>
       </html>
     </FiltersProvider>
   );
