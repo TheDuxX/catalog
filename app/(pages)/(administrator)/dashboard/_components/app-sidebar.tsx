@@ -1,66 +1,75 @@
-import {
-  Bolt,
-  Box,
-  Calendar,
-  Home,
-  Inbox,
-  PackagePlus,
-  Search,
-  Settings,
-  Store,
-} from "lucide-react";
+"use client";
 
+import { useSidebar } from "@/app/_components/ui/sidebar";
+import Image from "next/image";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/app/_components/ui/sidebar";
-import Image from "next/image";
+import { Home, Store, PackagePlus, Bolt } from "lucide-react";
 
 const items = [
   {
-    title: "Home",
-    url: "/",
+    title: "Início",
+    url: "/dashboard",
     icon: Home,
   },
   {
     title: "Produtos",
-    url: "/products",
+    url: "/dashboard/products",
     icon: Store,
   },
   {
     title: "Novo Produto",
-    url: "/new-product",
+    url: "/dashboard/new-product",
     icon: PackagePlus,
   },
   {
     title: "Configurações",
-    url: "/configuration",
+    url: "/dashboard/settings",
     icon: Bolt,
   },
 ];
 
 const AppSidebar = () => {
+  const { state } = useSidebar();
+
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="relative h-10 mt-4 transition-all">
+        {state === "collapsed" ? (
+          <Image
+            src="/favicon.ico"
+            alt="Logo reduzida"
+            width={30}
+            height={30}
+            className="object-contain"
+          />
+        ) : (
+          <Image
+            src="/logo.png"
+            alt="Logo completa"
+            fill
+            className="object-contain"
+          />
+        )}
+      </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup className="flex flex-col gap-4 mt-4">
-          <SidebarGroupLabel className="relative h-10 py-4">
-            <Image src="/logo.png" alt="logo" fill className="object-contain" />
-          </SidebarGroupLabel>
+        <SidebarGroup className="flex flex-col gap-4 mt-2">
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <a href={item.url} className="flex items-center gap-2">
                       <item.icon />
-                      <span>{item.title}</span>
+                      {state !== "collapsed" && <span>{item.title}</span>}
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

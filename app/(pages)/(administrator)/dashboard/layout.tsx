@@ -12,7 +12,6 @@ export default function HomeLayout({
         <SidebarProvider>
           <AppSidebar />
           <main className="flex-grow">
-            <SidebarTrigger />
             {children}
           </main>
         </SidebarProvider>

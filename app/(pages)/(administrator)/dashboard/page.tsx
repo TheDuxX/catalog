@@ -1,11 +1,14 @@
+import DashboardHeader from "./_components/dashboard-header";
 import ProductListView from "./_views/product-list-view";
 
 const DashboardPage = () => {
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <ProductListView searchQuery="" />
-    </div>
+    <>
+      <DashboardHeader />
+      <div className="p-2">
+        <ProductListView searchQuery="" />
+      </div>
+    </>
   );
 };
 
