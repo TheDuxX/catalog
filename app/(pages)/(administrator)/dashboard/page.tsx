@@ -1,3 +1,4 @@
+import MetricCharts from "./_components/charts";
 import DashboardHeader from "./_components/dashboard-header";
 
 const DashboardPage = () => {
@@ -5,7 +6,7 @@ const DashboardPage = () => {
     <>
       <DashboardHeader />
       <div className="p-2">
-        Teste
+        <MetricCharts />
       </div>
     </>
   );
