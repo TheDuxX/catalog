@@ -5,14 +5,7 @@ const About = () => {
     <div className="w-full flex items-center justify-center my-4 px-4">
       <div className="w-full max-w-full md:max-w-[1150px] grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-2">
         {/* Imagem 1 */}
-        <div className="w-full h-48 md:min-h-[320px] rounded-md order-1 md:order-none relative overflow-hidden shadow-sm">
-          <Image
-            src={"/about-image.png"}
-            alt="about"
-            fill
-            className="md:object-fill object-cover"
-          />
-        </div>
+        <div className="w-full h-48 md:h-full bg-gray-300 rounded-md order-1 md:order-none"></div>
 
         {/* Texto 1 */}
         <div className="w-full order-2 md:order-none">
@@ -44,15 +37,6 @@ const About = () => {
           </p>
         </div>
 
-        {/* Imagem 2 */}
-        <div className="w-full h-48 md:min-h-[320px] rounded-md order-3 md:order-none relative overflow-hidden shadow-sm">
-          <Image
-            src={"/about-image.png"}
-            alt="about"
-            fill
-            className="md:object-fill object-cover"
-          />
-        </div>
       </div>
     </div>
   );
