@@ -36,7 +36,7 @@ const MetricCharts = () => {
         </div>
         <div className="flex flex-row gap-2 w-full justify-between items-baseline">
           <p className="text-4xl font-bold">{totalViews.toLocaleString()}</p>
-          <p
+          <div
             className={`flex  items-center ${
               viewsChange! > 0 ? "text-green-500" : "text-red-500"
             }`}
@@ -53,7 +53,7 @@ const MetricCharts = () => {
               </div>
             )}
             {formatChange(viewsChange)}
-          </p>
+          </div>
         </div>
         {/* <span className="text-gray-500 text-sm">Visualizações de página</span> */}
       </div>
@@ -64,7 +64,7 @@ const MetricCharts = () => {
         </div>
         <div className="flex flex-row gap-2 w-full justify-between items-baseline">
           <p className="text-4xl font-bold">{totalOrders.toLocaleString()}</p>
-          <p
+          <div
             className={`flex items-center ${
               ordersChange! > 0 ? "text-green-500" : "text-red-500"
             }`}
@@ -81,7 +81,7 @@ const MetricCharts = () => {
               </div>
             )}
             {formatChange(ordersChange)}
-          </p>
+          </div>
         </div>
         {/* <span className="text-gray-500 text-sm">Pedidos realizados</span> */}
       </div>
