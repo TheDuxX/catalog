@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useActivitycharts } from "../_viewmodels/useActivityCharts";
 
-const MetricCharts = () => {
+const MetricCards = () => {
   const {
     totalViews,
     totalOrders,
@@ -29,7 +29,7 @@ const MetricCharts = () => {
 
   return (
     <div className="flex w-full flex-row gap-4">
-      <div className="w-full max-w-[300px] bg-white rounded-md shadow p-4 space-y-2">
+      <div className="w-full max-w-[300px] bg-white rounded-md shadow p-4 space-y-2  hover:shadow-lg transition-all border-l-4 border-secondary">
         <div className={`flex flex-row items-center gap-2 `}>
           <Eye size={20} className="stroke-1" />
           <h3 className="text-lg font-medium">Visitas</h3>
@@ -57,7 +57,7 @@ const MetricCharts = () => {
         </div>
         {/* <span className="text-gray-500 text-sm">Visualizações de página</span> */}
       </div>
-      <div className="w-full max-w-[300px] bg-white rounded-md shadow p-4 space-y-2">
+      <div className="w-full max-w-[300px] bg-white rounded-md shadow hover:shadow-lg transition-all  p-4 space-y-2 border-l-4 border-secondary">
         <div className="flex flex-row items-center gap-2">
           <BadgeDollarSign size={20} className="stroke-1" />
           <h3 className="text-lg font-medium">Pedidos</h3>
@@ -85,7 +85,7 @@ const MetricCharts = () => {
         </div>
         {/* <span className="text-gray-500 text-sm">Pedidos realizados</span> */}
       </div>
-      <div className="w-full max-w-[300px] bg-white rounded-md shadow p-4 space-y-2">
+      <div className="w-full max-w-[300px] bg-white rounded-md shadow hover:shadow-lg transition-all  p-4 space-y-2 border-l-4 border-secondary">
         <div className="flex flex-row items-center gap-2">
           <BoxIcon size={20} className="stroke-1" />
           <h3 className="text-lg font-medium">Produtos</h3>
@@ -97,4 +97,4 @@ const MetricCharts = () => {
   );
 };
 
-export default MetricCharts;
+export default MetricCards;

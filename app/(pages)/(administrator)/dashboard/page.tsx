@@ -1,12 +1,12 @@
-import MetricCharts from "./_components/charts";
+import MetricCards from "./_components/cards";
 import DashboardHeader from "./_components/dashboard-header";
 
 const DashboardPage = () => {
   return (
     <>
       <DashboardHeader />
-      <div className="p-2">
-        <MetricCharts />
+      <div className="p-4">
+        <MetricCards />
       </div>
     </>
   );
