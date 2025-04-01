@@ -53,10 +53,12 @@ const AppSidebar = () => {
           />
         ) : (
           <Image
+            priority={true}
             src="/logo.png"
             alt="Logo completa"
             fill
             className="object-contain"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         )}
       </SidebarHeader>
