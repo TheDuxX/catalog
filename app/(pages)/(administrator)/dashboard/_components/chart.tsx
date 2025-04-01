@@ -1,97 +1,77 @@
 "use client";
+import { Skeleton } from "@/app/_components/ui/skeleton";
 import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/app/_components/ui/chart";
-import { createClient } from "@/app/_utils/supabase/server";
-import { format, parseISO } from "date-fns";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { BarChart, Bar, XAxis, Tooltip, Legend, CartesianGrid } from "recharts";
+  chartConfig,
+  useActivityCharts,
+} from "../_viewmodels/useActivityCharts";
+import { ChartContainer } from "@/app/_components/ui/chart";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-interface ActivityData {
-  date: string;
-  orders: number;
-  page_views: number;
-}
+const MetricCharts = () => {
+  const { activity, lastWeeks, loading } = useActivityCharts();
+  chartConfig;
 
-const chartConfig = {
-  orders: {
-    label: "Pedidos",
-    color: "#ff4a49",
-  },
-  page_views: {
-    label: "Acessos",
-    color: "#60a5fa",
-  },
-} satisfies ChartConfig;
-
-const ChartsActivity = () => {
-  const [activity, setActivity] = useState<ActivityData[]>([]);
-
-  useEffect(() => {
-    const fetchActivityData = async () => {
-      const supabase = await createClient();
-      const { data: siteActivity, error } = await supabase
-        .from("site_activity")
-        .select("*")
-        .order("date", { ascending: true });
-
-      if (error) {
-        toast.error("Erro ao buscar atividades");
-        return;
-      }
-
-      if (siteActivity) {
-        setActivity(
-          siteActivity.map((item: any) => ({
-            date: format(parseISO(item.date), "dd/MM"), // Formata a data para dia/mês
-            orders: Number(item.orders), // Garante que os valores sejam números
-            page_views: Number(item.page_views),
-          }))
-        );
-      }
-    };
-
-    fetchActivityData();
-  }, []);
+  if (loading)
+    return (
+      <Skeleton className="flex w-full gap-4 bg-white rounded-md shadow p-4 h-full">
+        Carregando...
+      </Skeleton>
+    );
 
   return (
-    <div className="w-full h-auto bg-white p-4 rounded-lg shadow">
-      <h2 className="text-lg font-semibold mb-2">Atividade do Site</h2>
-      <ChartContainer config={chartConfig} className="w-full">
-        <BarChart data={activity}>
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="date"
-            opacity={0}
-            tickLine={false}
-            height={10}
-            tickMargin={0}
-            axisLine={false}
-            tickFormatter={(value) => value.slice(0, 2)}
-          />
-          <ChartTooltip content={<ChartTooltipContent />} />
-          <Tooltip />
-          <Legend />
-          <Bar
-            dataKey="page_views"
-            fill="var(--color-page_views)"
-            radius={4}
-            name="Acessos"
-          />
-          <Bar
-            dataKey="orders"
-            fill="var(--color-orders)"
-            radius={4}
-            name="Pedidos"
-          />
-        </BarChart>
-      </ChartContainer>
+    <div className="flex md:flex-row flex-col w-full gap-4 ">
+      <div className="bg-white rounded-md shadow p-4 w-full">
+        <h2 className="font-medium text-xl">Visitas nos últimos 15 dias</h2>
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+          <BarChart data={lastWeeks}>
+            <CartesianGrid
+              vertical={false}
+              className=""
+              stroke="hsl(var(--sidebar-border))"
+            />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              tickMargin={5}
+              axisLine={false}
+              tickFormatter={(value) => {
+                const [year, month, day] = value.split("-");
+                return `${day}/${month}`;
+              }}
+            />
+            <Bar
+              dataKey="page_views"
+              fill="var(--color-activity)"
+              radius={20}
+            />
+          </BarChart>
+        </ChartContainer>
+      </div>
+      <div className="bg-white rounded-md shadow p-4 w-full">
+        <h2 className="font-medium text-xl">Pedidos nos últimos 15 dias</h2>
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+          <BarChart accessibilityLayer data={lastWeeks}>
+            <CartesianGrid
+              vertical={false}
+              className=""
+              stroke="hsl(var(--sidebar-border))"
+            />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              tickMargin={5}
+              axisLine={false}
+              tickFormatter={(value) => {
+                const [year, month, day] = value.split("-");
+                return `${day}/${month}`;
+              }}
+            />
+            <Bar dataKey="orders" fill="var(--color-orders)" radius={20} />
+          </BarChart>
+        </ChartContainer>
+      </div>
     </div>
   );
 };
 
-export default ChartsActivity;
+export default MetricCharts;
