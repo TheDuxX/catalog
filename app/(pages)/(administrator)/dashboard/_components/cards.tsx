@@ -8,7 +8,8 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
-import { useActivitycharts } from "../_viewmodels/useActivityCharts";
+import { useActivitycards } from "../_viewmodels/useActivityCards";
+import { Skeleton } from "@/app/_components/ui/skeleton";
 
 const MetricCards = () => {
   const {
@@ -18,26 +19,41 @@ const MetricCards = () => {
     viewsChange,
     ordersChange,
     loading,
-  } = useActivitycharts();
+  } = useActivitycards();
 
-  if (loading) return <div>Carregando...</div>;
+  if (loading)
+    return (
+      <div className="flex flex-row gap-4">
+        <Skeleton className="w-full min-h-[108px] max-w-[300px] bg-white rounded-md shadow p-4 space-y-2  hover:shadow-lg transition-all">
+          Carregando...
+        </Skeleton>
+        <Skeleton className="w-full min-h-[108px] max-w-[300px] bg-white rounded-md shadow p-4 space-y-2  hover:shadow-lg transition-all">
+          Carregando...
+        </Skeleton>
+        <Skeleton className="w-full min-h-[108px] max-w-[300px] bg-white rounded-md shadow p-4 space-y-2  hover:shadow-lg transition-all">
+          Carregando...
+        </Skeleton>
+      </div>
+    );
 
   const formatChange = (value: number | null) => {
     if (value === null) return "N/A";
-    return `${value.toFixed(2)}%`;
+    return `${value.toFixed(0)}%`;
   };
 
   return (
-    <div className="flex w-full flex-row gap-4">
-      <div className="w-full max-w-[300px] bg-white rounded-md shadow p-4 space-y-2  hover:shadow-lg transition-all border-l-4 border-secondary">
+    <div className="md:flex w-full md:flex-row grid grid-cols-2 md:gap-4 gap-2">
+      <div className="w-full max-w-[300px] bg-white rounded-md shadow md:p-4 p-2 space-y-2  hover:shadow-lg transition-all md:border-l-4 border-secondary">
         <div className={`flex flex-row items-center gap-2 `}>
           <Eye size={20} className="stroke-1" />
           <h3 className="text-lg font-medium">Visitas</h3>
         </div>
         <div className="flex flex-row gap-2 w-full justify-between items-baseline">
-          <p className="text-4xl font-bold">{totalViews.toLocaleString()}</p>
+          <p className="md:text-4xl text-3xl font-bold">
+            {totalViews.toLocaleString()}
+          </p>
           <div
-            className={`flex  items-center ${
+            className={`flex items-center md:text-lg text-sm ${
               viewsChange! > 0 ? "text-green-500" : "text-red-500"
             }`}
           >
@@ -57,15 +73,15 @@ const MetricCards = () => {
         </div>
         {/* <span className="text-gray-500 text-sm">Visualizações de página</span> */}
       </div>
-      <div className="w-full max-w-[300px] bg-white rounded-md shadow hover:shadow-lg transition-all  p-4 space-y-2 border-l-4 border-secondary">
+      <div className="w-full max-w-[300px] bg-white rounded-md shadow md:p-4 p-2 space-y-2  hover:shadow-lg transition-all md:border-l-4 border-secondary">
         <div className="flex flex-row items-center gap-2">
           <BadgeDollarSign size={20} className="stroke-1" />
           <h3 className="text-lg font-medium">Pedidos</h3>
         </div>
         <div className="flex flex-row gap-2 w-full justify-between items-baseline">
-          <p className="text-4xl font-bold">{totalOrders.toLocaleString()}</p>
+          <p className="md:text-4xl text-3xl font-bold">{totalOrders.toLocaleString()}</p>
           <div
-            className={`flex items-center ${
+            className={`flex items-center md:text-lg text-sm ${
               ordersChange! > 0 ? "text-green-500" : "text-red-500"
             }`}
           >
@@ -85,12 +101,12 @@ const MetricCards = () => {
         </div>
         {/* <span className="text-gray-500 text-sm">Pedidos realizados</span> */}
       </div>
-      <div className="w-full max-w-[300px] bg-white rounded-md shadow hover:shadow-lg transition-all  p-4 space-y-2 border-l-4 border-secondary">
+      <div className="w-full max-w-[300px] bg-white rounded-md shadow md:p-4 p-2 space-y-2  hover:shadow-lg transition-all md:border-l-4 border-secondary">
         <div className="flex flex-row items-center gap-2">
           <BoxIcon size={20} className="stroke-1" />
           <h3 className="text-lg font-medium">Produtos</h3>
         </div>
-        <p className="text-4xl font-bold">{totalProducts}</p>
+        <p className="md:text-4xl text-3xl font-bold">{totalProducts}</p>
         {/* <span className="text-gray-500 text-sm">Total de produtos cadastrados</span> */}
       </div>
     </div>
