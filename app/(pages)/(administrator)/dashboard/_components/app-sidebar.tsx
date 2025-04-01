@@ -69,7 +69,7 @@ const AppSidebar = () => {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url} className="flex items-center gap-2">
+                    <a href={item.url} className="flex items-center gap-2 hover:bg-secondary hover:rounded-full hover:font-semibold p-4">
                       <item.icon />
                       {state !== "collapsed" && <span>{item.title}</span>}
                     </a>
