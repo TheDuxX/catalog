@@ -5,7 +5,7 @@ import {
   useActivityCharts,
 } from "../_viewmodels/useActivityCharts";
 import { ChartContainer } from "@/app/_components/ui/chart";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis } from "recharts";
 
 const MetricCharts = () => {
   const { activity, lastWeeks, loading } = useActivityCharts();
@@ -21,7 +21,7 @@ const MetricCharts = () => {
   return (
     <div className="flex md:flex-row flex-col w-full gap-4 ">
       <div className="bg-white rounded-md shadow p-4 w-full">
-        <h2 className="font-medium text-xl">Visitas nos últimos 15 dias</h2>
+        <h2 className="font-medium text-xl">Visitas ao site</h2>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
           <BarChart data={lastWeeks}>
             <CartesianGrid
@@ -39,16 +39,34 @@ const MetricCharts = () => {
                 return `${day}/${month}`;
               }}
             />
+            <Tooltip
+              isAnimationActive={false}
+              contentStyle={{
+                backgroundColor: "white",
+                borderRadius: "5px",
+                padding: "5px",
+                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+              }}
+              labelFormatter={(label) => {
+                const [year, month, day] = label.split("-");
+                return `${day}/${month}`;
+              }}
+              formatter={(value, name) => [
+                `${value}`,
+                name === "page_views" ? "Visualizações" : "Pedidos",
+              ]}
+            />
             <Bar
               dataKey="page_views"
               fill="var(--color-activity)"
-              radius={20}
+              radius={5}
+              barSize={50}
             />
           </BarChart>
         </ChartContainer>
       </div>
       <div className="bg-white rounded-md shadow p-4 w-full">
-        <h2 className="font-medium text-xl">Pedidos nos últimos 15 dias</h2>
+        <h2 className="font-medium text-xl">Pedidos</h2>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
           <BarChart accessibilityLayer data={lastWeeks}>
             <CartesianGrid
@@ -66,7 +84,29 @@ const MetricCharts = () => {
                 return `${day}/${month}`;
               }}
             />
-            <Bar dataKey="orders" fill="var(--color-orders)" radius={20} />
+            <Tooltip
+              isAnimationActive={false}
+              contentStyle={{
+                backgroundColor: "white",
+                borderRadius: "5px",
+                padding: "5px",
+                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+              }}
+              labelFormatter={(label) => {
+                const [year, month, day] = label.split("-");
+                return `${day}/${month}`;
+              }}
+              formatter={(value, name) => [
+                `${value}`,
+                name === "page_views" ? "Visualizações" : "Pedidos",
+              ]}
+            />
+            <Bar
+              dataKey="orders"
+              fill="var(--color-orders)"
+              radius={5}
+              barSize={50}
+            />
           </BarChart>
         </ChartContainer>
       </div>
