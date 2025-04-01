@@ -5,13 +5,18 @@ import {
   BadgeDollarSign,
   BoxIcon,
   Eye,
+  Plus,
+  PlusCircle,
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
 import { useActivitycards } from "../_viewmodels/useActivityCards";
 import { Skeleton } from "@/app/_components/ui/skeleton";
+import { Button } from "@/app/_components/ui/button";
+import { useRouter } from "next/navigation";
 
 const MetricCards = () => {
+  const router = useRouter();
   const {
     totalViews,
     totalOrders,
@@ -79,7 +84,9 @@ const MetricCards = () => {
           <h3 className="text-lg font-medium">Pedidos</h3>
         </div>
         <div className="flex flex-row gap-2 w-full justify-between items-baseline">
-          <p className="md:text-4xl text-3xl font-bold">{totalOrders.toLocaleString()}</p>
+          <p className="md:text-4xl text-3xl font-bold">
+            {totalOrders.toLocaleString()}
+          </p>
           <div
             className={`flex items-center md:text-lg text-sm ${
               ordersChange! > 0 ? "text-green-500" : "text-red-500"
@@ -106,8 +113,16 @@ const MetricCards = () => {
           <BoxIcon size={20} className="stroke-1" />
           <h3 className="text-lg font-medium">Produtos</h3>
         </div>
-        <p className="md:text-4xl text-3xl font-bold">{totalProducts}</p>
-        {/* <span className="text-gray-500 text-sm">Total de produtos cadastrados</span> */}
+        <div className="flex flex-row gap-2 w-full justify-between items-baseline">
+          <p className="md:text-4xl text-3xl font-bold">{totalProducts}</p>
+          <Button
+            variant={"secondary"}
+            className="aspect-square p-0"
+            onClick={() => router.push("/dashboard/new-product")}
+          >
+            <Plus />
+          </Button>
+        </div>
       </div>
     </div>
   );
