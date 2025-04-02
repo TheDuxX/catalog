@@ -7,15 +7,14 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <div className="flex flex-col min-h-screen">
-        <SidebarProvider>
-          <AppSidebar />
-          <main className="flex-grow">
-            {children}
-          </main>
-        </SidebarProvider>
-      </div>
-    </>
+    <div className="flex min-h-screen w-full overflow-hidden">
+      <SidebarProvider>
+        {/* Sidebar ocupa um espaço fixo */}
+        <AppSidebar />
+
+        {/* Main ocupa todo o restante do espaço disponível */}
+        <main className="flex-grow w-full overflow-auto">{children}</main>
+      </SidebarProvider>
+    </div>
   );
 }

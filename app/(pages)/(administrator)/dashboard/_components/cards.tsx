@@ -28,7 +28,7 @@ const MetricCards = () => {
 
   if (loading)
     return (
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row gap-2">
         <Skeleton className="w-full min-h-[108px] max-w-[300px] bg-white rounded-md shadow p-4 space-y-2  hover:shadow-lg transition-all">
           Carregando...
         </Skeleton>
@@ -47,7 +47,7 @@ const MetricCards = () => {
   };
 
   return (
-    <div className="md:flex w-full md:flex-row grid grid-cols-2 md:gap-4 gap-2">
+    <div className="md:flex w-full md:flex-row grid grid-cols-2 gap-2">
       <div className="w-full max-w-[300px] bg-white rounded-md shadow md:p-4 p-2 space-y-2  hover:shadow-lg transition-all md:border-l-4 border-secondary">
         <div className={`flex flex-row items-center gap-2 `}>
           <Eye size={20} className="stroke-1" />

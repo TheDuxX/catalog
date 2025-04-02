@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { fetchActivities } from "../_services/activity-service";
-import { fetchProducts } from "../_services/product-service";
+import { fetchProducts } from "../_services/products-service";
 
 type Activity = {
   date: string;
