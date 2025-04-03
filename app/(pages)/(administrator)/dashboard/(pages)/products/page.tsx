@@ -1,5 +1,11 @@
+import DashboardList from "../../_components/dashboard-list";
+
 const DashboardProductsPage = () => {
-    return ( <>Página de produtos Dashboard</> );
-}
- 
+  return (
+    <>
+      <DashboardList />
+    </>
+  );
+};
+
 export default DashboardProductsPage;
