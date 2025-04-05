@@ -28,9 +28,9 @@ interface ProductProps {
 
 const DashboardItem = ({ product, formattedPrice }: ProductProps) => {
   return (
-    <Card className="p-0 min-w-[180px] lg:min-w-[240px] bg-white hover:shadow-md hover:translate-y-[-5px] transition-all">
+    <Card className="p-0 md:min-w-[100px] bg-white hover:shadow-md hover:translate-y-[-5px] transition-all">
       <CardContent className={`p-1 flex flex-col justify-between`}>
-        <div className={`relative min-w-[150px] aspect-square rounded-md`}>
+        <div className={`relative min-w-[100px] aspect-square rounded-md`}>
           <Image
             src={product.imageUrls[0]}
             alt={product.name}
@@ -41,7 +41,7 @@ const DashboardItem = ({ product, formattedPrice }: ProductProps) => {
         </div>
         <div className={` flex flex-col  gap-2 px-2`}>
           <div className="flex flex-col gap-0">
-            <h2 className={`font-medium line-clamp-1 text-lg`}>
+            <h2 className={`md:font-medium line-clamp-1 md:text-lg`}>
               {product.name}
             </h2>
             <small className="text-secondary">
@@ -49,7 +49,7 @@ const DashboardItem = ({ product, formattedPrice }: ProductProps) => {
             </small>
           </div>
           <h3
-            className={`scroll-m-20 text-lg lg:text-2xl font-semibold tracking-tight`}
+            className={`scroll-m-20 text-sm md:text-base lg:text-lg sm:font-semibold tracking-tight`}
           >
             {formattedPrice}
           </h3>

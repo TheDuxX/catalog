@@ -22,11 +22,11 @@ const DashboardList = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-row gap-2">
-        <DashboardSearch />
+      <div className="flex flex-row gap-2 justify-end">
+        {/* <DashboardSearch /> */}
         <Filters />
       </div>
-      <div className="grid md:grid-cols-6 grid-cols-2 w-full gap-2">
+      <div className="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 w-full gap-2">
         {products.map((product) => (
           <DashboardItem
             key={product.id}
