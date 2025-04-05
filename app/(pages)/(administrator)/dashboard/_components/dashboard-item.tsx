@@ -28,9 +28,9 @@ interface ProductProps {
 
 const DashboardItem = ({ product, formattedPrice }: ProductProps) => {
   return (
-    <Card className="p-0 md:min-w-[100px] bg-white hover:shadow-md hover:translate-y-[-5px] transition-all">
+    <Card className="p-0 md:min-w-[100px] w-full bg-white hover:shadow-md hover:translate-y-[-5px] transition-all">
       <CardContent className={`p-1 flex flex-col justify-between`}>
-        <div className={`relative min-w-[100px] aspect-square rounded-md`}>
+        <div className={`relative min-w-[100px] w-full aspect-square rounded-md`}>
           <Image
             src={product.imageUrls[0]}
             alt={product.name}

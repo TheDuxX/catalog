@@ -19,7 +19,7 @@ const MetricCharts = () => {
     );
 
   return (
-    <div className="flex md:flex-row flex-col w-full gap-2 ">
+    <div className="flex lg:flex-row flex-col w-full gap-2 ">
       <div className="w-full flex flex-col gap-2">
         <h2 className="text-lg">Visitas ao Site</h2>
         <div className="bg-white rounded-md shadow p-2 pb-0 w-full">
