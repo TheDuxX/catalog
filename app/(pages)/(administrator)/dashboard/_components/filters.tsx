@@ -33,19 +33,11 @@ const Filters = () => {
           <option value="name:asc">Ordem alfabética</option>
         </select>
 
-        <select
-          onChange={(e) => vm.setItemCount(Number(e.target.value))}
-          value={vm.itemCount}
-          className="px-2 rounded-md bg-primary min-h-[32px] md:h-full md:w-auto w-full text-white"
-        >
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>
-
         <Sheet>
-          <SheetTrigger asChild className="flex items-center px-2 rounded-md bg-primary text-white">
+          <SheetTrigger
+            asChild
+            className="flex items-center px-2 rounded-md bg-primary text-white"
+          >
             <div className="flex items-center min-h-[32px] md:h-full md:w-auto w-full">
               <FilterIcon size={18} className="fill-white stroke-none" />
               Filtros
@@ -54,7 +46,9 @@ const Filters = () => {
           <SheetContent>
             <SheetHeader className="text-left space-y-1 border-solid border-b-[1px] pb-2">
               <SheetTitle>Filtros</SheetTitle>
-              <SheetDescription>Selecione os filtros que deseja.</SheetDescription>
+              <SheetDescription>
+                Selecione os filtros que deseja.
+              </SheetDescription>
             </SheetHeader>
 
             {/* Categorias */}
@@ -67,14 +61,21 @@ const Filters = () => {
                       id={category.id}
                       checked={vm.selectedCategories.includes(category.id)}
                       onCheckedChange={() => {
-                        const newCategories = vm.selectedCategories.includes(category.id)
-                          ? vm.selectedCategories.filter((id) => id !== category.id)
+                        const newCategories = vm.selectedCategories.includes(
+                          category.id
+                        )
+                          ? vm.selectedCategories.filter(
+                              (id) => id !== category.id
+                            )
                           : [...vm.selectedCategories, category.id];
 
                         vm.setSelectedCategories(newCategories);
                       }}
                     />
-                    <Label htmlFor={category.id} className="text-sm leading-none font-normal">
+                    <Label
+                      htmlFor={category.id}
+                      className="text-sm leading-none font-normal"
+                    >
                       {category.name}
                     </Label>
                   </div>
@@ -101,7 +102,10 @@ const Filters = () => {
                         vm.setSelectedMarks(newMarks);
                       }}
                     />
-                    <Label htmlFor={mark.id} className="text-sm leading-none font-normal">
+                    <Label
+                      htmlFor={mark.id}
+                      className="text-sm leading-none font-normal"
+                    >
                       {mark.name}
                     </Label>
                   </div>
@@ -113,24 +117,24 @@ const Filters = () => {
 
             <SheetClose asChild className="w-full flex justify-end">
               <div className="flex flex-row w-full gap-2">
-                <Button className="mt-4" variant="outline" onClick={vm.handleResetFilters}>
+                <Button
+                  className="mt-4"
+                  variant="outline"
+                  onClick={vm.handleResetFilters}
+                >
                   Limpar Filtros
                 </Button>
-                <Button className="mt-4" variant="secondary" onClick={vm.handleFilterApply}>
+                <Button
+                  className="mt-4"
+                  variant="secondary"
+                  onClick={vm.handleFilterApply}
+                >
                   Aplicar Filtros
                 </Button>
               </div>
             </SheetClose>
           </SheetContent>
         </Sheet>
-
-        <Button
-          onClick={vm.toggleOrientation}
-          className="p-2 h-full aspect-square bg-primary text-white border-none"
-          variant="outline"
-        >
-          {vm.itemOrientation ? <Columns /> : <Rows />}
-        </Button>
       </div>
     </div>
   );
