@@ -65,11 +65,11 @@ const AppSidebar = () => {
       <SidebarContent>
         <SidebarGroup className="flex flex-col gap-4 mt-2">
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="">
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.title} className="hover:bg-secondary rounded-full">
                   <SidebarMenuButton asChild>
-                    <a href={item.url} className="flex items-center gap-2 hover:bg-secondary hover:rounded-full hover:font-semibold p-4">
+                    <a href={item.url} className="flex items-center gap-2 hover:bg-transparent hover:rounded-full hover:font-semibold p-4">
                       <item.icon />
                       {state !== "collapsed" && <span>{item.title}</span>}
                     </a>
