@@ -24,16 +24,7 @@ const DashboardMostView = () => {
       <div className="pl-1 overflow-x-auto w-full flex-nowrap [&::-webkit-scrollbar]:hidden py-2">
         <div className="flex flex-row gap-2">
           {products.slice(0, 10).map((product) => (
-            <div key={product.id} className="min-w-[140px]">
-              <DashboardItem
-                key={product.id}
-                product={product}
-                formattedPrice={formattedPrice(product.price)}
-              />
-            </div>
-          ))}
-          {products.slice(0, 10).map((product) => (
-            <div key={product.id} className="min-w-[140px]">
+            <div key={product.id} className="min-w-[200px] max-w-[200px]">
               <DashboardItem
                 key={product.id}
                 product={product}

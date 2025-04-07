@@ -1,15 +1,15 @@
 "use client";
 import { Skeleton } from "@/app/_components/ui/skeleton";
+import DashboardItem from "./dashboard-item";
+import Filters from "./filters";
 import {
   formattedPrice,
   useDashboardItem,
 } from "../_viewmodels/useDashboardItem";
-import DashboardItem from "./dashboard-item";
-import DashboardSearch from "./dashboard-search";
-import Filters from "@/app/_components/filters";
 
 const DashboardList = () => {
-  const { products, loading } = useDashboardItem();
+  const { loading, itemOrientation, products, hasProducts } =
+  useDashboardItem();
   formattedPrice;
 
   if (loading) {
@@ -23,7 +23,6 @@ const DashboardList = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row gap-2 justify-end">
-        {/* <DashboardSearch /> */}
         <Filters />
       </div>
       <div className="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 w-full gap-2">
