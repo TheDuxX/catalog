@@ -58,7 +58,7 @@ const MetricCards = () => {
             {totalViews.toLocaleString()}
           </p>
           <div
-            className={`flex items-center md:text-lg text-sm ${
+            className={`flex items-center md:text-lg text-sm gap-1 ${
               viewsChange! > 0 ? "text-green-500" : "text-red-500"
             }`}
           >
@@ -70,7 +70,6 @@ const MetricCards = () => {
             ) : (
               <div className="flex flex=row gap-1">
                 <TrendingDown size={16} />
-                <p>-</p>
               </div>
             )}
             {formatChange(viewsChange)}
@@ -88,7 +87,7 @@ const MetricCards = () => {
             {totalOrders.toLocaleString()}
           </p>
           <div
-            className={`flex items-center md:text-lg text-sm ${
+            className={`flex items-center md:text-lg text-sm gap-1 ${
               ordersChange! > 0 ? "text-green-500" : "text-red-500"
             }`}
           >
@@ -100,7 +99,6 @@ const MetricCards = () => {
             ) : (
               <div className="flex flex=row gap-1">
                 <TrendingDown size={16} />
-                <p>-</p>
               </div>
             )}
             {formatChange(ordersChange)}

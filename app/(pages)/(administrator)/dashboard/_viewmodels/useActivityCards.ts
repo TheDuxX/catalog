@@ -30,31 +30,36 @@ export const useActivitycards = () => {
         setTotalProducts(productsData.length);
 
         // Ordenar os dados por data
-        const sortedData = activityData.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        const sortedData = activityData.sort(
+          (a: any, b: any) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
 
-        // Capturar a data de hoje e calcular períodos
         const today = new Date();
-        const last7DaysStart = new Date();
-        last7DaysStart.setDate(today.getDate() - 6); // Últimos 7 dias incluem hoje
+        const last7DaysEnd = new Date(today);
+        last7DaysEnd.setDate(today.getDate() - 1);
+        const last7DaysStart = new Date(today);
+        last7DaysStart.setDate(today.getDate() - 7);
+        const prev7DaysEnd = new Date(last7DaysStart);
+        prev7DaysEnd.setDate(last7DaysStart.getDate() - 1);
 
-        const prev7DaysStart = new Date();
-        prev7DaysStart.setDate(last7DaysStart.getDate() - 7); // 7 dias antes dos últimos 7 dias
+        const prev7DaysStart = new Date(prev7DaysEnd);
+        prev7DaysStart.setDate(prev7DaysEnd.getDate() - 6);
 
-        const prev7DaysEnd = new Date();
-        prev7DaysEnd.setDate(last7DaysStart.getDate() - 1); // Um dia antes do último período de 7 dias
+        const last7Days = sortedData.filter((item: any) => {
+          const itemDate = new Date(item.date);
+          return itemDate >= last7DaysStart && itemDate <= last7DaysEnd;
+        });
 
-        // Filtrar os últimos 7 dias
-        const last7Days = sortedData.slice(-7);
-
-        // Filtrar os 7 dias anteriores
         const prev7Days = sortedData.filter((item: any) => {
           const itemDate = new Date(item.date);
           return itemDate >= prev7DaysStart && itemDate <= prev7DaysEnd;
         });
 
-        // Somar total de visualizações e pedidos para cada período
-        const sumViews = (data: Activity[]) => data.reduce((acc, curr) => acc + curr.page_views, 0);
-        const sumOrders = (data: Activity[]) => data.reduce((acc, curr) => acc + curr.orders, 0);
+        const sumViews = (data: Activity[]) =>
+          data.reduce((acc, curr) => acc + curr.page_views, 0);
+        const sumOrders = (data: Activity[]) =>
+          data.reduce((acc, curr) => acc + curr.orders, 0);
 
         const viewsLast7Days = sumViews(last7Days);
         const viewsPrev7Days = sumViews(prev7Days);
@@ -72,7 +77,6 @@ export const useActivitycards = () => {
 
         setViewsChange(calculateChange(viewsLast7Days, viewsPrev7Days));
         setOrdersChange(calculateChange(ordersLast7Days, ordersPrev7Days));
-
       } catch (error) {
         console.error("Erro ao carregar dados", error);
       } finally {
@@ -83,5 +87,13 @@ export const useActivitycards = () => {
     loadData();
   }, []);
 
-  return { activity, totalViews, totalOrders, totalProducts, viewsChange, ordersChange, loading };
+  return {
+    activity,
+    totalViews,
+    totalOrders,
+    totalProducts,
+    viewsChange,
+    ordersChange,
+    loading,
+  };
 };
