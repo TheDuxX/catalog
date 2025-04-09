@@ -3,6 +3,7 @@ import { User } from "lucide-react";
 import { useDashboardHeaderViewModel } from "../_viewmodels/useDashboardHeaderViewModel";
 import { SidebarTrigger } from "@/app/_components/ui/sidebar";
 import SearchBar from "./dashboard-search-bar";
+import Avatar from "./avatar";
 
 const DashboardHeader = () => {
   const { currentTitle, goBack } = useDashboardHeaderViewModel();
@@ -15,9 +16,7 @@ const DashboardHeader = () => {
       </div>
       <div className="flex-row flex items-center gap-2 w-2/4">
         <SearchBar />
-        <div className="border border-gray-500 rounded-full">
-          <User size={36} className="stroke-1 text-gray-500" />
-        </div>
+        <Avatar />
       </div>
     </div>
   );
