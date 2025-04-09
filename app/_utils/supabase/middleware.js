@@ -27,8 +27,13 @@ export async function updateSession(request) {
     }
   )
 
-  // refreshing the auth token
-  await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
 
   return supabaseResponse
 }
