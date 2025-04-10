@@ -31,7 +31,10 @@ export function useAuthViewModel() {
 
   const validateAndSignup = async () => {
     const result = signupSchema
-      .extend({ password: passwordSchema })
+      .refine((data) => passwordSchema.safeParse(data.password).success, {
+        message: "Invalid password",
+        path: ["password"],
+      })
       .safeParse(formData);
     if (!result.success) return formatErrors(result.error);
     const form = new FormData();
