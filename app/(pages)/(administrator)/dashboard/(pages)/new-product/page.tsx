@@ -1,5 +1,11 @@
+import CreateProductPage from "./_components/form";
+
 const NewProductPage = () => {
-    return ( <>Novo produto</> );
-}
- 
+  return (
+    <>
+      <CreateProductPage />
+    </>
+  );
+};
+
 export default NewProductPage;
