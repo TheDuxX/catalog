@@ -21,9 +21,11 @@ import {
 import Image from "next/image";
 import { Plus } from "lucide-react";
 import { Label } from "@/app/_components/ui/label";
+import { Textarea } from "@/app/_components/ui/textarea";
+import { useState } from "react";
 
 export default function CreateProductPage() {
-  const { form, onSubmit, marks, categories, isLoading } = useCreateProduct();
+  const { form, onSubmit, marks, categories, isLoading, formatToCurrency } = useCreateProduct();
 
   return (
     <div className="w-full flex items-center justify-start md:p-4">
@@ -40,7 +42,9 @@ export default function CreateProductPage() {
             name="imageUrls"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-semibold">Imagens do produto</FormLabel>
+                <FormLabel className="font-semibold">
+                  Imagens do produto
+                </FormLabel>
                 <FormControl>
                   <div className="flex flex-wrap gap-2">
                     <Label
@@ -105,7 +109,7 @@ export default function CreateProductPage() {
               <FormItem>
                 <FormLabel className="font-semibold">Descrição</FormLabel>
                 <FormControl>
-                  <Input
+                  <Textarea
                     placeholder="Digite a descrição do produto"
                     {...field}
                   />
@@ -118,20 +122,45 @@ export default function CreateProductPage() {
             <FormField
               control={form.control}
               name="price"
-              render={({ field }) => (
-                <FormItem className="w-1/2">
-                  <FormLabel className="font-semibold">Preço</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Digite o preço do produto"
-                      type="number"
-                      value={field.value}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const [displayValue, setDisplayValue] = useState(
+                  field.value ? formatToCurrency(field.value) : ""
+                );
+
+                const handleChange = (
+                  e: React.ChangeEvent<HTMLInputElement>
+                ) => {
+                  const raw = e.target.value;
+
+                  // Remove tudo que não for número
+                  const numericString = raw.replace(/\D/g, "");
+
+                  // Converte para número com centavos
+                  const valueAsNumber = Number(numericString) / 100;
+
+                  // Atualiza o valor real do form
+                  field.onChange(valueAsNumber);
+
+                  // Atualiza o que está sendo exibido
+                  setDisplayValue(formatToCurrency(valueAsNumber));
+                };
+
+                return (
+                  <FormItem className="w-1/2">
+                    <FormLabel>Preço</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="R$ 0,00"
+                        value={displayValue}
+                        onChange={handleChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
             <FormField
               control={form.control}
@@ -207,7 +236,12 @@ export default function CreateProductPage() {
               )}
             />
           </div>
-          <Button variant={"secondary"} className="font-semibold md:w-1/4" disabled={isLoading} type="submit">
+          <Button
+            variant={"secondary"}
+            className="font-semibold md:w-1/4"
+            disabled={isLoading}
+            type="submit"
+          >
             {isLoading ? "Criando..." : "Cadastrar"}
           </Button>
         </form>

@@ -95,5 +95,13 @@ export function useCreateProduct() {
     }
   }
 
-  return { form, onSubmit, marks, categories, isLoading };
+  function formatToCurrency(value: number) {
+    return value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  }
+
+  return { form, onSubmit, marks, categories, isLoading, formatToCurrency };
 }
+
