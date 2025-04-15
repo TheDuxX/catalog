@@ -1,7 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEditProduct } from "../_viewmodels/useEditProduct";
 import {
   Form,
   FormControl,
@@ -25,6 +24,7 @@ import { Label } from "@/app/_components/ui/label";
 import { Plus } from "lucide-react";
 import { useProductForm } from "../_viewmodels/useProductForm";
 import { Button } from "@/app/_components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
 
 const ProductForm = () => {
   const { id } = useParams();
@@ -209,11 +209,27 @@ const ProductForm = () => {
                 />
               </div>
               <div className="">
-                {product.status ? (
-                  <p>Produto Ativo</p>
-                ) : (
-                  <p>Produto Desativado</p>
-                )}
+                <Label className="font-semibold">Status</Label>
+                <RadioGroup defaultValue={product.status ? "true" : "false"}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="true"
+                      id="active"
+                      defaultChecked={product.status}
+                      disabled={edit}
+                    />
+                    <Label htmlFor="active">Ativo</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="false"
+                      id="inactive"
+                      defaultChecked={!product.status}
+                      disabled={edit}
+                    />
+                    <Label htmlFor="inactive">Inativo</Label>
+                  </div>
+                </RadioGroup>
               </div>
             </div>
             <div className="md:w-1/2">
