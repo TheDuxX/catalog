@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useFilters } from "@/app/_utils/filters-context";
 import { useSearchParams } from "next/navigation";
+import { useProductRealtime } from "../_services/supabase-realtime";
 
 export const useDashboardItem = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -10,22 +11,22 @@ export const useDashboardItem = () => {
   const { itemOrientation, itemCount, sortOrder } = useFilters();
   const params = useSearchParams();
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/filters?${params.toString()}`);
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error("Erro ao buscar produtos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  async function fetchProducts() {
+    setLoading(true);
+    const res = await fetch(`/api/filters?${params.toString()}`);
+    const data = await res.json();
+    setProducts(data);
+    setLoading(false);
+  }
 
+  useEffect(() => {
     fetchProducts();
   }, [params]);
+
+  useProductRealtime((payload) => {
+    console.log("Atualizando produtos...", payload);
+    fetchProducts();
+  });
 
   const sortedProducts = [...products].sort((a, b) => {
     if (!sortOrder) return 0;
