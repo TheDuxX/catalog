@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/app/_components/ui/card";
 import Image from "next/image";
+import { useDashboardItem } from "../_viewmodels/useDashboardItem";
 
 interface ProductProps {
   product: {
@@ -27,10 +28,17 @@ interface ProductProps {
 }
 
 const DashboardItem = ({ product, formattedPrice }: ProductProps) => {
+  const { handleProductClick } = useDashboardItem();
+
   return (
-    <Card className="p-0 md:min-w-[100px] w-full bg-white hover:shadow-md hover:translate-y-[-5px] transition-all">
+    <Card
+      className="p-0 md:min-w-[100px] w-full bg-white hover:shadow-md hover:translate-y-[-5px] transition-all cursor-pointer"
+      onClick={() => handleProductClick(product.id)}
+    >
       <CardContent className={`p-1 flex flex-col justify-between`}>
-        <div className={`relative min-w-[100px] w-full aspect-square rounded-md`}>
+        <div
+          className={`relative min-w-[100px] w-full aspect-square rounded-md`}
+        >
           <Image
             src={product.imageUrls[0]}
             alt={product.name}
