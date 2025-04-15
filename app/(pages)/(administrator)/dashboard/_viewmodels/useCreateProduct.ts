@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { uploadImages } from "../_services/uploadImages";
 import { createProduct } from "../_services/createProduct-service";
 import { useRouter } from "next/navigation";
+import { fetchCategoryMark } from "../_services/category-mark-service";
 
 type Categories = {
   id: string;
@@ -28,30 +29,10 @@ export function useCreateProduct() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch("/api/category");
-        if (!response.ok) throw new Error("Erro ao buscar Categorias");
-        const data = await response.json();
-        setCategories(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const fetchMarks = async () => {
-      try {
-        const response = await fetch("/api/mark");
-        if (!response.ok) throw new Error("Erro ao buscar Marcas");
-        const data = await response.json();
-        setMarks(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchCategories();
-    fetchMarks();
+    fetchCategoryMark().then(({ category, mark }) => {
+      setCategories(category);
+      setMarks(mark);
+    });
   }, []);
 
   const form = useForm<z.infer<typeof productSchema>>({
@@ -104,4 +85,3 @@ export function useCreateProduct() {
 
   return { form, onSubmit, marks, categories, isLoading, formatToCurrency };
 }
-
