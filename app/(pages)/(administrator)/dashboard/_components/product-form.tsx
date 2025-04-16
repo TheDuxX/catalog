@@ -43,8 +43,6 @@ const ProductForm = () => {
   if (isLoading) return <div>Carregando...</div>;
   if (!product) return <div>Produto não encontrado</div>;
 
-  console.log(product);
-
   return (
     <div className="w-full h-screen rounded-md flex flex-row gap-2">
       <Form {...form}>
