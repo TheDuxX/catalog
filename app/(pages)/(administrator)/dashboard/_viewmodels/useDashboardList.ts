@@ -2,32 +2,30 @@
 
 import { useEffect, useState } from "react";
 import { useFilters } from "@/app/_utils/filters-context";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useProductRealtime } from "../_services/supabase-realtime";
+import { useSearchParams } from "next/navigation";
+import { fetchProducts } from "../_services/products-service";
 
 export const useDashboardItem = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { itemOrientation, itemCount, sortOrder } = useFilters();
   const params = useSearchParams();
-  const router = useRouter();
-
-  async function fetchProducts() {
-    setLoading(true);
-    const res = await fetch(`/api/filters?${params.toString()}`);
-    const data = await res.json();
-    setProducts(data);
-    setLoading(false);
-  }
 
   useEffect(() => {
-    fetchProducts();
-  }, [params]);
+    const fetchProductsList = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchProducts(params);
+        setProducts(data);
+      } catch (error) {
+        console.error("Erro ao buscar produtos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useProductRealtime((payload) => {
-    console.log("Atualizando produtos...", payload);
-    fetchProducts();
-  });
+    fetchProductsList();
+  }, [params]);
 
   const sortedProducts = [...products].sort((a, b) => {
     if (!sortOrder) return 0;
@@ -52,16 +50,11 @@ export const useDashboardItem = () => {
 
   const visibleProducts = sortedProducts.slice(0, itemCount);
 
-  function handleProductClick(id: string) {
-    router.push(`/dashboard/product/${id}`);
-  }
-
   return {
     loading,
     itemOrientation,
     products: visibleProducts,
     hasProducts: sortedProducts.length > 0,
-    handleProductClick,
   };
 };
 

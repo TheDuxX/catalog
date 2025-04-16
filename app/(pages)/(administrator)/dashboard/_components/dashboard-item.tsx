@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/app/_components/ui/card";
 import Image from "next/image";
-import { useDashboardItem } from "../_viewmodels/useDashboardItem";
+import { useDashboardItem } from "../_viewmodels/useDashboardList";
 
 interface ProductProps {
   product: {
@@ -28,12 +28,12 @@ interface ProductProps {
 }
 
 const DashboardItem = ({ product, formattedPrice }: ProductProps) => {
-  const { handleProductClick } = useDashboardItem();
+  // const { handleProductClick } = useDashboardItem();
 
   return (
     <Card
       className="p-0 md:min-w-[100px] w-full bg-white hover:shadow-md hover:translate-y-[-5px] transition-all cursor-pointer"
-      onClick={() => handleProductClick(product.id)}
+      // onClick={() => handleProductClick(product.id)}
     >
       <CardContent className={`p-1 flex flex-col justify-between`}>
         <div
@@ -45,6 +45,7 @@ const DashboardItem = ({ product, formattedPrice }: ProductProps) => {
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
           />
         </div>
         <div className={` flex flex-col  gap-2 px-2`}>

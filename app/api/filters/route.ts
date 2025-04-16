@@ -10,11 +10,6 @@ export async function GET(req: NextRequest) {
   const mark = searchParams.get("mark")?.split(",") || [];
   const status = true;
 
-  console.log("Filtros recebidos:");
-  console.log("Categorias:", category);
-  console.log("Marcas:", mark);
-  console.log("Status:", status);
-
   let query = supabase.from("product")
     .select(`id, name, description, reference, status, price, date, "imageUrls", views, categoryId,
     category:categoryId(name), markId,

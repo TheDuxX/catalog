@@ -3,7 +3,7 @@ import { Skeleton } from "@/app/_components/ui/skeleton";
 import {
   formattedPrice,
   useDashboardItem,
-} from "../_viewmodels/useDashboardItem";
+} from "../_viewmodels/useDashboardList";
 import DashboardItem from "./dashboard-item";
 
 const DashboardMostView = () => {

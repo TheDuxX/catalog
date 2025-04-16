@@ -5,7 +5,7 @@ import Filters from "./filters";
 import {
   formattedPrice,
   useDashboardItem,
-} from "../_viewmodels/useDashboardItem";
+} from "../_viewmodels/useDashboardList";
 
 interface SearchProductsParams {
   products: {

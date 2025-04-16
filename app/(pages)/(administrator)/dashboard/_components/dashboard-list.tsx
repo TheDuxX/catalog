@@ -5,7 +5,7 @@ import Filters from "./filters";
 import {
   formattedPrice,
   useDashboardItem,
-} from "../_viewmodels/useDashboardItem";
+} from "../_viewmodels/useDashboardList";
 import { Loader2 } from "lucide-react";
 
 const DashboardList = () => {

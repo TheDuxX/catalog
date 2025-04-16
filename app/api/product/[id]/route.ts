@@ -4,10 +4,24 @@ import { NextRequest, NextResponse } from "next/server";
 interface Params {
   params: { id: string };
 }
+type Context = {
+  params: {
+    id: string;
+  };
+};
 
-// GET: Buscar produto por ID
-export async function GET(req: NextRequest, { params }: Params) {
-  const id = params.id;
+export async function GET(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
+
+  if (!id) {
+    return new Response(JSON.stringify({ error: "ID não fornecido" }), {
+      status: 400,
+    });
+  }
+
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -20,10 +34,15 @@ export async function GET(req: NextRequest, { params }: Params) {
     .eq("id", id)
     .single();
 
-  if (error)
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  if (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+    });
+  }
 
-  return NextResponse.json(data, { status: 200 });
+  return new Response(JSON.stringify(data), {
+    status: 200,
+  });
 }
 
 // PUT: Atualizar produto
