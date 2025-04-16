@@ -14,14 +14,19 @@ export async function login(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const { error } = await supabase.auth.signInWithPassword(data);
+  try {
+    const { error } = await supabase.auth.signInWithPassword(data);
 
-  if (error) {
-    redirect("/error");
+    if (error) {
+      console.error(error.message);
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Erro ao efetuar login", error);
+    return { success: false };
+  } finally {
+    revalidatePath("/", "layout");
   }
-
-  revalidatePath("/", "layout");
-  redirect("/dashboard");
 }
 
 export async function signup(formData: FormData) {

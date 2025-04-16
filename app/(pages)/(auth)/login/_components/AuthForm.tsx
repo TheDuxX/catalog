@@ -9,10 +9,13 @@ import {
   TabsTrigger,
 } from "@/app/_components/ui/tabs";
 import { useAuthViewModel } from "../_view-model/useAuthViewModels";
+import { Loader2 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function AuthForm() {
   const {
     formData,
+    isLoading,
     errors,
     handleChange,
     validateAndLogin,
@@ -28,7 +31,13 @@ export function AuthForm() {
       </TabsList>
 
       <TabsContent value="login">
-        <form action={validateAndLogin} className="flex flex-col gap-2">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            validateAndLogin();
+          }}
+          className="flex flex-col gap-2"
+        >
           <Input
             name="email"
             value={formData.email}
@@ -47,7 +56,15 @@ export function AuthForm() {
             placeholder="Senha"
           />
           {errors.password && (
-            <p className="text-sm text-red-500">{errors.password}</p>
+            <motion.p
+              className="text-sm text-red-500"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2 }}
+            >
+              {errors.password}
+            </motion.p>
           )}
           <span
             onClick={() => redirect("reset")}
@@ -60,31 +77,67 @@ export function AuthForm() {
       </TabsContent>
 
       <TabsContent value="signup">
-        <form action={validateAndSignup} className="flex flex-col gap-2">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            validateAndSignup();
+          }}
+          className="flex flex-col gap-2"
+        >
           <Input
             name="email"
             value={formData.email}
             onChange={handleChange}
             placeholder="Email"
           />
+          {errors.email && (
+            <motion.p
+              className="text-sm text-red-500"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2 }}
+            >
+              {errors.email}
+            </motion.p>
+          )}
           <Input
             name="password"
             value={formData.password}
             onChange={handleChange}
             placeholder="Senha"
           />
+          {errors.password && (
+            <motion.p
+              className="text-sm text-red-500"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2 }}
+            >
+              {errors.password}
+            </motion.p>
+          )}
           <Input
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder="Confirmar senha"
           />
-          {Object.values(errors).map((e, i) => (
-            <p key={i} className="text-sm text-red-500">
-              {e}
-            </p>
-          ))}
-          <Button type="submit">Cadastrar</Button>
+          {errors.confirmPassword && (
+            <motion.p
+              className="text-sm text-red-500"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2 }}
+            >
+              {errors.confirmPassword}
+            </motion.p>
+          )}
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? <Loader2 className="animate-spin" /> : "Entrar"}
+          </Button>
         </form>
       </TabsContent>
     </Tabs>

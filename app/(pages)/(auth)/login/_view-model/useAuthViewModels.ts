@@ -18,6 +18,7 @@ export function useAuthViewModel() {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -29,10 +30,26 @@ export function useAuthViewModel() {
   const validateAndLogin = async () => {
     const result = loginSchema.safeParse(formData);
     if (!result.success) return formatErrors(result.error);
-    const form = new FormData();
-    form.append("email", formData.email);
-    form.append("password", formData.password);
-    await login(form);
+
+    try {
+      setIsLoading(true);
+      const form = new FormData();
+      form.append("email", formData.email);
+      form.append("password", formData.password);
+
+      const response = await login(form);
+      if (response?.success) {
+        setIsLoading(false);
+        toast.success("Login efetuado com sucesso!");
+        router.push("/dashboard");
+      } else {
+        toast.error("Erro ao efetuar login!");
+      }
+    } catch (error) {
+      console.error("Erro ao efetuar login", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const validateAndSignup = async () => {
@@ -86,10 +103,10 @@ export function useAuthViewModel() {
 
   const redirect = (path: string) => router.push(path);
 
-
   return {
     formData,
     errors,
+    isLoading,
     handleChange,
     validateAndLogin,
     validateAndSignup,
