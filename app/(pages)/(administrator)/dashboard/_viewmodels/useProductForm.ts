@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { fetchCategoryMark } from "../_services/category-mark-service";
-import { getProductById } from "../_services/product-service";
+import { getProductById, updateProduct } from "../_services/product-service";
 import { createProduct } from "../_services/createProduct-service";
 import { uploadImages } from "../_services/uploadImages";
 
@@ -139,6 +139,23 @@ export function useProductForm({ id }: { id: string }) {
     });
   }
 
+  const handleChangeStatus = async () => {
+    if (!product) return;
+
+    try {
+      const updatedStatus = !product.status;
+      await updateProduct(product.id, { status: updatedStatus } as any);
+
+      // Atualiza localmente
+      setProduct({ ...product, status: updatedStatus });
+
+      toast.success("Status alterado com sucesso!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao alterar status.");
+    }
+  };
+
   return {
     product,
     form,
@@ -151,5 +168,7 @@ export function useProductForm({ id }: { id: string }) {
     formatToCurrency,
     edit,
     setEdit,
+    handleChangeStatus,
+    reset,
   };
 }

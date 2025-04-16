@@ -21,10 +21,12 @@ import {
 } from "@/app/_components/ui/select";
 import Image from "next/image";
 import { Label } from "@/app/_components/ui/label";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useProductForm } from "../_viewmodels/useProductForm";
 import { Button } from "@/app/_components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
+import { Switch } from "@/app/_components/ui/switch";
+import { Skeleton } from "@/app/_components/ui/skeleton";
 
 const ProductForm = () => {
   const { id } = useParams();
@@ -38,37 +40,124 @@ const ProductForm = () => {
     formatToCurrency,
     edit,
     setEdit,
+    handleChangeStatus,
   } = useProductForm({ id: String(id) });
 
-  if (isLoading) return <div>Carregando...</div>;
-  if (!product) return <div>Produto não encontrado</div>;
+  if (isLoading || !product) {
+    return (
+      <div className="p-4">
+        <div className="w-full h-full flex flex-col gap-6">
+          <div className="grid md:grid-cols-5 grid-cols-2 gap-2 w-1/2">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Skeleton
+                key={index}
+                className="md:min-w-[100px] w-full shadow flex items-center justify-center aspect-square"
+              />
+            ))}
+          </div>
+          <div className="flex flex-col gap-2 w-1/2">
+            <Skeleton className="w-full h-10" />
+            <Skeleton className="w-full h-20" />
+            <div className="flex flex-row gap-2">
+              <Skeleton className="w-full h-10" />
+              <Skeleton className="w-full h-10" />
+            </div>
+            <div className="flex flex-row gap-2">
+              <Skeleton className="w-full h-10" />
+              <Skeleton className="w-full h-10" />
+            </div>
+            <div className="w-1/3 flex flex-row gap-2">
+              <Skeleton className="w-full h-10" />
+              <Skeleton className="w-full h-10" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-screen rounded-md flex flex-row gap-2">
       <Form {...form}>
         <form className="w-full">
-          <div className="flex md:flex-row flex-col gap-4 w-full">
+          <div className="flex flex-col gap-4 w-full">
             <div className="md:w-1/2">
               <FormField
                 control={form.control}
-                name="name"
+                name="imageUrls"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-semibold">
-                      Nome do produto
+                      Imagens do produto
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Nome do produto"
-                        {...field}
-                        value={product.name}
-                        disabled={edit}
-                      />
+                      <div className="gap-2 grid md:grid-cols-5 grid-cols-2">
+                        {product.imageUrls.map((url, index) => (
+                          <div
+                            className="relative w-full h-auto aspect-square rounded-md overflow-hidden shadow"
+                            key={index}
+                          >
+                            <Image
+                              src={url}
+                              alt={`${product.name}-${index}`}
+                              fill
+                              className="object-contain object-center"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              priority
+                            />
+                          </div>
+                        ))}
+                        <Label
+                          htmlFor="upload"
+                          className="w-full aspect-square h-auto flex items-center justify-center border border-dashed rounded bg-white cursor-pointer"
+                        >
+                          <Plus className="text-gray-500" />
+                        </Label>
+                        <Input
+                          id="upload"
+                          type="file"
+                          multiple
+                          className="hidden"
+                          onChange={(e) => {
+                            const files = Array.from(e.target.files || []);
+                            const newUrls = files.map((file) =>
+                              URL.createObjectURL(file)
+                            );
+                            field.onChange([
+                              ...(field.value || []),
+                              ...newUrls,
+                            ]);
+                          }}
+                        />
+                      </div>
                     </FormControl>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
+            </div>
+            <div className="md:w-1/2">
+              <div className="flex flex-row gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="font-semibold">
+                        Nome do produto
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Nome do produto"
+                          {...field}
+                          value={product.name}
+                          disabled={edit}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="description"
@@ -99,13 +188,9 @@ const ProductForm = () => {
                       e: React.ChangeEvent<HTMLInputElement>
                     ) => {
                       const raw = e.target.value;
-                      // Remove tudo que não for número
                       const numericString = raw.replace(/\D/g, "");
-                      // Converte para número com centavos
                       const valueAsNumber = Number(numericString) / 100;
-                      // Atualiza o valor real do form
                       field.onChange(valueAsNumber);
-                      // Atualiza o que está sendo exibido
                       setDisplayValue(formatToCurrency(valueAsNumber));
                     };
                     return (
@@ -206,94 +291,17 @@ const ProductForm = () => {
                   )}
                 />
               </div>
-              <div className="">
-                <Label className="font-semibold">Status</Label>
-                <RadioGroup defaultValue={product.status ? "true" : "false"}>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value="true"
-                      id="active"
-                      defaultChecked={product.status}
-                      disabled={edit}
-                    />
-                    <Label htmlFor="active">Ativo</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value="false"
-                      id="inactive"
-                      defaultChecked={!product.status}
-                      disabled={edit}
-                    />
-                    <Label htmlFor="inactive">Inativo</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-            </div>
-            <div className="md:w-1/2">
-              <FormField
-                control={form.control}
-                name="imageUrls"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-semibold">
-                      Imagens do produto
-                    </FormLabel>
-                    <FormControl>
-                      <div className="gap-2 grid md:grid-cols-4 grid-cols-2">
-                        {product.imageUrls.map((url, index) => (
-                          <div
-                            className="relative w-full h-auto aspect-square rounded-md overflow-hidden shadow"
-                            key={index}
-                          >
-                            <Image
-                              src={url}
-                              alt={`${product.name}-${index}`}
-                              fill
-                              className="object-contain object-center"
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              priority
-                            />
-                          </div>
-                        ))}
-                        <Label
-                          htmlFor="upload"
-                          className="w-full h-auto flex items-center justify-center border border-dashed rounded bg-white cursor-pointer"
-                        >
-                          <Plus className="text-gray-500" />
-                        </Label>
-                        <Input
-                          id="upload"
-                          type="file"
-                          multiple
-                          className="hidden"
-                          onChange={(e) => {
-                            const files = Array.from(e.target.files || []);
-                            const newUrls = files.map((file) =>
-                              URL.createObjectURL(file)
-                            );
-                            field.onChange([
-                              ...(field.value || []),
-                              ...newUrls,
-                            ]);
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
             </div>
           </div>
-          <Button
-            type="button"
-            variant="secondary"
-            className={`py-2 px-6 mt-4 ${edit ? "" : "hidden"}`}
-            onClick={() => setEdit(false)}
-          >
-            Editar
-          </Button>
           <div className="flex flex-row gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              className={`py-2 px-6 mt-4 ${edit ? "" : "hidden"}`}
+              onClick={() => setEdit(false)}
+            >
+              Editar
+            </Button>
             <Button
               type="submit"
               variant="secondary"
@@ -302,12 +310,20 @@ const ProductForm = () => {
               Salvar
             </Button>
             <Button
-              type="button"
+              type="reset"
               variant="outline"
               className={`py-2 px-6 mt-4 ${edit ? "hidden" : ""}`}
               onClick={() => setEdit(true)}
             >
               Cancelar
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className={`py-2 px-6 mt-4 `}
+              onClick={handleChangeStatus}
+            >
+              {product.status ? "Desativar" : "Ativar"}
             </Button>
           </div>
         </form>
