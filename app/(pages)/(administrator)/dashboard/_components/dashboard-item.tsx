@@ -3,6 +3,7 @@
 import { Card, CardContent } from "@/app/_components/ui/card";
 import Image from "next/image";
 import { useDashboardItem } from "../_viewmodels/useDashboardList";
+import { useItemService } from "../_viewmodels/useItemService";
 
 interface ProductProps {
   product: {
@@ -28,12 +29,12 @@ interface ProductProps {
 }
 
 const DashboardItem = ({ product, formattedPrice }: ProductProps) => {
-  // const { handleProductClick } = useDashboardItem();
+  const { handleClick } = useItemService();
 
   return (
     <Card
       className="p-0 md:min-w-[100px] w-full bg-white hover:shadow-md hover:translate-y-[-5px] transition-all cursor-pointer"
-      // onClick={() => handleProductClick(product.id)}
+      onClick={() => handleClick(product.id)}
     >
       <CardContent className={`p-1 flex flex-col justify-between`}>
         <div

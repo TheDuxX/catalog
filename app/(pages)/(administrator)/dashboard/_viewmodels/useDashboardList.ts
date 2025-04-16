@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useFilters } from "@/app/_utils/filters-context";
 import { useSearchParams } from "next/navigation";
-import { fetchProducts } from "../_services/products-service";
+import { fetchFilterProducts } from "../_services/products-service";
 
 export const useDashboardItem = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -15,7 +15,7 @@ export const useDashboardItem = () => {
     const fetchProductsList = async () => {
       setLoading(true);
       try {
-        const data = await fetchProducts(params);
+        const data = await fetchFilterProducts(params);
         setProducts(data);
       } catch (error) {
         console.error("Erro ao buscar produtos:", error);
