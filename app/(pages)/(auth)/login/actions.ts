@@ -7,8 +7,6 @@ import { redirect } from "next/navigation";
 export async function login(formData: FormData) {
   const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -37,14 +35,19 @@ export async function signup(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const { error } = await supabase.auth.signUp(data);
+  try {
+    const { error } = await supabase.auth.signUp(data);
 
-  if (error) {
-    redirect("/error");
+    if (error) {
+      redirect("/error");
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Erro ao efetuar cadastro", error);
+    return { success: false };
+  } finally {
+    revalidatePath("/", "layout");
   }
-
-  revalidatePath("/", "layout");
-  redirect("/dashboard");
 }
 
 export async function logout() {
@@ -62,15 +65,19 @@ export async function logout() {
 export async function resetPassword(formData: FormData) {
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.resetPasswordForEmail(
-    formData.get("email") as string
-  );
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(
+      formData.get("email") as string
+    );
 
-  if (error) {
-    console.error(error.message);
+    if (error) {
+      console.error(error.message);
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Erro ao enviar e-mail de redefinição:", error);
+    return { success: false };
   }
-
-  console.log("E-mail de redefinição enviado!");
 }
 
 export async function updatePassword(formData: FormData) {

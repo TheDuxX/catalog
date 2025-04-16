@@ -10,6 +10,7 @@ import {
 } from "../_models/authSchema";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { set } from "zod";
 
 export function useAuthViewModel() {
   const [formData, setFormData] = useState({
@@ -40,8 +41,8 @@ export function useAuthViewModel() {
       const response = await login(form);
       if (response?.success) {
         setIsLoading(false);
-        toast.success("Login efetuado com sucesso!");
         router.push("/dashboard");
+        toast.success("Login efetuado com sucesso!");
       } else {
         toast.error("Erro ao efetuar login!");
       }
@@ -60,10 +61,24 @@ export function useAuthViewModel() {
       })
       .safeParse(formData);
     if (!result.success) return formatErrors(result.error);
-    const form = new FormData();
-    form.append("email", formData.email);
-    form.append("password", formData.password);
-    await signup(form);
+    try {
+      setIsLoading(true);
+      const form = new FormData();
+      form.append("email", formData.email);
+      form.append("password", formData.password);
+
+      const response = await signup(form);
+      if (response?.success) {
+        router.push("/dashboard");
+        toast.success("Cadastro efetuado com sucesso!");
+      } else {
+        toast.error("Erro ao efetuar cadastro!");
+      }
+    } catch (error) {
+      console.error("Erro ao efetuar cadastro", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const validateAndUpdatePassword = async () => {
@@ -84,6 +99,7 @@ export function useAuthViewModel() {
       const response = await updatePassword(form);
 
       if (response?.success) {
+        router.push("/login");
         toast.success("Senha atualizada com sucesso!");
       } else {
         toast.error("Erro ao atualizar senha!");

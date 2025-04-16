@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "./_components/header";
 import Footer from "./_components/footer";
 import { FiltersProvider } from "./_utils/filters-context";
+import { Toaster } from "react-hot-toast";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <FiltersProvider>
       <html lang="pt-br">
-        <body className={`${montserrat.variable} antialiased`}>{children}</body>
+        <body className={`${montserrat.variable} antialiased`}>
+        <Toaster position="bottom-right" />
+        {children}</body>
       </html>
     </FiltersProvider>
   );
