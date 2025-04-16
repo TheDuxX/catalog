@@ -17,6 +17,7 @@ export function AuthForm() {
     handleChange,
     validateAndLogin,
     validateAndSignup,
+    redirect,
   } = useAuthViewModel();
 
   return (
@@ -48,7 +49,12 @@ export function AuthForm() {
           {errors.password && (
             <p className="text-sm text-red-500">{errors.password}</p>
           )}
-          <span className="text-sm text-muted-foreground">Esqueceu a sua senha?</span>
+          <span
+            onClick={() => redirect("reset")}
+            className="text-sm text-muted-foreground cursor-pointer hover:underline"
+          >
+            Esqueceu a sua senha?
+          </span>
           <Button type="submit">Entrar</Button>
         </form>
       </TabsContent>

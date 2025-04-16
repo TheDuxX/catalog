@@ -3,7 +3,6 @@
 import { createClient } from "@/app/_utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import toast from "react-hot-toast";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
@@ -28,8 +27,6 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
   const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
@@ -51,17 +48,18 @@ export async function logout() {
 
   if (error) {
     console.error("Erro ao fazer logout:", error.message);
-    redirect("/error"); // ou mostrar um toast depois
+    redirect("/error");
   }
 
-  redirect("/login"); // redireciona para a tela de login
+  redirect("/login");
 }
 
 export async function resetPassword(formData: FormData) {
   const supabase = await createClient();
 
   const { error } = await supabase.auth.resetPasswordForEmail(
-    formData.get("email") as string);
+    formData.get("email") as string
+  );
 
   if (error) {
     console.error(error.message);
@@ -73,11 +71,24 @@ export async function resetPassword(formData: FormData) {
 export async function updatePassword(formData: FormData) {
   const supabase = await createClient();
 
-  const { error } = await supabase.auth.updateUser({
-    password: "new_password",
-  });
+  const data = {
+    password: formData.get("password") as string,
+  };
 
-  if (error) {
-    toast.error(error.message);
+  try {
+    const { error } = await supabase.auth.updateUser({
+      password: data.password,
+    });
+
+    if (error) {
+      console.error(error.message);
+    }
+    alert("Senha atualizada com sucesso!");
+    return { success: true };
+  } catch (error) {
+    console.error("Erro ao atualizar senha:", error);
+    return { success: false };
+  } finally {
+    redirect("/login");
   }
 }

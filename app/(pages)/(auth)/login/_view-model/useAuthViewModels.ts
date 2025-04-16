@@ -1,11 +1,15 @@
+"use client";
 import { useState } from "react";
 
-import { login, signup } from "../actions";
+import { login, signup, updatePassword } from "../actions";
 import {
   loginSchema,
   passwordSchema,
+  resetPasswordSchema,
   signupSchema,
 } from "../_models/authSchema";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export function useAuthViewModel() {
   const [formData, setFormData] = useState({
@@ -14,6 +18,8 @@ export function useAuthViewModel() {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,6 +49,33 @@ export function useAuthViewModel() {
     await signup(form);
   };
 
+  const validateAndUpdatePassword = async () => {
+    const result = resetPasswordSchema.safeParse({
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+    });
+
+    if (!result.success) {
+      console.warn("Erros de validação:", result.error.flatten());
+      return formatErrors(result.error);
+    }
+
+    try {
+      const form = new FormData();
+      form.append("email", formData.email);
+      form.append("password", formData.password);
+      const response = await updatePassword(form);
+
+      if (response?.success) {
+        toast.success("Senha atualizada com sucesso!");
+      } else {
+        toast.error("Erro ao atualizar senha!");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar a senha:", error);
+    }
+  };
+
   const formatErrors = (error: any) => {
     const fieldErrors: Record<string, string> = {};
     error.errors.forEach((err: any) => {
@@ -51,11 +84,16 @@ export function useAuthViewModel() {
     setErrors(fieldErrors);
   };
 
+  const redirect = (path: string) => router.push(path);
+
+
   return {
     formData,
     errors,
     handleChange,
     validateAndLogin,
     validateAndSignup,
+    validateAndUpdatePassword,
+    redirect,
   };
 }
