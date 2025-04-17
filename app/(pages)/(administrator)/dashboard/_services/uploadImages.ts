@@ -1,4 +1,3 @@
-
 import { createSupabaseClient } from "@/app/_utils/supabase/client";
 import { v4 as uuidv4 } from "uuid";
 
@@ -23,4 +22,18 @@ export async function uploadImages(files: File[]): Promise<string[]> {
   });
 
   return await Promise.all(uploads);
+}
+
+export async function deleteImages(urls: string[]) {
+  const supabase = await createSupabaseClient();
+
+  const deletes = urls.map(async (url) => {
+    const { error } = await supabase.storage
+      .from("tratorino-pics")
+      .remove([url]);
+
+    if (error) throw new Error("Erro ao deletar imagem");
+  });
+
+  return await Promise.all(deletes);
 }

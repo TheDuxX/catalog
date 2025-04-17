@@ -21,7 +21,7 @@ import {
 } from "@/app/_components/ui/select";
 import Image from "next/image";
 import { Label } from "@/app/_components/ui/label";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useProductForm } from "../_viewmodels/useProductForm";
 import { Button } from "@/app/_components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
@@ -41,6 +41,7 @@ const ProductForm = () => {
     edit,
     setEdit,
     handleChangeStatus,
+    handleRemoveImage,
   } = useProductForm({ id: String(id) });
 
   if (isLoading || !product) {
@@ -79,7 +80,13 @@ const ProductForm = () => {
   return (
     <div className="w-full h-screen rounded-md flex flex-row gap-2">
       <Form {...form}>
-        <form className="w-full">
+        <form
+          className="w-full"
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit(onSubmit)();
+          }}
+        >
           <div className="flex flex-col gap-4 w-full">
             <div className="md:w-1/2">
               <FormField
@@ -92,7 +99,7 @@ const ProductForm = () => {
                     </FormLabel>
                     <FormControl>
                       <div className="gap-2 grid md:grid-cols-5 grid-cols-2">
-                        {product.imageUrls.map((url, index) => (
+                        {form.watch("imageUrls")?.map((url, index) => (
                           <div
                             className="relative w-full h-auto aspect-square rounded-md overflow-hidden shadow"
                             key={index}
@@ -105,6 +112,15 @@ const ProductForm = () => {
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                               priority
                             />
+                            {!edit && (
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveImage(url)}
+                                className="absolute top-1 right-1 bg-red-500 p-1 rounded-full"
+                              >
+                                <Trash2 className="w-4 h-4 text-white" />
+                              </button>
+                            )}
                           </div>
                         ))}
                         <Label
@@ -135,7 +151,7 @@ const ProductForm = () => {
                 )}
               />
             </div>
-            <div className="md:w-1/2">
+            <div className="md:w-1/2 flex flex-col gap-4">
               <div className="flex flex-row gap-2 w-full">
                 <FormField
                   control={form.control}
@@ -217,7 +233,6 @@ const ProductForm = () => {
                   render={({ field }) => (
                     <FormItem className="w-1/2">
                       <FormLabel className="font-semibold">
-                        {" "}
                         Referência
                       </FormLabel>
                       <FormControl>

@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { fetchCategoryMark } from "../_services/category-mark-service";
 import { getProductById, updateProduct } from "../_services/product-service";
 import { createProduct } from "../_services/createProduct-service";
-import { uploadImages } from "../_services/uploadImages";
+import { deleteImages, uploadImages } from "../_services/uploadImages";
 
 type Categories = { id: string; name: string };
 type Marks = { id: string; name: string };
@@ -43,6 +43,7 @@ export function useProductForm({ id }: { id: string }) {
   const [categories, setCategories] = useState<Categories[]>([]);
   const [marks, setMarks] = useState<Marks[]>([]);
   const [edit, setEdit] = useState(true);
+  const [removedImages, setRemovedImages] = useState<string[]>([]);
 
   const isEditMode = !!id;
 
@@ -101,7 +102,22 @@ export function useProductForm({ id }: { id: string }) {
     loadProduct();
   }, [id, reset]);
 
+  const handleRemoveImage = (url: string) => {
+    const currentImages = form.getValues("imageUrls") || [];
+    const updatedImages = currentImages.filter((img: string) => img !== url);
+    form.setValue("imageUrls", updatedImages);
+    setRemovedImages((prev) => [...prev, url]);
+  };
+
   const onSubmit = async (data: z.infer<typeof productSchema>) => {
+    function buildImageUrls(
+      existing: string[] = [],
+      removed: string[] = [],
+      uploaded: string[] = []
+    ): string[] {
+      const remaining = existing.filter((url) => !removed.includes(url));
+      return [...remaining, ...uploaded];
+    }
     setIsLoading(true);
     try {
       const fileInputs = (document.getElementById("upload") as HTMLInputElement)
@@ -110,18 +126,38 @@ export function useProductForm({ id }: { id: string }) {
 
       const uploadedUrls = files.length > 0 ? await uploadImages(files) : [];
 
-      const payload = {
-        ...data,
-        imageUrls: uploadedUrls.length > 0 ? uploadedUrls : data.imageUrls,
-      };
-
       if (isEditMode) {
-        toast("Função de edição ainda não implementada.");
-        console.log("Editar produto com payload:", payload);
-      } else {
-        await createProduct(payload);
-        toast.success("Produto criado com sucesso!");
+        if (removedImages.length > 0) {
+          await deleteImages(removedImages);
+        }
+
+        const finalImageUrls = buildImageUrls(
+          product?.imageUrls,
+          removedImages,
+          uploadedUrls
+        );
+
+        const editPayload = {
+          ...data,
+          imageUrls: finalImageUrls,
+        };
+
+        await updateProduct(id, editPayload);
+
+        toast.success("Produto atualizado com sucesso!");
         router.push("/dashboard/products");
+        form.reset();
+      } else {
+        const finalImageUrls = uploadedUrls;
+
+        const createPayload = {
+          ...data,
+          imageUrls: finalImageUrls,
+        };
+
+        await createProduct(createPayload);
+        toast.success("Produto criado com sucesso!");
+        router.back();
         form.reset();
       }
     } catch (err) {
@@ -146,7 +182,6 @@ export function useProductForm({ id }: { id: string }) {
       const updatedStatus = !product.status;
       await updateProduct(product.id, { status: updatedStatus } as any);
 
-      // Atualiza localmente
       setProduct({ ...product, status: updatedStatus });
 
       toast.success("Status alterado com sucesso!");
@@ -170,5 +205,6 @@ export function useProductForm({ id }: { id: string }) {
     setEdit,
     handleChangeStatus,
     reset,
+    handleRemoveImage,
   };
 }
