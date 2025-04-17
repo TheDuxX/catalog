@@ -18,14 +18,14 @@ body {
     --primary-foreground: 36 92% 58%; /* Amarelo */
     --secondary: 36 92% 58%; /* Amarelo */
     --secondary-foreground: 40 10% 10%; /* Preto Suave */
-    --muted: 40 15% 85%; /* Cinza Claro */
-    --muted-foreground: 40 10% 40%; /* Cinza Médio */
-    --accent: 40 10% 20%; /* Cinza Escuro */
+    --muted: 0 0% 85%; /* Cinza Claro */
+    --muted-foreground: 0 0% 40%; /* Cinza Médio */
+    --accent: 0 0% 20%; /* Cinza Escuro */
     --accent-foreground: 36 92% 58%; /* Amarelo */
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 40 20% 98%;
-    --border: 40 10% 50%;
-    --input: 40 10% 50%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 50%;
+    --input: 0 0% 50%;
     --ring: 36 92% 58%; /* Amarelo */
     --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
@@ -55,7 +55,7 @@ body {
     --muted-foreground: 40 10% 60%; /* Cinza Claro */
     --accent: 40 15% 20%;
     --accent-foreground: 36 92% 58%; /* Amarelo */
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 85% 60%;
     --destructive-foreground: 40 20% 98%;
     --border: 40 10% 30%;
     --input: 40 10% 30%;
