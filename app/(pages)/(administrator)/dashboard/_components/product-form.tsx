@@ -24,9 +24,21 @@ import { Label } from "@/app/_components/ui/label";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useProductForm } from "../_viewmodels/useProductForm";
 import { Button } from "@/app/_components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
-import { Switch } from "@/app/_components/ui/switch";
 import { Skeleton } from "@/app/_components/ui/skeleton";
+
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  rectSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import SortableImage from "./sortableImage";
 
 const ProductForm = () => {
   const { id } = useParams();
@@ -42,7 +54,9 @@ const ProductForm = () => {
     setEdit,
     handleChangeStatus,
     handleRemoveImage,
+    resetForm,
   } = useProductForm({ id: String(id) });
+  const sensors = useSensors(useSensor(PointerSensor));
 
   if (isLoading || !product) {
     return (
@@ -98,53 +112,110 @@ const ProductForm = () => {
                       Imagens do produto
                     </FormLabel>
                     <FormControl>
-                      <div className="gap-2 grid md:grid-cols-5 grid-cols-2">
-                        {form.watch("imageUrls")?.map((url, index) => (
-                          <div
-                            className="relative w-full h-auto aspect-square rounded-md overflow-hidden shadow"
-                            key={index}
-                          >
-                            <Image
-                              src={url}
-                              alt={`${product.name}-${index}`}
-                              fill
-                              className="object-contain object-center"
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              priority
-                            />
-                            {!edit && (
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveImage(url)}
-                                className="absolute top-1 right-1 bg-red-500 p-1 rounded-full"
+                      <div>
+                        {edit ? (
+                          <div className="gap-2 grid md:grid-cols-5 grid-cols-2">
+                            {form.watch("imageUrls")?.map((url, index) => (
+                              <div
+                                className="relative w-full h-auto aspect-square rounded-md overflow-hidden shadow"
+                                key={url}
                               >
-                                <Trash2 className="w-4 h-4 text-white" />
-                              </button>
-                            )}
+                                <Image
+                                  src={url}
+                                  alt={`${product.name}-${index}`}
+                                  fill
+                                  className="object-contain object-center"
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                  priority
+                                />
+                                <button
+                                  type="button"
+                                  hidden={edit}
+                                  onClick={() => handleRemoveImage(url)}
+                                  className="absolute top-1 right-1 bg-red-500 p-1 rounded-full"
+                                >
+                                  <Trash2 className="w-4 h-4 text-white" />
+                                </button>
+                              </div>
+                            ))}
                           </div>
-                        ))}
-                        <Label
-                          htmlFor="upload"
-                          className="w-full aspect-square h-auto flex items-center justify-center border border-dashed rounded bg-white cursor-pointer"
-                        >
-                          <Plus className="text-gray-500" />
-                        </Label>
-                        <Input
-                          id="upload"
-                          type="file"
-                          multiple
-                          className="hidden"
-                          onChange={(e) => {
-                            const files = Array.from(e.target.files || []);
-                            const newUrls = files.map((file) =>
-                              URL.createObjectURL(file)
-                            );
-                            field.onChange([
-                              ...(field.value || []),
-                              ...newUrls,
-                            ]);
-                          }}
-                        />
+                        ) : (
+                          <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={({ active, over }) => {
+                              if (!over) return; // over pode ser null
+                              const currentUrls = form.watch("imageUrls") ?? [];
+
+                              const oldIndex = currentUrls.indexOf(
+                                active.id as string
+                              );
+                              const newIndex = currentUrls.indexOf(
+                                over.id as string
+                              );
+
+                              if (
+                                oldIndex !== -1 &&
+                                newIndex !== -1 &&
+                                oldIndex !== newIndex
+                              ) {
+                                const newOrder = arrayMove(
+                                  currentUrls,
+                                  oldIndex,
+                                  newIndex
+                                );
+                                form.setValue("imageUrls", newOrder);
+                              }
+                            }}
+                          >
+                            <SortableContext
+                              items={
+                                (form.watch("imageUrls") ?? []) as string[]
+                              }
+                              strategy={rectSortingStrategy}
+                            >
+                              <div className="gap-2 grid md:grid-cols-5 grid-cols-2">
+                                {form.watch("imageUrls")?.map((url, index) => (
+                                  <SortableImage
+                                    key={url}
+                                    url={url}
+                                    index={index}
+                                    onRemove={() => handleRemoveImage(url)}
+                                    disabled={edit}
+                                    name={product.name}
+                                  />
+                                ))}
+                              </div>
+                            </SortableContext>
+                          </DndContext>
+                        )}
+
+                        {!edit && (
+                          <>
+                            <Label
+                              htmlFor="upload"
+                              className="w-full aspect-square h-auto flex items-center justify-center border border-dashed rounded bg-white cursor-pointer"
+                            >
+                              <Plus className="text-gray-500" />
+                            </Label>
+                            <Input
+                              id="upload"
+                              type="file"
+                              multiple
+                              className="hidden"
+                              onChange={(e) => {
+                                const files = Array.from(e.target.files || []);
+                                const newUrls = files.map((file) =>
+                                  URL.createObjectURL(file)
+                                );
+                                form.setValue("imageUrls", [
+                                  ...(form.getValues("imageUrls") || []),
+                                  ...newUrls,
+                                ]);
+                              }}
+                            />
+                          </>
+                        )}
                       </div>
                     </FormControl>
                   </FormItem>
@@ -163,9 +234,8 @@ const ProductForm = () => {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Nome do produto"
+                          placeholder={product.name}
                           {...field}
-                          value={product.name}
                           disabled={edit}
                         />
                       </FormControl>
@@ -182,10 +252,9 @@ const ProductForm = () => {
                     <FormLabel className="font-semibold">Descrição</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Digite a descrição do produto"
+                        placeholder={product.description}
                         {...field}
                         disabled={edit}
-                        value={product.description}
                       />
                     </FormControl>
                     <FormMessage />
@@ -216,8 +285,7 @@ const ProductForm = () => {
                           <Input
                             type="text"
                             inputMode="numeric"
-                            placeholder="R$ 0,00"
-                            value={displayValue}
+                            placeholder={displayValue}
                             disabled={edit}
                             onChange={handleChange}
                           />
@@ -237,9 +305,8 @@ const ProductForm = () => {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Digite a referência do produto"
+                          placeholder={product.reference}
                           {...field}
-                          value={product.reference}
                           disabled={edit}
                         />
                       </FormControl>
@@ -262,7 +329,7 @@ const ProductForm = () => {
                           disabled={edit}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecione uma categoria" />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((category) => (
@@ -290,7 +357,7 @@ const ProductForm = () => {
                           disabled={edit}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder={product.mark?.name} />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {marks.map((mark) => (
@@ -328,7 +395,10 @@ const ProductForm = () => {
               type="reset"
               variant="outline"
               className={`py-2 px-6 mt-4 ${edit ? "hidden" : ""}`}
-              onClick={() => setEdit(true)}
+              onClick={() => {
+                setEdit(true);
+                resetForm();
+              }}
             >
               Cancelar
             </Button>

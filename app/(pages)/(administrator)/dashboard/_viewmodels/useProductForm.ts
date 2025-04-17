@@ -92,7 +92,6 @@ export function useProductForm({ id }: { id: string }) {
           price: product.price,
         });
         console.log("Form values:", form.getValues());
-
       } catch (err) {
         console.error("Erro ao buscar produto:", err);
         toast.error("Erro ao carregar produto.");
@@ -109,6 +108,20 @@ export function useProductForm({ id }: { id: string }) {
     const updatedImages = currentImages.filter((img: string) => img !== url);
     form.setValue("imageUrls", updatedImages);
     setRemovedImages((prev) => [...prev, url]);
+  };
+
+  const resetForm = async () => {
+    const updatedProduct = await getProductById(id);
+    setProduct(updatedProduct);
+    form.reset({
+      name: updatedProduct.name,
+      description: updatedProduct.description,
+      reference: updatedProduct.reference,
+      imageUrls: updatedProduct.imageUrls,
+      categoryId: updatedProduct.category.id,
+      markId: updatedProduct.mark.id,
+      price: updatedProduct.price,
+    });
   };
 
   const onSubmit = async (data: z.infer<typeof productSchema>) => {
@@ -144,11 +157,21 @@ export function useProductForm({ id }: { id: string }) {
           imageUrls: finalImageUrls,
         };
 
-        await updateProduct(id, editPayload);
+        try {
+          const response = await updateProduct(id, editPayload);
 
-        toast.success("Produto atualizado com sucesso!");
-        router.push("/dashboard/products");
-        form.reset();
+          if (response?.success) {
+            toast.success("Produto atualizado com sucesso!");
+
+            resetForm();
+
+            setEdit(!edit);
+            router.push(`/dashboard/product/${id}`);
+          }
+        } catch (error) {
+          console.error("Erro ao atualizar produto", error);
+          toast.error("Erro ao atualizar produto.");
+        }
       } else {
         const finalImageUrls = uploadedUrls;
 
@@ -208,5 +231,6 @@ export function useProductForm({ id }: { id: string }) {
     handleChangeStatus,
     reset,
     handleRemoveImage,
+    resetForm,
   };
 }

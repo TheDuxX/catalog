@@ -33,7 +33,7 @@ export async function updateProduct(id: string, data: ProductSchemaType) {
     throw new Error(error || "Erro ao atualizar produto");
   }
 
-  return res.json();
+  return { success : true};
 }
 
 export async function deleteProduct(id: string) {
