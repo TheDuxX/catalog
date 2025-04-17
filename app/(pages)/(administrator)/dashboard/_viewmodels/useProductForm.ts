@@ -91,6 +91,8 @@ export function useProductForm({ id }: { id: string }) {
           markId: product.mark.id,
           price: product.price,
         });
+        console.log("Form values:", form.getValues());
+
       } catch (err) {
         console.error("Erro ao buscar produto:", err);
         toast.error("Erro ao carregar produto.");

@@ -28,8 +28,8 @@ export async function GET(
     .from("product")
     .select(
       `id, name, description, reference, status, price, date, "imageUrls", views, categoryId,
-       category:categoryId(name), markId,
-       mark:markId(name)`
+       category:categoryId(id, name), markId,
+       mark:markId(id, name)`
     )
     .eq("id", id)
     .single();

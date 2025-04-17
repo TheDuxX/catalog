@@ -258,11 +258,11 @@ const ProductForm = () => {
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value}
                           disabled={edit}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder={product.category.name} />
+                            <SelectValue placeholder="Selecione uma categoria" />
                           </SelectTrigger>
                           <SelectContent>
                             {categories.map((category) => (
@@ -286,11 +286,11 @@ const ProductForm = () => {
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value}
+                          value={field.value}
                           disabled={edit}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder={product.mark.name} />
+                            <SelectValue placeholder={product.mark?.name} />
                           </SelectTrigger>
                           <SelectContent>
                             {marks.map((mark) => (
