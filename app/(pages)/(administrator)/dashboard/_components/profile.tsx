@@ -19,7 +19,7 @@ type ProfileProps = {
 };
 
 const Profile = ({ isCollapsed }: ProfileProps) => {
-  const { user, isLoading } = useUserViewModel();
+  const { user, isLoading, redirectToProfile } = useUserViewModel();
 
   const username = isLoading
     ? "Carregando..."
@@ -55,7 +55,7 @@ const Profile = ({ isCollapsed }: ProfileProps) => {
         side="top"
         className="w-[--radix-popper-anchor-width] border-none bg-white shadow"
       >
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={redirectToProfile}>
           <span>Perfil</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={logout}>

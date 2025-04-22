@@ -1,3 +1,6 @@
+import { createSupabaseClient } from "@/app/_utils/supabase/client";
+
+
 export type UserData = {
   id: string;
   email: string;
@@ -32,6 +35,27 @@ export const updateUser = async (data: UpdateUserData): Promise<UserData> => {
   if (!res.ok) throw new Error("Erro ao atualizar usuário");
 
   return res.json();
+};
+
+export const uploadAvatar = async (
+  file: File,
+  userId: string
+): Promise<string[]> => {
+  const fileExt = file.name.split(".").pop();
+  const filePath = `${userId}.${fileExt}`;
+
+  const supabase = await createSupabaseClient();
+
+  const { data, error } = await supabase.storage
+    .from("avatars")
+    .upload(filePath, file, { upsert: true });
+
+  if (error) throw new Error("Erro ao fazer upload do avatar.");
+
+  const { data: publicUrl } = supabase.storage
+    .from("avatars")
+    .getPublicUrl(filePath);
+  return [publicUrl.publicUrl];
 };
 
 export const deleteUser = async (): Promise<void> => {
