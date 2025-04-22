@@ -8,10 +8,12 @@ import {
   UpdateUserData,
   UserData,
 } from "../_services/user-service";
+import { useRouter } from "next/navigation";
 
 export const useUserViewModel = () => {
   const [user, setUser] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   // GET
   const fetchUser = async () => {

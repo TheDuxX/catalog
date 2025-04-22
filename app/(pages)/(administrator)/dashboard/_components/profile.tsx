@@ -14,7 +14,11 @@ import { useUserViewModel } from "../_viewmodels/useUser";
 import { Skeleton } from "@/app/_components/ui/skeleton";
 import Image from "next/image";
 
-const Profile = () => {
+type ProfileProps = {
+  isCollapsed: string;
+};
+
+const Profile = ({ isCollapsed }: ProfileProps) => {
   const { user, isLoading } = useUserViewModel();
 
   const username = isLoading
@@ -39,7 +43,7 @@ const Profile = () => {
                 />
               </div>
             ) : (
-              <User2 className="w-full h-full p-2 stroke-1 bg-white"/>
+              <User2 className="w-full h-full p-2 stroke-1 bg-white" />
             )}
           </div>
           <p>{username}</p>

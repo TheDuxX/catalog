@@ -1,10 +1,5 @@
 "use client";
 
-import {
-  SidebarFooter,
-  SidebarRail,
-  useSidebar,
-} from "@/app/_components/ui/sidebar";
 import Image from "next/image";
 import {
   Sidebar,
@@ -15,15 +10,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
+  useSidebar,
 } from "@/app/_components/ui/sidebar";
-import { Home, Store, PackagePlus, Bolt, User2, ChevronUp } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/app/_components/ui/dropdown-menu";
+import { Home, Store, PackagePlus, Bolt, User2 } from "lucide-react";
 import Profile from "./profile";
+import { useUserViewModel } from "../_viewmodels/useUser";
 
 const items = [
   {
@@ -50,6 +42,19 @@ const items = [
 
 const AppSidebar = () => {
   const { state } = useSidebar();
+  const { user, isLoading } = useUserViewModel();
+
+  const avatar = isLoading ? (
+    "Carregando..."
+  ) : (
+    <>
+      {user?.avatar ? (
+        <img src={user.avatar} alt="Avatar" />
+      ) : (
+        <User2 className="w-full h-full p-2 stroke-1 bg-white rounded-full shadow" />
+      )}
+    </>
+  );
 
   return (
     <Sidebar collapsible="icon">
@@ -97,10 +102,10 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <Profile />
+      <SidebarFooter className="">
+        <SidebarMenu className="p-0 w-full ">
+          <SidebarMenuItem className="p-0 w-full transition-all">
+            {state === "collapsed" ? avatar : <Profile isCollapsed={state} />}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
