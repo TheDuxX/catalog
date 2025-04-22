@@ -1,6 +1,10 @@
 "use client";
 
-import { useSidebar } from "@/app/_components/ui/sidebar";
+import {
+  SidebarFooter,
+  SidebarRail,
+  useSidebar,
+} from "@/app/_components/ui/sidebar";
 import Image from "next/image";
 import {
   Sidebar,
@@ -12,7 +16,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/app/_components/ui/sidebar";
-import { Home, Store, PackagePlus, Bolt } from "lucide-react";
+import { Home, Store, PackagePlus, Bolt, User2, ChevronUp } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/app/_components/ui/dropdown-menu";
+import Profile from "./profile";
 
 const items = [
   {
@@ -67,9 +78,15 @@ const AppSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu className="">
               {items.map((item) => (
-                <SidebarMenuItem key={item.title} className="hover:bg-secondary rounded-full">
+                <SidebarMenuItem
+                  key={item.title}
+                  className="hover:bg-secondary rounded-full"
+                >
                   <SidebarMenuButton asChild>
-                    <a href={item.url} className="flex items-center gap-2 hover:bg-transparent hover:rounded-full hover:font-semibold p-4">
+                    <a
+                      href={item.url}
+                      className="flex items-center gap-2 hover:bg-transparent hover:rounded-full hover:font-semibold p-4"
+                    >
                       <item.icon />
                       {state !== "collapsed" && <span>{item.title}</span>}
                     </a>
@@ -80,6 +97,13 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <Profile />
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 };

@@ -3,7 +3,6 @@
 import { useDashboardHeaderViewModel } from "../_viewmodels/useDashboardHeaderViewModel";
 import { SidebarTrigger } from "@/app/_components/ui/sidebar";
 import SearchBar from "./dashboard-search-bar";
-import Avatar from "./avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +25,6 @@ const DashboardHeader = () => {
           <div className="w-full max-w-md">
             <SearchBar />
           </div>
-          <Avatar />
         </div>
 
         <div className="flex md:hidden items-center justify-end">
