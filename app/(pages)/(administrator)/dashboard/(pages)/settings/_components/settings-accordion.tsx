@@ -18,26 +18,18 @@ import UserManagement from "./user-management";
 
 const SettingsPage = () => {
   return (
-    <Tabs defaultValue="profile" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="profile">Perfil</TabsTrigger>
-        <TabsTrigger value="users-management">Usuários</TabsTrigger>
-      </TabsList>
-      <TabsContent value="profile">
-        <Card className="w-full">
-          <CardContent className="flex justify-center items-center">
-            <UserForm />
-          </CardContent>
-        </Card>
-      </TabsContent>
-      <TabsContent value="users-management">
-        <Card className="w-full">
-          <CardContent className="flex justify-center items-center">
-            <UserManagement />
-          </CardContent>
-        </Card>
-      </TabsContent>
-    </Tabs>
+    <div className="grid grid-cols-3 gap-2">
+      <Card className="w-full ">
+        <CardContent className="flex w-full justify-center items-center">
+          <UserForm />
+        </CardContent>
+      </Card>
+      <Card className="w-full">
+        <CardContent className="flex justify-center items-center">
+          <UserManagement />
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

@@ -15,12 +15,12 @@ const UserManagement = () => {
 
   return (
     <>
-      <div className="w-2/3">
+      <div className="w-full">
         <div className="grid grid-cols-4 gap-2 items-center p-2 font-semibold">
           <p>Imagem</p>
           <p>Nome</p>
           <p>Atualizado em</p>
-          <p>Ações</p>
+          <p className="text-end">Ações</p>
         </div>
         {users.map((user) => (
           <div

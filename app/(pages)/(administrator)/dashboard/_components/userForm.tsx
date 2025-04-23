@@ -30,11 +30,11 @@ const UserForm = () => {
   } = useUserViewModel();
 
   return (
-    <Card className="max-w-[50%] min-w-[30%] shadow-none">
+    <Card className="w-full min-w-[30%] shadow-none">
       <CardContent className="p-4  ">
         <Form {...form}>
           <form
-            className=" flex flex-col gap-4"
+            className=" grid grid-cols-3 grid-rows-3 gap-4 items-center justify-center"
             onSubmit={(e) => {
               e.preventDefault();
               form.handleSubmit(onSubmit)();
@@ -44,7 +44,7 @@ const UserForm = () => {
               control={form.control}
               name="avatar"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="row-span-3 col-span-1">
                   <FormControl>
                     <div className="relative flex items-center justify-center">
                       <Label
@@ -94,7 +94,7 @@ const UserForm = () => {
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full col-span-2">
                   <FormLabel>Nome do usuário</FormLabel>
                   <FormControl>
                     <Input {...field} disabled={!isEditing} />
@@ -107,7 +107,7 @@ const UserForm = () => {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full col-span-2">
                   <FormLabel>E-mail do usuário</FormLabel>
                   <FormControl>
                     <Input {...field} disabled={!isEditing} />
@@ -116,16 +116,15 @@ const UserForm = () => {
                 </FormItem>
               )}
             />
-            <div className="flex gap-2 w-1/3">
+            <div className="flex gap-2 col-span-2">
               {isEditing && (
                 <Button
                   type="submit"
                   disabled={form.formState.isSubmitting || isLoading}
                   className="w-full"
+                  variant={"secondary"}
                 >
-                  {form.formState.isSubmitting
-                    ? "Salvando..."
-                    : "Salvar alterações"}
+                  {form.formState.isSubmitting ? "Salvando..." : "Salvar"}
                 </Button>
               )}
               <Button
