@@ -34,7 +34,7 @@ const Profile = ({ isCollapsed }: ProfileProps) => {
         <SidebarMenuButton className="flex items-center h-14 p-0 focus-visible:ring-0">
           <div className="h-[40px] w-[40px] flex justify-center items-center shadow rounded-full overflow-hidden">
             {user?.avatar ? (
-              <div className="relative">
+              <div className="relative w-full h-full">
                 <Image
                   src={user.avatar}
                   fill
