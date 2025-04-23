@@ -1,5 +1,11 @@
+import SettingsPage from "./_components/settings-accordion";
+
 const SettingsDashboardPage = () => {
-    return ( <>Configurações</> );
-}
- 
+  return (
+    <>
+      <SettingsPage />
+    </>
+  );
+};
+
 export default SettingsDashboardPage;
