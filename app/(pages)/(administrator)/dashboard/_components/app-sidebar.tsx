@@ -12,10 +12,30 @@ import {
   SidebarMenuItem,
   SidebarFooter,
   useSidebar,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
 } from "@/app/_components/ui/sidebar";
-import { Home, Store, PackagePlus, Bolt, User2 } from "lucide-react";
+import {
+  Home,
+  Store,
+  PackagePlus,
+  Bolt,
+  User2,
+  Users2,
+  FilterIcon,
+  ImageIcon,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 import Profile from "./profile";
 import { useUserViewModel } from "../_viewmodels/useUser";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/app/_components/ui/collapsible";
+import Link from "next/link";
 
 const items = [
   {
@@ -33,10 +53,28 @@ const items = [
     url: "/dashboard/new-product",
     icon: PackagePlus,
   },
+];
+
+const settings = [
   {
-    title: "Configurações",
-    url: "/dashboard/settings",
-    icon: Bolt,
+    title: "Perfil",
+    url: "/dashboard/settings/profile",
+    icon: User2,
+  },
+  {
+    title: "Usuários",
+    url: "/dashboard/settings/users",
+    icon: Users2,
+  },
+  {
+    title: "Categorias e Marcas",
+    url: "/dashboard/settings/filters",
+    icon: FilterIcon,
+  },
+  {
+    title: "Banners",
+    url: "/dashboard/settings/banners",
+    icon: ImageIcon,
   },
 ];
 
@@ -90,7 +128,7 @@ const AppSidebar = () => {
                   <SidebarMenuButton asChild>
                     <a
                       href={item.url}
-                      className="flex items-center gap-2 hover:bg-transparent hover:rounded-full hover:font-semibold p-4"
+                      className="flex items-center gap-2 hover:bg-transparent hover:rounded-full hover:font-semibold"
                     >
                       <item.icon />
                       {state !== "collapsed" && <span>{item.title}</span>}
@@ -98,6 +136,30 @@ const AppSidebar = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem className="">
+                <SidebarMenuButton className="hover:bg-secondary rounded-full hover:font-semibold cursor-default">
+                  <Bolt />
+                  <span>Configurações</span>
+                </SidebarMenuButton>
+                <SidebarMenuSub className="">
+                  {settings.map((item) => (
+                    <SidebarMenuSubItem
+                      key={item.title}
+                      className="hover:bg-secondary rounded-full px-2"
+                    >
+                      <SidebarMenuSubButton asChild>
+                        <a
+                          href={item.url}
+                          className="flex items-center gap-2 hover:bg-transparent hover:rounded-full hover:font-semibold p-4 text-nowrap"
+                        >
+                          <item.icon className="stroke-1"/>
+                          {item.title}
+                        </a>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  ))}
+                </SidebarMenuSub>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
