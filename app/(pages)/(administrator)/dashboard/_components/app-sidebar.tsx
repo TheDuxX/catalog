@@ -123,12 +123,12 @@ const AppSidebar = () => {
               {items.map((item) => (
                 <SidebarMenuItem
                   key={item.title}
-                  className="hover:bg-secondary rounded-full"
+                  className="rounded-full"
                 >
                   <SidebarMenuButton asChild>
                     <a
                       href={item.url}
-                      className="flex items-center gap-2 hover:bg-transparent hover:rounded-full hover:font-semibold"
+                      className="flex items-center gap-2 hover:rounded-full hover:font-semibold"
                     >
                       <item.icon />
                       {state !== "collapsed" && <span>{item.title}</span>}
@@ -136,30 +136,36 @@ const AppSidebar = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              <SidebarMenuItem className="">
-                <SidebarMenuButton className="hover:bg-secondary rounded-full hover:font-semibold cursor-default">
-                  <Bolt />
-                  <span>Configurações</span>
-                </SidebarMenuButton>
-                <SidebarMenuSub className="">
-                  {settings.map((item) => (
-                    <SidebarMenuSubItem
-                      key={item.title}
-                      className="hover:bg-secondary rounded-full px-2"
-                    >
-                      <SidebarMenuSubButton asChild>
-                        <a
-                          href={item.url}
-                          className="flex items-center gap-2 hover:bg-transparent hover:rounded-full hover:font-semibold p-4 text-nowrap"
+              <Collapsible defaultOpen>
+                <SidebarMenuItem className="">
+                  <CollapsibleTrigger asChild >
+                    <SidebarMenuButton className="rounded-full hover:font-semibold cursor-default">
+                      <Bolt />
+                      <span>Configurações</span>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub className="">
+                      {settings.map((item) => (
+                        <SidebarMenuSubItem
+                          key={item.title}
+                          className="rounded-full px-2"
                         >
-                          <item.icon className="stroke-1"/>
-                          {item.title}
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </SidebarMenuItem>
+                          <SidebarMenuSubButton asChild>
+                            <a
+                              href={item.url}
+                              className="flex items-center gap-2 hover:rounded-full hover:font-semibold p-4 text-nowrap"
+                            >
+                              <item.icon className="stroke-1" />
+                              {item.title}
+                            </a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
