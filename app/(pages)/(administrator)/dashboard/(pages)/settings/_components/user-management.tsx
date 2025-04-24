@@ -1,48 +1,103 @@
 "use client";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/app/_components/ui/card";
 import { useUserManagent } from "../_viewmodels/useUserManagent";
 import Image from "next/image";
+import { Button } from "@/app/_components/ui/button";
+import { Trash2 } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/app/_components/ui/table";
+import { Skeleton } from "@/app/_components/ui/skeleton";
 
 const UserManagement = () => {
   const { users, isLoading, formatDate } = useUserManagent();
 
   if (isLoading) {
     return (
-      <div className="p-2 flex flex-col w-full justify-start items-start">
-        <p>Carregando...</p>
-      </div>
+      <Skeleton className="w-2/3 bg-white">
+        <Card className="bg-white w-full">
+          <CardHeader className="m-0 p-2">
+            <CardTitle className="text-lg p-2 px-4">
+              Usuários Cadastrados
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="font-semibold ">Imagem</TableHead>
+                  <TableHead className="font-semibold">Nome</TableHead>
+                  <TableHead className="font-semibold">
+                    Última atualização
+                  </TableHead>
+                  <TableHead className="text-right font-semibold">
+                    Ações
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+            </Table>
+          </CardContent>
+        </Card>
+      </Skeleton>
     );
   }
 
   return (
-    <>
-      <div className="w-full">
-        <div className="grid grid-cols-4 gap-2 items-center p-2 font-semibold">
-          <p>Imagem</p>
-          <p>Nome</p>
-          <p>Atualizado em</p>
-          <p className="text-end">Ações</p>
-        </div>
-        {users.map((user) => (
-          <div
-            key={user.id}
-            className="w-full grid grid-cols-4 gap-2 items-center p-2 border-b border-solid border-opacity-50 border-gray-400"
-          >
-            {user.avatar && (
-              <div className="relative h-10 w-10 rounded-full overflow-hidden">
-                <Image
-                  src={user.avatar}
-                  alt={user.username || "Avatar"}
-                  className="object-cover"
-                  fill
-                />
-              </div>
-            )}
-            <p>{user.username}</p>
-            <p>{formatDate(user.updated_at)}</p>
-          </div>
-        ))}
-      </div>
-    </>
+    <Card className="bg-white w-2/3">
+      <CardHeader className="m-0 p-2">
+        <CardTitle className="text-lg p-2 px-4">Usuários Cadastrados</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="font-semibold ">Imagem</TableHead>
+              <TableHead className="font-semibold">Nome</TableHead>
+              <TableHead className="font-semibold">
+                Última atualização
+              </TableHead>
+              <TableHead className="text-right font-semibold">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>
+                  <Image
+                    src={user.avatar ?? "/placeholder.jpg"}
+                    alt={user.username ?? "Avatar"}
+                    width={40}
+                    height={40}
+                    className="rounded-sm"
+                  />
+                </TableCell>
+                <TableCell>{user.username}</TableCell>
+                <TableCell>{formatDate(user.updated_at)}</TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => console.log("Excluir usuário", user.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   );
 };
 
