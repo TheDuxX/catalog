@@ -30,8 +30,8 @@ const UserForm = () => {
   } = useUserViewModel();
 
   return (
-    <Card className="w-full min-w-[30%] shadow-none">
-      <CardContent className="p-4  ">
+    <Card className="w-2/3 min-w-[30%] bg-white">
+      <CardContent className="py-4  ">
         <Form {...form}>
           <form
             className=" grid grid-cols-3 grid-rows-3 gap-4 items-center justify-center"
@@ -49,7 +49,7 @@ const UserForm = () => {
                     <div className="relative flex items-center justify-center">
                       <Label
                         htmlFor="avatar-upload"
-                        className={`relative w-[100px] h-[100px] rounded-full overflow-hidden shadow group ${
+                        className={`relative w-1/2 aspect-square rounded-full overflow-hidden shadow group ${
                           isEditing ? "hover:ring-2 hover:ring-primary/50" : ""
                         }`}
                       >

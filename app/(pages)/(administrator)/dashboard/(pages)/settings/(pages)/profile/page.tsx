@@ -1,4 +1,5 @@
-import UserForm from "../../../_components/userForm";
+import UserForm from "../../../../_components/userForm";
+
 
 const SettingsProfile = () => {
   return (
