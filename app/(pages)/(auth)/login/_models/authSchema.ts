@@ -21,6 +21,11 @@ export const loginSchema = z.object({
 
 export const signupSchema = z
   .object({
+    username: z.string().min(1, { message: "O nome é obrigatório" }),
+    avatar: z
+      .instanceof(File)
+      .refine((file) => file.size > 0, "Avatar obrigatório")
+      .optional(),
     email: z.string().email({ message: "E-mail inválido" }),
     password: passwordSchema,
     confirmPassword: z.string(),
