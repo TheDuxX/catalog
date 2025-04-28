@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
-import Header from "./_components/header";
-import Footer from "./_components/footer";
 import { FiltersProvider } from "./_utils/filters-context";
 import { Toaster } from "react-hot-toast";
+import { QueryProvider } from "./_utils/quey-provider";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -25,8 +24,9 @@ export default function RootLayout({
     <FiltersProvider>
       <html lang="pt-br">
         <body className={`${montserrat.variable} antialiased`}>
-        <Toaster position="bottom-right" />
-        {children}</body>
+          <Toaster position="bottom-right" />
+          <QueryProvider>{children}</QueryProvider>
+        </body>
       </html>
     </FiltersProvider>
   );
