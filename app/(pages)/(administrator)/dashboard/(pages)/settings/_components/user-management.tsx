@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/_components/ui/card";
-import { useUserManagent } from "../_viewmodels/useUserManagent";
+import { useUserManagent, useUsers } from "../_viewmodels/useUserManagent";
 import Image from "next/image";
 import { Button } from "@/app/_components/ui/button";
 import { Loader2, PlusIcon, Trash2 } from "lucide-react";
@@ -45,9 +45,7 @@ import { Label } from "@/app/_components/ui/label";
 
 const UserManagement = () => {
   const {
-    users,
     formData,
-    isLoading,
     errors,
     formatDate,
     handleDeleteUser,
@@ -56,6 +54,8 @@ const UserManagement = () => {
     isDeleting,
     handleAvatarChange,
   } = useUserManagent();
+
+  const { data: users, isLoading, isError, error, refetch } = useUsers();
 
   if (isLoading) {
     return (
@@ -105,7 +105,7 @@ const UserManagement = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((user) => (
+            {users?.map((user) => (
               <TableRow key={user.id}>
                 <TableCell>
                   <Image
@@ -208,7 +208,7 @@ const UserManagement = () => {
                   </motion.p>
                 )}
                 <div className="w-full flex flex-col gap-2">
-                <Input
+                  <Input
                     name="username"
                     autoComplete="name"
                     value={formData.username}

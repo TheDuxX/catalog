@@ -11,10 +11,29 @@ import {
   passwordSchema,
   signupSchema,
 } from "@/app/(pages)/(auth)/login/_models/authSchema";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchUsers = async () => {
+  try {
+    const usersData = await getUsers();
+
+    return usersData;
+  } catch (error) {
+    console.error("Erro ao buscar usuários:", error);
+  }
+};
+
+export const useUsers = () => {
+  return useQuery({
+    queryKey: ["users"],
+    queryFn: fetchUsers,
+    staleTime: 5 * 60 * 1000,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
+};
 
 export function useUserManagent() {
-  const [users, setUsers] = useState<UserData[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [formData, setFormData] = useState({
@@ -24,18 +43,6 @@ export function useUserManagent() {
     password: "",
     confirmPassword: "",
   });
-
-  const fetchUsers = async () => {
-    try {
-      setIsLoading(true);
-      const usersData = await getUsers();
-      setUsers(usersData);
-    } catch (error) {
-      console.error("Erro ao buscar usuários:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -57,7 +64,6 @@ export function useUserManagent() {
       await deleteUser(id);
 
       toast.success("Usuário deletado com sucesso!");
-      setUsers((prev) => prev.filter((u) => u.id !== id));
     } catch (error) {
       console.error("Erro ao deletar usuário:", error);
       toast.error("Erro ao deletar usuário.");
@@ -92,7 +98,6 @@ export function useUserManagent() {
     }
 
     try {
-      setIsLoading(true);
 
       const form = new FormData();
       form.append("username", formData.username);
@@ -113,15 +118,12 @@ export function useUserManagent() {
     } catch (error) {
       console.error("Erro ao criar usuário", error);
     } finally {
-      setIsLoading(false);
     }
   };
 
   return {
-    users,
     formData,
     errors,
-    isLoading,
     formatDate,
     handleChange,
     handleDeleteUser,
