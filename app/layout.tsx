@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
-import Header from "./_components/header";
-import Footer from "./_components/footer";
 import { FiltersProvider } from "./_utils/filters-context";
 import { Toaster } from "react-hot-toast";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -16,6 +15,8 @@ export const metadata: Metadata = {
   description: "Peças para maquinas e tratores",
 };
 
+const queryClient = new QueryClient();
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,8 +26,11 @@ export default function RootLayout({
     <FiltersProvider>
       <html lang="pt-br">
         <body className={`${montserrat.variable} antialiased`}>
-        <Toaster position="bottom-right" />
-        {children}</body>
+          <QueryClientProvider client={queryClient}>
+            <Toaster position="bottom-right" />
+            {children}
+          </QueryClientProvider>
+        </body>
       </html>
     </FiltersProvider>
   );
