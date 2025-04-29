@@ -1,7 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  deleteUser,
+  deleteUser as deleteUserApi,
   getUsers,
   signup,
   UserData,
@@ -11,20 +13,20 @@ import {
   passwordSchema,
   signupSchema,
 } from "@/app/(pages)/(auth)/login/_models/authSchema";
-import { useQuery } from "@tanstack/react-query";
 
-const fetchUsers = async () => {
+const fetchUsers = async (): Promise<UserData[]> => {
   try {
     const usersData = await getUsers();
-
     return usersData;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Erro ao buscar usuários:", error);
+    toast.error("Erro ao buscar usuários.");
+    throw error;
   }
 };
 
-export const useUsers = () => {
-  return useQuery({
+export const useUsersQuery = () => {
+  return useQuery<UserData[], Error>({
     queryKey: ["users"],
     queryFn: fetchUsers,
     staleTime: 5 * 60 * 1000,
@@ -33,9 +35,7 @@ export const useUsers = () => {
   });
 };
 
-export function useUserManagent() {
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+export function useUserManagment() {
   const [formData, setFormData] = useState({
     username: "",
     avatar: null as File | null,
@@ -43,6 +43,8 @@ export function useUserManagent() {
     password: "",
     confirmPassword: "",
   });
+
+  const queryClient = useQueryClient();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -54,27 +56,8 @@ export function useUserManagent() {
     return `${datePart} às ${timePart}`;
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const handleDeleteUser = async (id: string) => {
-    try {
-      setIsDeleting(true);
-      await deleteUser(id);
-
-      toast.success("Usuário deletado com sucesso!");
-    } catch (error) {
-      console.error("Erro ao deletar usuário:", error);
-      toast.error("Erro ao deletar usuário.");
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({});
   };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +66,42 @@ export function useUserManagent() {
       setFormData((prev) => ({ ...prev, avatar: file }));
     }
   };
+
+  const deleteUserMutation = useMutation<void, Error, string>({
+    mutationFn: (userId: string) => deleteUserApi(userId),
+    onSuccess: () => {
+      toast.success("Usuário deletado com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: (error: Error) => {
+      console.error("Erro ao deletar usuário:", error);
+      toast.error("Erro ao deletar usuário.");
+    },
+  });
+
+  const handleDeleteUser = async (userId: string) => {
+    console.log("Deletando usuário:", userId);
+    deleteUserMutation.mutate(userId);
+  };
+
+  const createUserMutation = useMutation<any, Error, FormData>({
+    mutationFn: (form: FormData) => signup(form),
+    onSuccess: () => {
+      toast.success("Usuário criado com sucesso!");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        avatar: null,
+      });
+    },
+    onError: (error: Error) => {
+      console.error("Erro ao criar usuário", error);
+      toast.error("Erro ao criar usuário!");
+    },
+  });
 
   const createUser = async () => {
     const result = signupSchema
@@ -94,41 +113,34 @@ export function useUserManagent() {
 
     if (!result.success) {
       console.error(result.error);
+      result.error.errors.forEach((err) => {
+        toast.error(`${err.message}`, {
+          duration: 5000,
+        });
+      });
       return;
     }
 
-    try {
+    const form = new FormData();
+    form.append("username", formData.username);
+    form.append("email", formData.email);
+    form.append("password", formData.password);
 
-      const form = new FormData();
-      form.append("username", formData.username);
-      form.append("email", formData.email);
-      form.append("password", formData.password);
-
-      if (formData.avatar instanceof File) {
-        form.append("avatar", formData.avatar);
-      }
-
-      const response = await signup(form);
-
-      if (response?.success) {
-        toast.success("Usuário criado com sucesso!");
-      } else {
-        toast.error("Erro ao criar usuário!");
-      }
-    } catch (error) {
-      console.error("Erro ao criar usuário", error);
-    } finally {
+    if (formData.avatar instanceof File) {
+      form.append("avatar", formData.avatar);
     }
+
+    createUserMutation.mutate(form);
   };
 
   return {
     formData,
-    errors,
     formatDate,
     handleChange,
     handleDeleteUser,
     createUser,
-    isDeleting,
     handleAvatarChange,
+    isDeleting: deleteUserMutation.isPending,
+    isCreating: createUserMutation.isPending,
   };
 }

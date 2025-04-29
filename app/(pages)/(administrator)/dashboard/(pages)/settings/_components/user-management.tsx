@@ -5,7 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/app/_components/ui/card";
-import { useUserManagent, useUsers } from "../_viewmodels/useUserManagent";
+import {
+  useUserManagment,
+  useUsersQuery,
+} from "../_viewmodels/useUserManagent"; // Importe os hooks
 import Image from "next/image";
 import { Button } from "@/app/_components/ui/button";
 import { Loader2, PlusIcon, Trash2 } from "lucide-react";
@@ -42,49 +45,95 @@ import {
 import { Input } from "@/app/_components/ui/input";
 import { AnimatePresence, motion } from "framer-motion";
 import { Label } from "@/app/_components/ui/label";
+import { cn } from "@/app/_lib/utils";
 
 const UserManagement = () => {
   const {
     formData,
-    errors,
     formatDate,
     handleDeleteUser,
     createUser,
     handleChange,
-    isDeleting,
     handleAvatarChange,
-  } = useUserManagent();
-
-  const { data: users, isLoading, isError, error, refetch } = useUsers();
+    isDeleting,
+    isCreating,
+  } = useUserManagment();
+  const { data: users, isLoading, isError, error, refetch } = useUsersQuery();
 
   if (isLoading) {
     return (
-      <Skeleton className="w-2/3 bg-white">
-        <Card className="bg-white w-full">
-          <CardHeader className="m-0 p-2">
-            <CardTitle className="text-lg p-2 px-4">
-              Usuários Cadastrados
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="font-semibold ">Imagem</TableHead>
-                  <TableHead className="font-semibold">Nome</TableHead>
-                  <TableHead className="font-semibold">
-                    Última atualização
-                  </TableHead>
-                  <TableHead className="text-right font-semibold">
-                    Ações
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-            </Table>
-          </CardContent>
-        </Card>
-      </Skeleton>
+      <Card className="bg-white w-2/3">
+        <CardHeader className="m-0 p-2">
+          <CardTitle className="text-lg p-2 px-4">
+            Usuários Cadastrados
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="font-semibold ">Imagem</TableHead>
+                <TableHead className="font-semibold">Nome</TableHead>
+                <TableHead className="font-semibold">
+                  Última atualização
+                </TableHead>
+                <TableHead className="text-right font-semibold">
+                  Ações
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <Skeleton className="h-10 w-10" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-6 w-24" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-6 w-32" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Skeleton className="h-8 w-8" />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Skeleton className="h-10 w-10" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-6 w-24" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-6 w-32" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Skeleton className="h-8 w-8" />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Skeleton className="h-10 w-10" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-6 w-24" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-6 w-32" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Skeleton className="h-8 w-8" />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     );
+  }
+
+  if (isError) {
+    return <p>Erro ao carregar usuários: {error?.message}</p>;
   }
 
   return (
@@ -142,6 +191,7 @@ const UserManagement = () => {
                         <AlertDialogAction
                           onClick={() => handleDeleteUser(user.id)}
                           className="bg-red-600 hover:bg-red-700 text-white"
+                          disabled={isDeleting}
                         >
                           {isDeleting ? "Removendo..." : "Remover"}
                         </AlertDialogAction>
@@ -196,17 +246,19 @@ const UserManagement = () => {
                   onChange={handleAvatarChange}
                   className="hidden"
                 />
-                {errors.avatar && (
-                  <motion.p
-                    className="text-sm text-red-500"
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {errors.avatar}
-                  </motion.p>
-                )}
+                {/* <AnimatePresence>
+                  {errors.avatar && (
+                    <motion.p
+                      className="text-sm text-red-500"
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {errors.avatar}
+                    </motion.p>
+                  )}
+                </AnimatePresence> */}
                 <div className="w-full flex flex-col gap-2">
                   <Input
                     name="username"
@@ -215,17 +267,19 @@ const UserManagement = () => {
                     onChange={handleChange}
                     placeholder="Nome de Usuário"
                   />
-                  {errors.email && (
-                    <motion.p
-                      className="text-sm text-red-500"
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {errors.email}
-                    </motion.p>
-                  )}
+                  {/* <AnimatePresence>
+                    {errors.email && (
+                      <motion.p
+                        className="text-sm text-red-500"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {errors.email}
+                      </motion.p>
+                    )}
+                  </AnimatePresence> */}
                   <Input
                     name="email"
                     autoComplete="email"
@@ -233,17 +287,19 @@ const UserManagement = () => {
                     onChange={handleChange}
                     placeholder="Email"
                   />
-                  {errors.email && (
-                    <motion.p
-                      className="text-sm text-red-500"
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {errors.email}
-                    </motion.p>
-                  )}
+                  {/* <AnimatePresence>
+                    {errors.email && (
+                      <motion.p
+                        className="text-sm text-red-500"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {errors.email}
+                      </motion.p>
+                    )}
+                  </AnimatePresence> */}
                   <Input
                     type="password"
                     autoComplete="new-password"
@@ -252,17 +308,19 @@ const UserManagement = () => {
                     onChange={handleChange}
                     placeholder="Senha"
                   />
-                  {errors.password && (
-                    <motion.p
-                      className="text-sm text-red-500"
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {errors.password}
-                    </motion.p>
-                  )}
+                  {/* <AnimatePresence>
+                    {errors.password && (
+                      <motion.p
+                        className="text-sm text-red-500"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {errors.password}
+                      </motion.p>
+                    )}
+                  </AnimatePresence> */}
                   <Input
                     type="password"
                     autoComplete="new-password"
@@ -271,23 +329,26 @@ const UserManagement = () => {
                     onChange={handleChange}
                     placeholder="Confirmar senha"
                   />
-                  {errors.confirmPassword && (
-                    <motion.p
-                      className="text-sm text-red-500"
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {errors.confirmPassword}
-                    </motion.p>
-                  )}
+                  {/* <AnimatePresence>
+                    {errors.confirmPassword && (
+                      <motion.p
+                        className="text-sm text-red-500"
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {errors.confirmPassword}
+                      </motion.p>
+                    )}
+                  </AnimatePresence> */}
                   <Button
                     type="submit"
-                    disabled={isLoading}
+                    disabled={isCreating}
                     variant={"secondary"}
+                    className={cn(isCreating && "cursor-not-allowed")}
                   >
-                    {isLoading ? (
+                    {isCreating ? (
                       <Loader2 className="animate-spin" />
                     ) : (
                       "Cadastrar"
