@@ -1,31 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useFilters } from "@/app/_utils/filters-context";
 import { useSearchParams } from "next/navigation";
+import { useFilters } from "@/app/_utils/filters-context";
+import { useQuery } from "@tanstack/react-query";
 import { fetchFilterProducts } from "../_services/products-service";
 
 export const useDashboardItem = () => {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const { itemOrientation, itemCount, sortOrder } = useFilters();
   const params = useSearchParams();
 
-  useEffect(() => {
-    const fetchProductsList = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchFilterProducts(params);
-        setProducts(data);
-      } catch (error) {
-        console.error("Erro ao buscar produtos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const paramsString = params?.toString() ?? "";
 
-    fetchProductsList();
-  }, [params]);
+  const query = useQuery({
+    queryKey: ["products", paramsString],
+    queryFn: () => fetchFilterProducts(params!),
+  });
+
+  const products = query.data ?? [];
 
   const sortedProducts = [...products].sort((a, b) => {
     if (!sortOrder) return 0;
@@ -51,10 +42,12 @@ export const useDashboardItem = () => {
   const visibleProducts = sortedProducts.slice(0, itemCount);
 
   return {
-    loading,
+    loading: query.isLoading,
+    error: query.error,
     itemOrientation,
     products: visibleProducts,
     hasProducts: sortedProducts.length > 0,
+    refetch: query.refetch,
   };
 };
 
