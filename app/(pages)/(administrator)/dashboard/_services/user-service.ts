@@ -58,10 +58,3 @@ export const uploadAvatar = async (
   return [publicUrl.publicUrl];
 };
 
-export const deleteUser = async (): Promise<void> => {
-  const res = await fetch("/api/user", {
-    method: "DELETE",
-  });
-
-  if (!res.ok) throw new Error("Erro ao deletar usuário");
-};
