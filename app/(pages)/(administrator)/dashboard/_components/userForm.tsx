@@ -21,10 +21,8 @@ const UserForm = () => {
   const {
     user,
     form,
-    onSubmit,
-    isLoading,
     updateProfile,
-    deleteProfile,
+    isLoading,
     refetchUser: fetchUser,
     redirectToProfile,
   } = useUserViewModel();
@@ -37,7 +35,7 @@ const UserForm = () => {
             className=" grid grid-cols-3 grid-rows-3 gap-4 items-center justify-center"
             onSubmit={(e) => {
               e.preventDefault();
-              form.handleSubmit(onSubmit)();
+              form.handleSubmit(updateProfile)();
             }}
           >
             <FormField

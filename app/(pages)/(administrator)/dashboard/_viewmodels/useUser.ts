@@ -1,63 +1,60 @@
 "use client";
-import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import toast from "react-hot-toast";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { updateUserSchema } from "../_schemas/userSchema";
 import {
-  deleteUser,
   getUser,
   updateUser,
   UpdateUserData,
   uploadAvatar,
-  UserData,
 } from "../_services/user-service";
+import { useEffect } from "react";
 
 export const useUserViewModel = () => {
-  const [user, setUser] = useState<UserData | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const fetchUser = async () => {
-    try {
-      setIsLoading(true);
-      const userData = await getUser();
-      setUser(userData);
-    } catch (error) {
-      console.error("Erro ao buscar dados do usuário", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // 🟡 QUERY: Fetch user
+  const {
+    data: user,
+    isLoading,
+    refetch: refetchUser,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+  });
 
+  // 🟡 FORM
   const form = useForm<z.infer<typeof updateUserSchema>>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
-      name: user?.username ?? "",
-      email: user?.email ?? "",
-      avatar: user?.avatar ?? "",
+      name: "",
+      email: "",
+      avatar: "",
     },
   });
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
+  // 🟡 Atualiza valores do form quando user estiver disponível
+  // sem depender de estado manual
   useEffect(() => {
     if (user) {
       form.reset({
         name: user.username ?? "",
-        email: user.email,
+        email: user.email ?? "",
         avatar: user.avatar ?? "",
       });
     }
-  }, [user]);
+  }, [user, form]);
 
-  const onSubmit = async (data: z.infer<typeof updateUserSchema>) => {
-    try {
+  // 🟡 MUTATION: Atualiza usuário
+  const updateMutation = useMutation({
+    mutationFn: async (data: z.infer<typeof updateUserSchema>) => {
       const parsed = updateUserSchema.safeParse(data);
       if (!parsed.success) {
         const formatted = parsed.error.format();
@@ -81,26 +78,20 @@ export const useUserViewModel = () => {
         avatar: avatarUrl ?? "",
       };
 
-      const updatedUser = await updateUser(payload);
-
-      setUser(updatedUser);
+      return updateUser(payload);
+    },
+    onSuccess: (updatedUser) => {
       toast.success("Perfil atualizado com sucesso!");
-      return { success: true, data: updatedUser };
-    } catch (error) {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+    onError: (error) => {
       console.error("Erro ao atualizar perfil", error);
       toast.error("Erro ao atualizar perfil.");
-      throw error;
-    }
-  };
+    },
+  });
 
-  const deleteProfile = async () => {
-    try {
-      await deleteUser();
-      return { success: true };
-    } catch (error) {
-      console.error("Erro ao deletar usuário", error);
-      throw error;
-    }
+  const updateProfile = (data: z.infer<typeof updateUserSchema>) => {
+    return updateMutation.mutateAsync(data);
   };
 
   const redirectToProfile = () => {
@@ -110,11 +101,9 @@ export const useUserViewModel = () => {
   return {
     user,
     form,
-    onSubmit,
     isLoading,
-    updateProfile: onSubmit,
-    deleteProfile,
-    refetchUser: fetchUser,
+    updateProfile,
+    refetchUser,
     redirectToProfile,
   };
 };
