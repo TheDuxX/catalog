@@ -62,8 +62,8 @@ const settings = [
     icon: User2,
   },
   {
-    title: "Usuários",
-    url: "/dashboard/settings/users",
+    title: "Histórico de Logs",
+    url: "/dashboard/settings/logs",
     icon: Users2,
   },
   {
