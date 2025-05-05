@@ -14,6 +14,7 @@ import { Log } from "../_services/logs-service";
 import {
   badgeColors,
   formatedDateandHour,
+  translateEntity,
   useLogList,
 } from "../_viewmodels/useLogList";
 import { useEffect, useState } from "react";
@@ -39,6 +40,7 @@ import {
 } from "@/app/_components/ui/dropdown-menu";
 import { useUsersList } from "../../../_viewmodels/useUsers";
 import Image from "next/image";
+
 const TextTable = () => {
   const { data: logs, isLoading, error, refetch } = useLogList();
   const { data: users, isLoading: isLoadingUsers } = useUsersList();
@@ -142,32 +144,113 @@ const TextTable = () => {
       },
     },
     {
-      accessorKey: "entity_id",
+      accessorKey: "entity",
       header: ({ column }) => {
         return (
-          <Button
-            className="p-0 hover:bg-transparent hover:text-inherit"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Entidade
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button
+              className="p-0 hover:bg-transparent hover:text-inherit"
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Seção
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  className="p-0 hover:bg-transparent hover:text-inherit "
+                  variant="ghost"
+                >
+                  <Filter className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem
+                  onClick={() => column?.setFilterValue(undefined)}
+                >
+                  Todos
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column?.setFilterValue("contacts")}
+                >
+                  Mensagens
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column?.setFilterValue("product")}
+                >
+                  Produtos
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column?.setFilterValue("category")}
+                >
+                  Categorias
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column?.setFilterValue("marks")}
+                >
+                  Marcas
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column?.setFilterValue("banners")}
+                >
+                  Banners
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column?.setFilterValue("profiles")}
+                >
+                  Perfis
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         );
       },
+      cell: ({ row }) => translateEntity(row.getValue("entity")),
     },
     {
       accessorKey: "user_id",
       header: ({ column }) => {
         return (
-          <Button
-            className="p-0 hover:bg-transparent hover:text-inherit"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Usuário
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button
+              className="p-0 hover:bg-transparent hover:text-inherit"
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Usuário
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  className="p-0 hover:bg-transparent hover:text-inherit "
+                  variant="ghost"
+                >
+                  <Filter className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem
+                  onClick={() => column?.setFilterValue(undefined)}
+                >
+                  Todos
+                </DropdownMenuItem>
+                {users?.map((user) => (
+                  <DropdownMenuItem
+                    key={user.id}
+                    onClick={() => column?.setFilterValue(user.id)}
+                  >
+                    {user.username}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         );
       },
       cell: ({ row }) => {
@@ -204,7 +287,7 @@ const TextTable = () => {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 20,
+        pageSize: 18,
       },
     },
     onColumnFiltersChange: setColumnFilters,
@@ -284,7 +367,7 @@ const TextTable = () => {
   return (
     <div className="w-full">
       <Card className="bg-white">
-        <CardContent className="pb-0 pt-2">
+        <CardContent className="pb-2 pt-2">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

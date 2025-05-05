@@ -31,3 +31,20 @@ export function badgeColors(type: string) {
       return "bg-yellow-500";
   }
 }
+
+export function translateEntity(type: string) {
+  switch (type) {
+    case "contacts":
+      return "Mensagens";
+    case "product":
+      return "Produtos";
+    case "category":
+      return "Categorias";
+    case "marks":
+      return "Marcas";
+    case "banners":
+      return "Banners";
+    case "profiles":
+      return "Perfis";
+  }
+}
