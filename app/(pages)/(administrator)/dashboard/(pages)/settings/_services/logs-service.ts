@@ -13,3 +13,4 @@ export const getLogs = async () => {
   if (!response.ok) throw new Error("Erro ao buscar logs");
   return response.json();
 };
+
