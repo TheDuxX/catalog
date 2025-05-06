@@ -1,6 +1,7 @@
 export type Category = {
   id: string;
   name: string;
+  product_count: number;
 };
 
 const API_URL_CATEGORY = "/api/category";
