@@ -258,20 +258,25 @@ const TextTable = () => {
         return (
           <div className="flex items-center gap-4">
             <div className="overflow-hidden rounded-full aspect-square relative w-6">
-              <Image
-                src={
-                  user?.avatar !== null && user?.avatar !== undefined
-                    ? user?.avatar
-                    : ""
-                }
-                alt={
-                  user?.username !== null && user?.username !== undefined
-                    ? user?.username
-                    : ""
-                }
-                fill
-                className="object-cover object-center"
-              />
+              {user?.avatar !== null && user?.avatar !== undefined ? (
+                <Image
+                  src={
+                    user?.avatar !== null && user?.avatar !== undefined
+                      ? user?.avatar
+                      : ""
+                  }
+                  alt={
+                    user?.username !== null && user?.username !== undefined
+                      ? user?.username
+                      : ""
+                  }
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover object-center"
+                />
+              ) : (
+                <div className="w-6 h-6 bg-gray-200 rounded-full" />
+              )}
             </div>
             {user?.username}
           </div>
