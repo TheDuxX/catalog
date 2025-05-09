@@ -17,8 +17,24 @@ import {
 } from "@/app/_components/ui/table";
 import { flexRender } from "@tanstack/react-table";
 import { Button } from "@/app/_components/ui/button";
-import { Check, CircleX, Pencil, PencilIcon, Trash2Icon } from "lucide-react";
+import {
+  Check,
+  CircleX,
+  Pencil,
+  PencilIcon,
+  Plus,
+  PlusCircleIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { Input } from "@/app/_components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/app/_components/ui/dropdown-menu";
+import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 
 const SettingsFilters = () => {
   const {
@@ -37,6 +53,10 @@ const SettingsFilters = () => {
     setEditingCategoryId,
     editedCategoryName,
     setEditedCategoryName,
+    createNewCategory,
+    setCreateNewCategory,
+    newCategoryName,
+    setNewCategoryName,
   } = categoriesSettingTable();
 
   const {
@@ -47,6 +67,10 @@ const SettingsFilters = () => {
     setEditingMarkId,
     editedMarkName,
     setEditedMarkName,
+    createNewMark,
+    setCreateNewMark,
+    newMarkName,
+    setNewMarkName,
   } = marksSettingTable();
 
   const { createCategory, updateCategory, deleteCategory } =
@@ -58,7 +82,15 @@ const SettingsFilters = () => {
     <div className="w-full flex flex-col md:grid md:grid-cols-2 gap-4 ">
       <Card className="bg-white w-full h-fit">
         <CardContent className="p-4 flex flex-col gap-2">
-          <CardHeader className="font-semibold p-0">Categorias</CardHeader>
+          <div className="flex items-center justify-between">
+            <CardHeader className="font-semibold p-0">Categorias</CardHeader>
+            <Button
+              variant={"button"}
+              onClick={() => setCreateNewCategory(!createNewCategory)}
+            >
+              <PlusCircleIcon />
+            </Button>
+          </div>
           <Table className="w-full rounded-md overflow-hidden">
             <TableHeader className="px-2 w-full">
               {categoriesTable.getHeaderGroups().map((headerGroup) => (
@@ -184,13 +216,62 @@ const SettingsFilters = () => {
                   </TableRow>
                 );
               })}
+              <TableRow hidden={!createNewCategory}>
+                <TableCell>
+                  <Input
+                    type="text"
+                    className="border rounded px-2 py-1 w-full"
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                  />
+                </TableCell>
+                <TableCell className="flex gap-2" colSpan={2}>
+                  <Button
+                    variant="button"
+                    size="icon"
+                    className=" border border-solid rounded-full border-green-500"
+                    onClick={() => {
+                      if (newCategoryName.trim()) {
+                        createCategory.mutate({
+                          name: newCategoryName,
+                        });
+                        setCreateNewCategory(false);
+                        setNewCategoryName("");
+                      }
+                    }}
+                  >
+                    <Check className="w-4 h-4 text-green-500" />
+                  </Button>
+                  <Button
+                    variant="button"
+                    size="icon"
+                    className=" border border-solid rounded-full border-red-500"
+                    onClick={() => {
+                      setCreateNewCategory(false);
+                      setNewCategoryName("");
+                    }}
+                  >
+                    <CircleX className="w-4 h-4 text-red-500" />
+                  </Button>
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </CardContent>
       </Card>
       <Card className="bg-white w-full h-fit">
         <CardContent className="p-4 flex flex-col gap-2">
-          <CardHeader className="font-semibold p-0">Marcas</CardHeader>
+          <div className="flex items-center justify-between">
+            <CardHeader className="font-semibold p-0">Marcas</CardHeader>
+            <Button
+              variant="button"
+              onClick={() => {
+                setCreateNewMark(!createNewMark);
+              }}
+            >
+              <PlusCircleIcon />
+            </Button>
+          </div>
           <Table className="w-full rounded-md overflow-hidden">
             <TableHeader className="px-2 w-full">
               {marksTable.getHeaderGroups().map((headerGroup) => (
@@ -316,6 +397,43 @@ const SettingsFilters = () => {
                   </TableRow>
                 );
               })}
+              <TableRow hidden={!createNewMark}>
+                <TableCell colSpan={1}>
+                  <Input
+                    type="text"
+                    placeholder="Adicione uma nova marca"
+                    value={newMarkName}
+                    onChange={(e) => setNewMarkName(e.target.value)}
+                  />
+                </TableCell>
+                <TableCell className="flex gap-2" colSpan={2}>
+                  <Button
+                    variant="button"
+                    size="icon"
+                    className=" border border-solid rounded-full border-green-500"
+                    onClick={() => {
+                      if (newMarkName.trim()) {
+                        createMark.mutate({ name: newMarkName });
+                        setCreateNewMark(false);
+                        setNewMarkName("");
+                      }
+                    }}
+                  >
+                    <Check className="text-green-500" />
+                  </Button>
+                  <Button
+                    variant="button"
+                    size="icon"
+                    className=" border border-solid rounded-full border-red-500"
+                    onClick={() => {
+                      setCreateNewMark(false);
+                      setNewMarkName("");
+                    }}
+                  >
+                    <CircleX className="text-red-500" />
+                  </Button>
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </CardContent>

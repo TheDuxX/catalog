@@ -36,9 +36,10 @@ export const useCategoriesMutations = () => {
   const queryclient = useQueryClient();
 
   const createCategory = useMutation({
-    mutationFn: categoryService.create,
+    mutationFn: (data: { name: string }) => categoryService.create(data),
     onSuccess: () => {
       queryclient.invalidateQueries({ queryKey: ["categories"] });
+      toast.success("Categoria criada com sucesso.");
     },
   });
 
@@ -47,6 +48,7 @@ export const useCategoriesMutations = () => {
       categoryService.update({ id, name: data.name }),
     onSuccess: () => {
       queryclient.invalidateQueries({ queryKey: ["categories"] });
+      toast.success("Categoria atualizada com sucesso.");
     },
   });
 
@@ -80,6 +82,8 @@ export const categoriesSettingTable = () => {
     null
   );
   const [editedCategoryName, setEditedCategoryName] = useState<string>();
+  const [createNewCategory, setCreateNewCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState<string>("");
 
   const categoriesColumns: ColumnDef<Category, unknown>[] = [
     {
@@ -137,6 +141,10 @@ export const categoriesSettingTable = () => {
     setEditingCategoryId,
     editedCategoryName,
     setEditedCategoryName,
+    createNewCategory,
+    setCreateNewCategory,
+    newCategoryName,
+    setNewCategoryName,
   };
 };
 
@@ -154,9 +162,10 @@ export const useMarksMutations = () => {
   const queryclient = useQueryClient();
 
   const createMark = useMutation({
-    mutationFn: markService.create,
+    mutationFn: (data: { name: string }) => markService.create(data),
     onSuccess: () => {
       queryclient.invalidateQueries({ queryKey: ["marks"] });
+      toast.success("Marca criada com sucesso.");
     },
   });
 
@@ -165,6 +174,7 @@ export const useMarksMutations = () => {
       markService.update({ id, name: data.name }),
     onSuccess: () => {
       queryclient.invalidateQueries({ queryKey: ["marks"] });
+      toast.success("Marca atualizada com sucesso.");
     },
   });
 
@@ -195,6 +205,8 @@ export const marksSettingTable = () => {
   const [isMarkEditing, setIsMarkEditing] = useState(false);
   const [editingMarkId, setEditingMarkId] = useState<string | null>(null);
   const [editedMarkName, setEditedMarkName] = useState<string>();
+  const [createNewMark, setCreateNewMark] = useState(false);
+  const [newMarkName, setNewMarkName] = useState<string>("");
 
   const marksColumns: ColumnDef<Mark, unknown>[] = [
     {
@@ -252,5 +264,9 @@ export const marksSettingTable = () => {
     setEditingMarkId,
     editedMarkName,
     setEditedMarkName,
+    createNewMark,
+    setCreateNewMark,
+    newMarkName,
+    setNewMarkName,
   };
 };
