@@ -4,6 +4,12 @@ export type Category = {
   product_count: number;
 };
 
+export type Mark = {
+  id: string;
+  name: string;
+  product_count: number;
+};
+
 const API_URL_CATEGORY = "/api/category";
 const API_URL_MARK = "/api/mark";
 

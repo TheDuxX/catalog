@@ -1,6 +1,11 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Category, categoryService } from "../_services/filters-service";
+import {
+  Category,
+  categoryService,
+  Mark,
+  markService,
+} from "../_services/filters-service";
 import { useState } from "react";
 import {
   ColumnDef,
@@ -48,7 +53,6 @@ export const useCategoriesMutations = () => {
   const deleteCategory = useMutation({
     mutationFn: (id: string) => categoryService.remove(id),
     onSuccess: (data) => {
-      console.log(data.message); // deve imprimir: Categoria deletada com sucesso.
       queryclient.invalidateQueries({ queryKey: ["categories"] });
       toast.success("Categoria deletada com sucesso.");
     },
@@ -63,16 +67,19 @@ export const useCategoriesMutations = () => {
 
 // DEFINIÇÃO DO DATA TABLE
 export const categoriesSettingTable = () => {
-  const [sorting, setSorting] = useState<SortingState>([
+  const [categorySorting, setCategorySorting] = useState<SortingState>([
     {
       id: "product_count",
       desc: true,
     },
   ]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editedName, setEditedName] = useState<string>();
+  const [columnMarkFilters, setColumnMarkFilters] =
+    useState<ColumnFiltersState>([]);
+  const [isCategoryEditing, setIsCategoryEditing] = useState(false);
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(
+    null
+  );
+  const [editedCategoryName, setEditedCategoryName] = useState<string>();
 
   const categoriesColumns: ColumnDef<Category, unknown>[] = [
     {
@@ -112,23 +119,138 @@ export const categoriesSettingTable = () => {
         pageSize: 20,
       },
     },
-    onColumnFiltersChange: setColumnFilters,
+    onColumnFiltersChange: setColumnMarkFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    onSortingChange: setSorting,
+    onSortingChange: setCategorySorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
-      sorting,
-      columnFilters,
+      sorting: categorySorting,
+      columnFilters: columnMarkFilters,
     },
   });
 
   return {
     categoriesTable,
-    isEditing,
-    setIsEditing,
-    editedName,
-    setEditedName,
-    editingId,
-    setEditingId,
+    isCategoryEditing,
+    setIsCategoryEditing,
+    editingCategoryId,
+    setEditingCategoryId,
+    editedCategoryName,
+    setEditedCategoryName,
+  };
+};
+
+export const useFiltersMark = () => {
+  return useQuery({
+    queryKey: ["marks"],
+    queryFn: markService.getAll,
+    staleTime: 5 * 60 * 1000,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useMarksMutations = () => {
+  const queryclient = useQueryClient();
+
+  const createMark = useMutation({
+    mutationFn: markService.create,
+    onSuccess: () => {
+      queryclient.invalidateQueries({ queryKey: ["marks"] });
+    },
+  });
+
+  const updateMark = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { name: string } }) =>
+      markService.update({ id, name: data.name }),
+    onSuccess: () => {
+      queryclient.invalidateQueries({ queryKey: ["marks"] });
+    },
+  });
+
+  const deleteMark = useMutation({
+    mutationFn: (id: string) => markService.remove(id),
+    onSuccess: (data) => {
+      queryclient.invalidateQueries({ queryKey: ["marks"] });
+      toast.success("Marca deletada com sucesso.");
+    },
+    onError: (error) => {
+      toast.error("Erro ao deletar marca.");
+      console.error("Erro ao deletar marca:", error);
+    },
+  });
+
+  return { createMark, updateMark, deleteMark };
+};
+
+export const marksSettingTable = () => {
+  const [markSorting, setMarkSorting] = useState<SortingState>([
+    {
+      id: "product_count",
+      desc: true,
+    },
+  ]);
+  const [columnMarkFilters, setColumnMarkFilters] =
+    useState<ColumnFiltersState>([]);
+  const [isMarkEditing, setIsMarkEditing] = useState(false);
+  const [editingMarkId, setEditingMarkId] = useState<string | null>(null);
+  const [editedMarkName, setEditedMarkName] = useState<string>();
+
+  const marksColumns: ColumnDef<Mark, unknown>[] = [
+    {
+      accessorKey: "name",
+      header: ({ column }) => (
+        <Button
+          className="p-0 hover:bg-transparent hover:text-inherit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nome
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    },
+    {
+      accessorKey: "product_count",
+      header: ({ column }) => (
+        <Button
+          className="p-0 hover:bg-transparent hover:text-inherit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Produtos
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    },
+  ];
+
+  const marksTable = useReactTable({
+    data: useFiltersMark().data || [],
+    columns: marksColumns,
+    getCoreRowModel: getCoreRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 20,
+      },
+    },
+    onColumnFiltersChange: setColumnMarkFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setMarkSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting: markSorting,
+      columnFilters: columnMarkFilters,
+    },
+  });
+
+  return {
+    marksTable,
+    isMarkEditing,
+    setIsMarkEditing,
+    editingMarkId,
+    setEditingMarkId,
+    editedMarkName,
+    setEditedMarkName,
   };
 };
