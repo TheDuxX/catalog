@@ -24,31 +24,50 @@ export async function getBanners() {
   return response.json();
 }
 
-export async function create(data: BannerProps) {
+export async function create(data: { name: string; image: File }) {
+  console.log("Iniciando criação",data);
+
+  const formData = new FormData();
+  formData.append("name", data.name);
+  formData.append("image", data.image);
+
   const res = await fetch("/api/banners", {
     method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
+    body: formData,
   });
+
   if (!res.ok) throw new Error("Erro ao criar banner");
   return res.json();
 }
 
-export async function bulkUpdate(
-  banners: { id: string; is_visible?: boolean; order?: number }[]
-) {
-  const res = await fetch("/api/banners/bulk-update", {
-    method: "PUT",
-    body: JSON.stringify(banners),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+export async function bulkUpdate(banners: Partial<BannerProps>[]) {
+  console.log("Enviando para a API:", banners);
+  try {
+    const res = await fetch("/api/banners", {
+      method: "PUT",
+      body: JSON.stringify(banners),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  if (!res.ok) throw new Error("Erro ao atualizar banners");
-  return res.json();
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Erro da API:", errorData);
+      throw new Error(
+        `Erro ao atualizar banners: ${res.status} - ${JSON.stringify(
+          errorData
+        )}`
+      );
+    }
+
+    const data = await res.json();
+    console.log("Resposta da API:", data);
+    return data;
+  } catch (error: any) {
+    console.error("Erro na função bulkUpdate:", error);
+    throw error;
+  }
 }
 
 export async function remove(id: string) {
