@@ -1,10 +1,8 @@
 "use client";
-import { Button } from "@/app/_components/ui/button";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import path from "path";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import SearchBar from "./search";
-
-interface ProdctDetailsPageProps {
-  params: {
-    url?: string;
-  };
-}
 const Header = () => {
   const pathname = usePathname();
 
@@ -29,8 +20,6 @@ const Header = () => {
     { name: "Contato", href: "/contact" },
     { name: "Sobre", href: "/about" },
   ];
-
-  const active = true;
 
   return (
     <>
@@ -75,7 +64,7 @@ const Header = () => {
           <div className="lg:max-w-[1140px] w-full flex flex-row justify-center items-center gap-1">
             {link.map((link, index) => (
               <Link
-                key={`${link.href}-${index}`} // Garante que a chave é única
+                key={`${link.href}-${index}`} 
                 href={link.href}
                 className={`hover:text-secondary hover:bg-primary w-full h-full p-5 rounded-md text-lg text-center ${
                   pathname === link.href ? "font-bold text-xl italic " : ""

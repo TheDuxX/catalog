@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Facebook, Instagram, Twitter } from "lucide-react"; // Ícones
 
 const Footer = () => {
   return (
