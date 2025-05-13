@@ -89,7 +89,9 @@ const SortableBannerItem = ({
     <motion.div
       ref={setNodeRef}
       style={style}
-      className="group relative bg-white p-4 rounded-lg border border-white/10 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] space-y-4 data-id"
+      className={`group relative bg-white p-4 rounded-lg border border-white/10 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] space-y-4 data-id ${
+        banner.is_visible ? "" : "opacity-50"
+      }`}
       data-id={banner.id}
     >
       {/* Área de arrastar */}
@@ -111,11 +113,17 @@ const SortableBannerItem = ({
               className="flex items-center gap-2"
               onClick={(e) => e.stopPropagation()}
             >
-              <span className="text-sm text-gray-300">Visível</span>
+              <span
+                className={`text-sm  ${
+                  banner.is_visible ? "text-green-500" : "text-red-400"
+                }`}
+              >
+                {banner.is_visible ? "Ativo" : "Inativo"}
+              </span>
               <Switch
                 checked={banner.is_visible}
                 onCheckedChange={handleSwitchChange}
-                className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-400"
+                className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-400"
               />
             </div>
             {/* Botão de Excluir */}
@@ -248,7 +256,7 @@ const BannerList = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Gerenciar Banners</h2>
+        <h2 className="text-xl font-semibold">Gerenciar Banners</h2>
         <div className="flex gap-4">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
