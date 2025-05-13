@@ -1,17 +1,5 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
-import { createContext, useContext, useEffect, useState } from "react";
-import { categoryService } from "../(pages)/(administrator)/dashboard/(pages)/settings/_services/filters-service";
-
-interface Category {
-  id: string;
-  name: string;
-}
-
-interface Mark {
-  id: string;
-  name: string;
-}
+import { createContext, useContext, useState } from "react";
 
 interface FiltersContextProps {
   itemOrientation: boolean;
