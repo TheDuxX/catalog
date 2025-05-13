@@ -1,32 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import { createSupabaseClient } from "@/app/_utils/supabase/client";
-
-type BannersProps = {
-  id?: string;
-  name: string;
-  image_url: string;
-  is_visible: boolean;
-  created_at: Date;
-};
+import { useBannersViewModel } from "@/app/(pages)/(administrator)/dashboard/(pages)/settings/_viewmodels/useBanners";
+import { Skeleton } from "@/app/_components/ui/skeleton";
 
 const ResponsiveCarousel = () => {
-  const [banners, setBanners] = useState<BannersProps[]>([]);
+  const { banners, isLoading, error } = useBannersViewModel();
 
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const res = await fetch("/api/banners");
-        const data = await res.json();
-        setBanners(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchBanners();
-  }, []);
+  if (isLoading && !banners) return;
+  if (error) return;
 
   return (
     <Carousel

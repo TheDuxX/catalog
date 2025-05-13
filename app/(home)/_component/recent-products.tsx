@@ -1,37 +1,44 @@
-"use client"
-import { useEffect, useState } from "react";
-import Item from "./item";
+"use client";
+import Item from "@/app/_components/item";
+import { useHome } from "../_viewmodel/useHome";
+import { Skeleton } from "@/app/_components/ui/skeleton";
 
 const RecentProducts = () => {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  useEffect(() => {
-    setLoading(true);
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(`/api/products`);
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error("Erro ao buscar produtos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const {
+    recentProducts,
+    products,
+    formattedPrice,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useHome();
 
-    fetchProducts();
-  }, []);
-
-  const recentProducts = [...products!].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  if (isLoading)
+    return (
+      <div>
+        <h2 className="font-semibold text-lg px-2">Produtos recentes</h2>
+        <div className="flex gap-2">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              className="min-h-[300px] w-full bg-white shadow"
+            ></Skeleton>
+          ))}
+        </div>
+      </div>
+    );
 
   return (
     <>
-      <h2 className="font-semibold text-lg px-2">Mais vistos</h2>
+      <h2 className="font-semibold text-lg px-2">Produtos recentes</h2>
       <div className="rounded-md flex gap-2 lg:max-w-[1150px] overflow-x-auto flex-nowrap [&::-webkit-scrollbar]:hidden p-2">
         {recentProducts.slice(0, 5).map((product) => (
-          <Item key={product.id} product={product} />
+          <Item
+            formattedPrice={formattedPrice(product.price)}
+            key={product.id}
+            product={product}
+          />
         ))}
       </div>
     </>
