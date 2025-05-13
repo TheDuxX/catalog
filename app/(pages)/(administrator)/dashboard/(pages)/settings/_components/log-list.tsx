@@ -40,6 +40,7 @@ import {
 } from "@/app/_components/ui/dropdown-menu";
 import { useUsersList } from "../../../_viewmodels/useUsers";
 import Image from "next/image";
+import LogCard from "./log-card";
 
 const TextTable = () => {
   const { data: logs, isLoading, error, refetch } = useLogList();
@@ -255,32 +256,7 @@ const TextTable = () => {
       },
       cell: ({ row }) => {
         const user = users?.find((user) => user.id === row.getValue("user_id"));
-        return (
-          <div className="flex items-center gap-4">
-            <div className="overflow-hidden rounded-full aspect-square relative w-6">
-              {user?.avatar !== null && user?.avatar !== undefined ? (
-                <Image
-                  src={
-                    user?.avatar !== null && user?.avatar !== undefined
-                      ? user?.avatar
-                      : ""
-                  }
-                  alt={
-                    user?.username !== null && user?.username !== undefined
-                      ? user?.username
-                      : ""
-                  }
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover object-center"
-                />
-              ) : (
-                <div className="w-6 h-6 bg-gray-200 rounded-full" />
-              )}
-            </div>
-            {user?.username}
-          </div>
-        );
+        return <div className="flex items-center gap-4">{user?.username}</div>;
       },
     },
   ];
@@ -371,67 +347,82 @@ const TextTable = () => {
 
   return (
     <div className="w-full">
-      <Card className="bg-white">
-        <CardContent className="pb-2 pt-2">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => {
-                return (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => {
+      <div className="hidden sm:block">
+        <Card className="bg-white">
+          <CardContent className="pb-2 pt-2">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
                       return (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
                       );
                     })}
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-      <div className="flex items-center justify-center space-x-2 py-4">
-        <Button
-          className="bg-white shadow"
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <Button
-          className="bg-white shadow"
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <ArrowRight className="h-4 w-4" />
-        </Button>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => {
+                  return (
+                    <TableRow key={row.id}>
+                      {row.getVisibleCells().map((cell) => {
+                        return (
+                          <TableCell key={cell.id} className="text-wrap">
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        <div className="flex items-center justify-center space-x-2 py-4">
+          <Button
+            className="bg-white shadow"
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            className="bg-white shadow"
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+      <div className="block sm:hidden">
+        {isLoading ? (
+          <>Carregando...</>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {logs.map((log: Log) => (
+              <div key={log.id}>
+                <LogCard log={log} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
