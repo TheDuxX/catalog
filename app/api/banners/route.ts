@@ -70,7 +70,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json(data, { status: 200 });
+  return NextResponse.json(
+    { message: "Banner criado com sucesso" },
+    { status: 200 }
+  );
 }
 
 export async function PUT(request: Request) {
@@ -101,19 +104,41 @@ export async function PUT(request: Request) {
   );
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(req: NextRequest) {
   const supabase = await createClient();
-  const body = await request.json();
-
+  const body = await req.json();
   const { id } = body;
 
-  if (!id) {
-    return NextResponse.json(
-      { error: "ID é obrigatório para deletar." },
-      { status: 400 }
-    );
+  // Primeiro, busca o banner pelo ID para pegar o caminho da imagem
+  const { data: banner, error: fetchError } = await supabase
+    .from("banners")
+    .select("image_url")
+    .eq("id", id)
+    .single();
+
+  if (fetchError) {
+    return NextResponse.json({ error: fetchError.message }, { status: 500 });
   }
 
+  // Extrai o caminho real da imagem (caso seja URL pública)
+  const filePath = banner?.image_url?.split(
+    "/storage/v1/object/public/banners/"
+  )[1];
+
+  if (filePath) {
+    const { error: deleteImageError } = await supabase.storage
+      .from("banners")
+      .remove([filePath]);
+
+    if (deleteImageError) {
+      return NextResponse.json(
+        { error: `Erro ao deletar imagem: ${deleteImageError.message}` },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Depois, deleta o registro no banco
   const { error } = await supabase.from("banners").delete().eq("id", id);
 
   if (error) {
@@ -121,7 +146,7 @@ export async function DELETE(request: Request) {
   }
 
   return NextResponse.json(
-    { message: "Banner deletado com sucesso." },
+    { message: "Banner deletado com sucesso" },
     { status: 200 }
   );
 }
