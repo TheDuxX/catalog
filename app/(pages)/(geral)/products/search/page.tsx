@@ -1,10 +1,14 @@
-import SearchResults from "./_components/search-list";
+import SearchResults from "@/app/(pages)/(administrator)/dashboard/_components/search-results";
+import SearchBar from "@/app/_components/search";
 
 const SearchPage = () => {
   return (
-    <>
-      <SearchResults />
-    </>
+    <div className="flex flex-col justify-center items-center pt-4">
+      <div className="w-full max-w-[1150px]">
+        <SearchBar />
+        <SearchResults />
+      </div>
+    </div>
   );
 };
 

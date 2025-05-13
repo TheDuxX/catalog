@@ -47,13 +47,6 @@ const DashboardList = () => {
             formattedPrice={formattedPrice(product.price)}
           />
         ))}
-        {products.map((product) => (
-          <DashboardItem
-            key={product.id}
-            product={product}
-            formattedPrice={formattedPrice(product.price)}
-          />
-        ))}
       </div>
     </div>
   );

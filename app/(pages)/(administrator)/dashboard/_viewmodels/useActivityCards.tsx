@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { fetchActivities } from "../_services/activity-service";
 import { fetchProducts } from "../_services/products-service";
+import { TrendingDown, TrendingUp } from "lucide-react";
 
 type Activity = {
   date: string;
@@ -96,4 +97,55 @@ export const useActivitycards = () => {
     ordersChange,
     loading,
   };
+};
+
+const formatChange = (value: number | null) => {
+  if (value === null) return "N/A";
+  return `${value.toFixed(0)}%`;
+};
+
+export const trendingMarks = (number: number | null) => {
+  if (number === null || number === undefined) {
+    return (
+      <div className="text-gray-500">
+        <div className="flex flex-row gap-1">
+          <p>--</p>
+          {formatChange(number)}
+        </div>
+      </div>
+    );
+  }
+
+  switch (true) {
+    case number > 0:
+      return (
+        <div className="text-green-500">
+          <div className="flex flex-row gap-1">
+            <TrendingUp size={16} />
+            <p>+</p>
+            {formatChange(number)}
+          </div>
+        </div>
+      );
+    case number < 0:
+      return (
+        <div className="text-red-500">
+          <div className="flex flex-row gap-1">
+            <TrendingDown size={16} />
+            <p>-</p>
+          </div>
+        </div>
+      );
+    case number === 0:
+      return (
+        <div className="text-gray-500">
+          <div className="flex flex-row gap-1">
+            <p>--</p>
+            {formatChange(number)}
+          </div>
+        </div>
+      );
+    default:
+      throw new Error(`Unexpected number value: ${number}`);
+  }
 };

@@ -10,7 +10,10 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
-import { useActivitycards } from "../_viewmodels/useActivityCards";
+import {
+  trendingMarks,
+  useActivitycards,
+} from "../_viewmodels/useActivityCards";
 import { Skeleton } from "@/app/_components/ui/skeleton";
 import { Button } from "@/app/_components/ui/button";
 import { useRouter } from "next/navigation";
@@ -41,11 +44,6 @@ const MetricCards = () => {
       </div>
     );
 
-  const formatChange = (value: number | null) => {
-    if (value === null) return "N/A";
-    return `${value.toFixed(0)}%`;
-  };
-
   return (
     <div className="md:flex w-full md:flex-row grid grid-cols-2 gap-2">
       <div className="w-full max-w-[300px] bg-white rounded-md shadow md:p-4 p-2 space-y-2  hover:shadow-lg transition-all md:border-l-4 border-secondary">
@@ -57,23 +55,7 @@ const MetricCards = () => {
           <p className="md:text-4xl text-3xl font-bold">
             {totalViews.toLocaleString()}
           </p>
-          <div
-            className={`flex items-center md:text-lg text-sm gap-1 ${
-              viewsChange! > 0 ? "text-green-500" : "text-red-500"
-            }`}
-          >
-            {viewsChange! > 0 ? (
-              <div className="flex flex=row gap-1">
-                <TrendingUp size={16} />
-                <p>+</p>
-              </div>
-            ) : (
-              <div className="flex flex=row gap-1">
-                <TrendingDown size={16} />
-              </div>
-            )}
-            {formatChange(viewsChange)}
-          </div>
+          {trendingMarks(viewsChange!)}
         </div>
         {/* <span className="text-gray-500 text-sm">Visualizações de página</span> */}
       </div>
@@ -86,23 +68,7 @@ const MetricCards = () => {
           <p className="md:text-4xl text-3xl font-bold">
             {totalOrders.toLocaleString()}
           </p>
-          <div
-            className={`flex items-center md:text-lg text-sm gap-1 ${
-              ordersChange! > 0 ? "text-green-500" : "text-red-500"
-            }`}
-          >
-            {ordersChange! > 0 ? (
-              <div className="flex flex=row gap-1">
-                <TrendingUp size={16} />
-                <p>+</p>
-              </div>
-            ) : (
-              <div className="flex flex=row gap-1">
-                <TrendingDown size={16} />
-              </div>
-            )}
-            {formatChange(ordersChange)}
-          </div>
+          {trendingMarks(ordersChange)}
         </div>
         {/* <span className="text-gray-500 text-sm">Pedidos realizados</span> */}
       </div>
