@@ -332,7 +332,7 @@ const ProductForm = () => {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {categories.map((category) => (
+                            {categories.map((category: any) => (
                               <SelectItem key={category.id} value={category.id}>
                                 {category.name}
                               </SelectItem>
@@ -360,7 +360,7 @@ const ProductForm = () => {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {marks.map((mark) => (
+                            {marks.map((mark: any) => (
                               <SelectItem key={mark.id} value={mark.id}>
                                 {mark.name}
                               </SelectItem>
