@@ -1,12 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent } from "@/app/_components/ui/card";
 import Image from "next/image";
-import { createSupabaseClient } from "../_utils/supabase/client";
-import SaleButton from "../(pages)/product/[id]/_component/sale-button";
+import { useItemService } from "../_viewmodel/useItemService";
 
-interface ProductItemProps {
+interface ProductProps {
   product: {
     id: string;
     name: string;
@@ -15,8 +13,6 @@ interface ProductItemProps {
     status: boolean;
     date: Date;
     price: number;
-    categoryId: string;
-    markId: string;
     imageUrls: string[];
     views: number | null;
     category: {
@@ -28,84 +24,41 @@ interface ProductItemProps {
       name: string;
     };
   };
-  itemOrientation: boolean;
+  formattedPrice: string;
 }
 
-const Item = ({ product, itemOrientation }: ProductItemProps) => {
-  const router = useRouter();
-
-  const handleProductClick = async () => {
-    try {
-      // Atualiza o status do produto com o ID fornecido
-      const supabase = createSupabaseClient();
-      const { data, error } = await supabase.rpc("increment_column", {
-        row_id: product.id,
-        increment_by: 1, // Valor a incrementar
-      });
-
-      if (error) {
-        console.error("Erro ao atualizar o status do produto:", error);
-      } else {
-        router.push(`/product/${product.id}`);
-      }
-    } catch (error) {
-      console.error("Erro interno ao atualizar o status do produto:", error);
-    }
-  };
-
-  const formattedPrice = `R$ ${product.price.toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
+const Item = ({ product, formattedPrice }: ProductProps) => {
+  const { handleClick } = useItemService();
 
   return (
     <Card
-      className={`p-0 ${
-        itemOrientation ? "w-full" : "md:w-50% lg:w-50%"
-      } bg-white`}
-      onClick={handleProductClick}
+      className="p-0 md:min-w-[100px] w-full bg-white hover:shadow-md hover:translate-y-[-5px] transition-all cursor-pointer"
+      onClick={() => handleClick(product.id)}
     >
-      <CardContent
-        className={`p-2 flex ${
-          itemOrientation ? "flex-row " : "flex-col justify-between"
-        } `}
-      >
-        <div className={`relative min-w-[120px] aspect-square rounded-md`}>
+      <CardContent className={`p-1 flex flex-col justify-between`}>
+        <div
+          className={`relative min-w-[100px] w-full aspect-square rounded-md`}
+        >
           <Image
             src={product.imageUrls[0]}
             alt={product.name}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover"
-            priority={true} // {false} | {true}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
           />
         </div>
-        <div
-          className={` flex flex-col  ${
-            itemOrientation ? "gap-5 justify-between px-5" : "gap-2 px-2"
-          }`}
-        >
+        <div className={` flex flex-col  gap-2 px-2`}>
           <div className="flex flex-col gap-0">
-            <h2
-              className={`font-medium line-clamp-1 ${
-                itemOrientation ? "text-xl" : "text-lg"
-              }`}
-            >
+            <h2 className={`md:font-medium line-clamp-1 md:text-lg`}>
               {product.name}
             </h2>
-
-            {itemOrientation ? (
-              <small>{product.description}</small>
-            ) : (
-              <small className="text-secondary">
-                {product.mark ? product.mark.name : "Marca não disponível"}
-              </small>
-            )}
+            <small className="text-secondary">
+              {product.mark ? product.mark.name : "Marca não disponível"}
+            </small>
           </div>
           <h3
-            className={`scroll-m-20 ${
-              itemOrientation ? "text-2xl" : "text-2xl"
-            } font-semibold tracking-tight`}
+            className={`scroll-m-20 text-sm md:text-base lg:text-lg sm:font-semibold tracking-tight`}
           >
             {formattedPrice}
           </h3>
