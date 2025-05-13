@@ -24,6 +24,7 @@ import {
   PencilIcon,
   Plus,
   PlusCircleIcon,
+  PlusIcon,
   Trash2Icon,
 } from "lucide-react";
 import { Input } from "@/app/_components/ui/input";
@@ -81,14 +82,16 @@ const SettingsFilters = () => {
   return (
     <div className="w-full flex flex-col md:grid md:grid-cols-2 gap-4 ">
       <Card className="bg-white w-full h-fit">
-        <CardContent className="p-4 flex flex-col gap-2">
+        <CardContent className="p-4 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <CardHeader className="font-semibold p-0">Categorias</CardHeader>
             <Button
-              variant={"button"}
+              variant={"secondary"}
               onClick={() => setCreateNewCategory(!createNewCategory)}
+              className="flex items-center justify-start gap-2 group transition-all duration-300"
             >
-              <PlusCircleIcon />
+              <span className="">Adicionar Nova</span>
+              <PlusIcon className="transition-transform duration-300 group-hover:rotate-90" />
             </Button>
           </div>
           <Table className="w-full rounded-md overflow-hidden">
@@ -113,9 +116,7 @@ const SettingsFilters = () => {
                       </TableHead>
                     );
                   })}
-                  <TableHead className="text-black font-semibold italic ">
-                    Ações
-                  </TableHead>
+                  <TableHead className="text-black">Ações</TableHead>
                 </TableRow>
               ))}
             </TableHeader>
@@ -188,7 +189,7 @@ const SettingsFilters = () => {
                           </Button>
                         </div>
                       ) : (
-                        <div>
+                        <div className="flex gap-2 pl-2">
                           <Button
                             variant={"button"}
                             onClick={() => {
@@ -260,16 +261,18 @@ const SettingsFilters = () => {
         </CardContent>
       </Card>
       <Card className="bg-white w-full h-fit">
-        <CardContent className="p-4 flex flex-col gap-2">
+        <CardContent className="p-4 flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <CardHeader className="font-semibold p-0">Marcas</CardHeader>
             <Button
-              variant="button"
+              variant="secondary"
               onClick={() => {
                 setCreateNewMark(!createNewMark);
               }}
+              className="flex items-center justify-start gap-2 group transition-all duration-300"
             >
-              <PlusCircleIcon />
+              <span>Criar marca</span>
+              <PlusIcon className="transition-transform duration-300 group-hover:rotate-90" />
             </Button>
           </div>
           <Table className="w-full rounded-md overflow-hidden">
@@ -294,9 +297,7 @@ const SettingsFilters = () => {
                       </TableHead>
                     );
                   })}
-                  <TableHead className="text-black font-semibold italic ">
-                    Ações
-                  </TableHead>
+                  <TableHead className="text-black ">Ações</TableHead>
                 </TableRow>
               ))}
             </TableHeader>
@@ -369,7 +370,7 @@ const SettingsFilters = () => {
                           </Button>
                         </div>
                       ) : (
-                        <div>
+                        <div className="flex gap-2 pl-2">
                           <Button
                             variant={"button"}
                             onClick={() => {
