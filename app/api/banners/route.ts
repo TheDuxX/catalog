@@ -15,10 +15,8 @@ export async function GET() {
   return NextResponse.json(data, { status: 200 });
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   const supabase = await createClient();
-
-  console.log(req);
 
   const formData = await req.formData();
   const name = formData.get("name") as string;
@@ -33,9 +31,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const filePath = `public/${crypto.randomUUID()}-${file.name}`;
+  const fileExt = file.name.split(".").pop();
+  const fileName = `${name.toLowerCase().split(" ").join("-")}.${fileExt}`;
+  const filePath = `${fileName}`;
 
-  console.log(filePath);
+  console.log("filePath", filePath);
 
   const { data: uploadData, error: uploadError } = await supabase.storage
     .from("banners")
@@ -58,13 +58,12 @@ export async function POST(req: NextRequest) {
     data: { publicUrl },
   } = supabase.storage.from("banners").getPublicUrl(filePath);
 
+  console.log(publicUrl);
+
   const { data, error } = await supabase.from("banners").insert({
-    id: crypto.randomUUID(),
-    name,
+    name: name,
     image_url: publicUrl,
     is_visible: true,
-    created_at: new Date(),
-    order: 0,
   });
 
   if (error) {

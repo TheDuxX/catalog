@@ -67,20 +67,6 @@ export const useBannersViewModel = () => {
     },
   });
 
-  // const updateBannerMutation = useMutation({
-  //   // Adicionando a mutação updateBanner
-  //   mutationFn: ({ id, data }: { id: string; data: Partial<BannerProps> }) =>
-  //     updateBanners(id, data),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["banners"] });
-  //     toast.success("Banner atualizado com sucesso.");
-  //     setIsDirty(false);
-  //   },
-  //   onError: (error: any) => {
-  //     toast.error(`Erro ao atualizar banner: ${error.message}`);
-  //   },
-  // });
-
   const bulkUpdateBannersMutation = useMutation({
     mutationFn: (banners: BannerProps[]) => updateBanners(banners),
     onSuccess: () => {
@@ -151,6 +137,8 @@ export const useBannersViewModel = () => {
   // React Hook Form
   type BannerFormValues = z.infer<typeof bannerFormSchema>;
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const form = useForm<BannerFormValues>({
     resolver: zodResolver(bannerFormSchema),
     defaultValues: {
@@ -159,24 +147,27 @@ export const useBannersViewModel = () => {
     },
   });
 
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-
   const handleCreateBanner = useCallback(() => {
     const values = form.getValues();
     const file = values.image_url;
 
     if (!file) return toast.error("Imagem não selecionada.");
 
-    createBannerMutation.mutate(
-      { name: values.name, image: file },
-      {
-        onSuccess: () => {
-          refetch(); // Atualiza lista após criação
-          form.reset();
-          setImagePreview(null);
-        },
-      }
-    );
+    try {
+      createBannerMutation.mutate(
+        { name: values.name, image: file },
+        {
+          onSuccess: () => {
+            refetch(); // Atualiza lista após criação
+            form.reset();
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Erro ao criar banner:", error);
+    } finally {
+      setIsDialogOpen(false);
+    }
   }, [createBannerMutation, form, refetch]);
 
   const handleSaveBanners = () => {
@@ -192,8 +183,8 @@ export const useBannersViewModel = () => {
     error,
     refetch,
     form,
-    imagePreview,
-    setImagePreview,
+    isDialogOpen,
+    setIsDialogOpen,
     handleUpdateVisibility,
     handleUpdateOrder,
     handleDeleteBanner,

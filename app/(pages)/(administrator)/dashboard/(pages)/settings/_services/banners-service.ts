@@ -25,7 +25,7 @@ export async function getBanners() {
 }
 
 export async function create(data: { name: string; image: File }) {
-  console.log("Iniciando criação",data);
+  console.log("Iniciando criação", data);
 
   const formData = new FormData();
   formData.append("name", data.name);

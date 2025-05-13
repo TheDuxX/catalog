@@ -152,6 +152,8 @@ const BannerList = () => {
     isLoading,
     error,
     form,
+    isDialogOpen,
+    setIsDialogOpen,
     handleUpdateVisibility,
     handleUpdateOrder,
     handleDeleteBanner,
@@ -248,9 +250,9 @@ const BannerList = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold">Gerenciar Banners</h2>
         <div className="flex gap-4">
-          <Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
                 <PlusCircle className="w-4 h-4 mr-2" />
                 Novo Banner
               </Button>
