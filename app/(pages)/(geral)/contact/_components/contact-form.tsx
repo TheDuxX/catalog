@@ -1,8 +1,5 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -14,76 +11,11 @@ import {
 import { Input } from "@/app/_components/ui/input";
 import { Textarea } from "@/app/_components/ui/textarea";
 import { Button } from "@/app/_components/ui/button";
-import toast from "react-hot-toast";
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
-
-const formSchema = z.object({
-  name: z
-    .string({ required_error: "Nome é um campo obrigatório" })
-    .min(2)
-    .max(50),
-  email: z.string({ required_error: "E-mail é um campo obrigatório" }).email(),
-  phone: z
-    .string({ required_error: "Telefone é um campo obrigatório" })
-    .min(9)
-    .max(15),
-  message: z
-    .string({ required_error: "Mensagem é um campo obrigatório" })
-    .min(10)
-    .max(500),
-});
+import { useContact } from "../_viewmodel/useContact";
 
 const ContactForm = () => {
-  const [loading, setLoading] = useState(false);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/contacts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Erro ao enviar contato");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      toast.success("Contato enviado com sucesso");
-      setLoading(false);
-      form.reset();
-    }
-  }
-
-  const formatPhone = (value: string) => {
-    value = value.replace(/\D/g, "");
-
-    if (value.length > 10) {
-      return `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(
-        7,
-        11
-      )}`;
-    } else if (value.length > 6) {
-      return `(${value.slice(0, 2)}) ${value.slice(2, 6)}-${value.slice(6)}`;
-    } else if (value.length > 2) {
-      return `(${value.slice(0, 2)}) ${value.slice(2)}`;
-    } else {
-      return value;
-    }
-  };
+  const { form, onSubmit, formatPhone, newContact } = useContact();
 
   return (
     <>
@@ -159,17 +91,22 @@ const ContactForm = () => {
             )}
           />
           <div className="w-full flex gap-2">
-            {loading ? (
-              <Button type="submit" variant="secondary" className="w-full">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
-              </Button>
-            ) : (
+            {newContact.isIdle ? (
               <Button type="submit" variant="secondary" className="w-full">
                 Enviar
               </Button>
+            ) : (
+              <Button type="submit" variant="secondary" className="w-full">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              </Button>
             )}
 
-            <Button type="button" variant="outline" className="w-full" onClick={() => form.reset()}>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => form.reset()}
+            >
               Limpar
             </Button>
           </div>
