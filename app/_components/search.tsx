@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SearchBar = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -22,14 +22,15 @@ const SearchBar = () => {
           value={searchTerm}
           onChange={handleSearch}
           className="border-none shadow-none w-full placeholder:text-base"
+          aria-details="search"
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              router.push(
+                `/products/search?query=${encodeURIComponent(searchTerm)}`
+              );
+            }
+          }}
         />
-        {/* <Button
-          className="p-0 m-0"
-          size="lg"
-          variant="ghost"
-          
-        >
-        </Button> */}
         <SearchIcon
           size={24}
           className="mx-2"
