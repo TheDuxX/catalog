@@ -15,7 +15,7 @@ const List = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 p-2 ">
         <div className="flex flex-row gap-2 justify-end">
           <Skeleton className="h-8 w-40 bg-white shadow"></Skeleton>
           <Skeleton className="h-8 w-20 bg-white shadow"></Skeleton>
@@ -35,7 +35,7 @@ const List = () => {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 px-2">
       <div className="flex flex-row gap-2 justify-end">
         <Filters />
       </div>
