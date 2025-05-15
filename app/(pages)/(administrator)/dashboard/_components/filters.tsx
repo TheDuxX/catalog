@@ -50,7 +50,7 @@ const Filters = () => {
     );
 
   return (
-    <div className="w-auto md:mr-2">
+    <div className="w-auto ">
       <div className="flex flex-row gap-1 items-center h-full">
         <select
           onChange={(e) => setSortOrder(e.target.value)}
