@@ -9,13 +9,17 @@ import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 
 import {
-  useCategoryMarkQuery,
   useProductQuery,
   useUpdateProductMutation,
   useCreateProductMutation,
   useDeleteImagesMutation,
   useUploadImagesMutation,
 } from "../_queries/product-queries";
+import { useQuery } from "@tanstack/react-query";
+import {
+  categoryService,
+  markService,
+} from "../(pages)/settings/_services/filters-service";
 
 type ProductFormProps = {
   id: string;
@@ -43,11 +47,38 @@ export function useProductForm({ id }: ProductFormProps) {
   const { setValue, reset } = form;
 
   const { data: product, isPending: productLoading } = useProductQuery(id);
-  const { data: categoriesMarks } = useCategoryMarkQuery();
   const updateMutation = useUpdateProductMutation();
   const createMutation = useCreateProductMutation();
   const deleteImagesMutation = useDeleteImagesMutation();
   const uploadImagesMutation = useUploadImagesMutation();
+
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+    error: categoriesErrorData,
+    refetch: refetchCategories,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => categoryService.getAll(),
+    staleTime: 5 * 60 * 1000,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
+
+  const {
+    data: marks,
+    isLoading: marksLoading,
+    isError: marksError,
+    error: marksErrorData,
+    refetch: refetchMarks,
+  } = useQuery({
+    queryKey: ["marks"],
+    queryFn: () => markService.getAll(),
+    staleTime: 5 * 60 * 1000,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
 
   useEffect(() => {
     if (product) {
@@ -160,12 +191,14 @@ export function useProductForm({ id }: ProductFormProps) {
       updateMutation.isPending ||
       createMutation.isPending ||
       deleteImagesMutation.isPending ||
-      uploadImagesMutation.isPending,
+      uploadImagesMutation.isPending ||
+      categoriesLoading ||
+      marksLoading,
     productLoading,
     isEditMode,
-    categories: categoriesMarks?.category || [],
-    marks: categoriesMarks?.mark || [],
     edit,
+    categories,
+    marks,
     formatToCurrency,
     setEdit,
     handleChangeStatus,

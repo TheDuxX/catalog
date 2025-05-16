@@ -20,6 +20,7 @@ export async function getProductById(id: string) {
 }
 
 export async function updateProduct(id: string, data: ProductSchemaType) {
+  console.log("Dados",data);
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
@@ -33,7 +34,7 @@ export async function updateProduct(id: string, data: ProductSchemaType) {
     throw new Error(error || "Erro ao atualizar produto");
   }
 
-  return { success : true};
+  return { success: true };
 }
 
 export async function deleteProduct(id: string) {

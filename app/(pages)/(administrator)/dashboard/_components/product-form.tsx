@@ -21,7 +21,7 @@ import {
 } from "@/app/_components/ui/select";
 import Image from "next/image";
 import { Label } from "@/app/_components/ui/label";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { useProductForm } from "../_viewmodels/useProductForm";
 import { Button } from "@/app/_components/ui/button";
 import { Skeleton } from "@/app/_components/ui/skeleton";
@@ -140,41 +140,42 @@ const ProductForm = () => {
                             ))}
                           </div>
                         ) : (
-                          <DndContext
-                            sensors={sensors}
-                            collisionDetection={closestCenter}
-                            onDragEnd={({ active, over }) => {
-                              if (!over) return; // over pode ser null
-                              const currentUrls = form.watch("imageUrls") ?? [];
+                          <div className="gap-2 grid md:grid-cols-5 grid-cols-2">
+                            <DndContext
+                              sensors={sensors}
+                              collisionDetection={closestCenter}
+                              onDragEnd={({ active, over }) => {
+                                if (!over) return; // over pode ser null
+                                const currentUrls =
+                                  form.watch("imageUrls") ?? [];
 
-                              const oldIndex = currentUrls.indexOf(
-                                active.id as string
-                              );
-                              const newIndex = currentUrls.indexOf(
-                                over.id as string
-                              );
-
-                              if (
-                                oldIndex !== -1 &&
-                                newIndex !== -1 &&
-                                oldIndex !== newIndex
-                              ) {
-                                const newOrder = arrayMove(
-                                  currentUrls,
-                                  oldIndex,
-                                  newIndex
+                                const oldIndex = currentUrls.indexOf(
+                                  active.id as string
                                 );
-                                form.setValue("imageUrls", newOrder);
-                              }
-                            }}
-                          >
-                            <SortableContext
-                              items={
-                                (form.watch("imageUrls") ?? []) as string[]
-                              }
-                              strategy={rectSortingStrategy}
+                                const newIndex = currentUrls.indexOf(
+                                  over.id as string
+                                );
+
+                                if (
+                                  oldIndex !== -1 &&
+                                  newIndex !== -1 &&
+                                  oldIndex !== newIndex
+                                ) {
+                                  const newOrder = arrayMove(
+                                    currentUrls,
+                                    oldIndex,
+                                    newIndex
+                                  );
+                                  form.setValue("imageUrls", newOrder);
+                                }
+                              }}
                             >
-                              <div className="gap-2 grid md:grid-cols-5 grid-cols-2">
+                              <SortableContext
+                                items={
+                                  (form.watch("imageUrls") ?? []) as string[]
+                                }
+                                strategy={rectSortingStrategy}
+                              >
                                 {form.watch("imageUrls")?.map((url, index) => (
                                   <SortableImage
                                     key={url}
@@ -185,13 +186,8 @@ const ProductForm = () => {
                                     name={product.name}
                                   />
                                 ))}
-                              </div>
-                            </SortableContext>
-                          </DndContext>
-                        )}
-
-                        {!edit && (
-                          <>
+                              </SortableContext>
+                            </DndContext>{" "}
                             <Label
                               htmlFor="upload"
                               className="w-full aspect-square h-auto flex items-center justify-center border border-dashed rounded bg-white cursor-pointer"
@@ -214,7 +210,7 @@ const ProductForm = () => {
                                 ]);
                               }}
                             />
-                          </>
+                          </div>
                         )}
                       </div>
                     </FormControl>
@@ -332,7 +328,7 @@ const ProductForm = () => {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {categories.map((category: any) => (
+                            {categories?.map((category: any) => (
                               <SelectItem key={category.id} value={category.id}>
                                 {category.name}
                               </SelectItem>
@@ -360,7 +356,7 @@ const ProductForm = () => {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {marks.map((mark: any) => (
+                            {marks?.map((mark: any) => (
                               <SelectItem key={mark.id} value={mark.id}>
                                 {mark.name}
                               </SelectItem>
