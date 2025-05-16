@@ -23,9 +23,28 @@ import { Plus } from "lucide-react";
 import { Label } from "@/app/_components/ui/label";
 import { Textarea } from "@/app/_components/ui/textarea";
 import { useState } from "react";
+import { Skeleton } from "@/app/_components/ui/skeleton";
 
 export default function CreateProductPage() {
-  const { form, onSubmit, marks, categories, isLoading, formatToCurrency } = useCreateProduct();
+  const {
+    form,
+    loading,
+    onSubmit,
+    marks,
+    categories,
+    isLoading,
+    formatToCurrency,
+  } = useCreateProduct();
+
+  if (isLoading) {
+    return (
+      <div className="w-2/3 flex flex-col gap-2">
+        <Skeleton className="min-h-[140px] w-full bg-white shadow"></Skeleton>
+        <Skeleton className="min-h-80 w-full bg-white shadow"></Skeleton>
+        <Skeleton className="h-10 bg-white shadow w-1/3"></Skeleton>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full flex items-center justify-start md:p-4">
@@ -196,7 +215,7 @@ export default function CreateProductPage() {
                         <SelectValue placeholder="Selecione uma categoria" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories.map((category) => (
+                        {categories?.map((category) => (
                           <SelectItem key={category.id} value={category.id}>
                             {category.name}
                           </SelectItem>
@@ -223,7 +242,7 @@ export default function CreateProductPage() {
                         <SelectValue placeholder="Selecione uma marca" />
                       </SelectTrigger>
                       <SelectContent>
-                        {marks.map((mark) => (
+                        {marks?.map((mark) => (
                           <SelectItem key={mark.id} value={mark.id}>
                             {mark.name}
                           </SelectItem>
@@ -239,10 +258,10 @@ export default function CreateProductPage() {
           <Button
             variant={"secondary"}
             className="font-semibold md:w-1/4"
-            disabled={isLoading}
+            disabled={loading}
             type="submit"
           >
-            {isLoading ? "Criando..." : "Cadastrar"}
+            {loading ? "Criando..." : "Cadastrar"}
           </Button>
         </form>
       </Form>

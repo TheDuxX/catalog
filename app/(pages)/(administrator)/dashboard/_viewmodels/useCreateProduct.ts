@@ -9,31 +9,45 @@ import { useEffect, useState } from "react";
 import { uploadImages } from "../_services/uploadImages";
 import { createProduct } from "../_services/createProduct-service";
 import { useRouter } from "next/navigation";
-import { fetchCategoryMark } from "../_services/category-mark-service";
-
-type Categories = {
-  id: string;
-  name: string;
-};
-
-type Marks = {
-  id: string;
-  name: string;
-};
+import { fetchCategory, fetchMark } from "../_services/category-mark-service";
+import { useQuery } from "@tanstack/react-query";
+import {
+  categoryService,
+  markService,
+} from "../(pages)/settings/_services/filters-service";
 
 export function useCreateProduct() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [categories, setCategories] = useState<Categories[]>([]);
-  const [marks, setMarks] = useState<Marks[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
-  useEffect(() => {
-    fetchCategoryMark().then(({ category, mark }) => {
-      setCategories(category);
-      setMarks(mark);
-    });
-  }, []);
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+    error: categoriesErrorData,
+    refetch: refetchCategories,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => categoryService.getAll(),
+    staleTime: 5 * 60 * 1000,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
+
+  const {
+    data: marks,
+    isLoading: marksLoading,
+    isError: marksError,
+    error: marksErrorData,
+    refetch: refetchMarks,
+  } = useQuery({
+    queryKey: ["marks"],
+    queryFn: () => markService.getAll(),
+    staleTime: 5 * 60 * 1000,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -49,7 +63,7 @@ export function useCreateProduct() {
   });
 
   async function onSubmit(data: z.infer<typeof productSchema>) {
-    setIsLoading(true);
+    setLoading(true);
 
     try {
       const fileInputs = (document.getElementById("upload") as HTMLInputElement)
@@ -70,7 +84,7 @@ export function useCreateProduct() {
       toast.error("Erro ao criar produto");
     } finally {
       toast.success("Produto criado com sucesso");
-      setIsLoading(false);
+      setLoading(false);
       router.push("/dashboard/products");
       form.reset();
     }
@@ -83,5 +97,13 @@ export function useCreateProduct() {
     });
   }
 
-  return { form, onSubmit, marks, categories, isLoading, formatToCurrency };
+  return {
+    form,
+    onSubmit,
+    marks,
+    categories,
+    loading,
+    isLoading: categoriesLoading || marksLoading,
+    formatToCurrency,
+  };
 }
