@@ -12,8 +12,13 @@ import { flexRender } from "@tanstack/react-table";
 import ContactItem from "./contact-item";
 
 const ContactsList = () => {
-  const { contacts, isLoading, handleDeleteContact, formatPhone } =
-    useContact();
+  const {
+    contacts,
+    sortedContacts,
+    isLoading,
+    handleDeleteContact,
+    formatPhone,
+  } = useContact();
 
   if (isLoading) return <div>Loading...</div>;
   console.log(contacts);
@@ -22,8 +27,8 @@ const ContactsList = () => {
     <Card className="p-2 flex flex-col gap-4 bg-transparent shadow-none">
       <CardTitle className="text-2xl font-bold">Contatos</CardTitle>
       <CardContent className="grid grid-cols-3 gap-2 p-0">
-        {contacts?.map((contact: Contact) => (
-          <ContactItem contact={contact} key={contact.id} />
+        {sortedContacts.map((contact: Contact) => (
+          <ContactItem key={contact.id} contact={contact} />
         ))}
       </CardContent>
     </Card>

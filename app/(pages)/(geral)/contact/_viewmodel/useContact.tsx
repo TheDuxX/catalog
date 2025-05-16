@@ -135,6 +135,10 @@ export const useContact = () => {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   }
 
+  const sortedContacts = contacts?.slice().sort((a: any, b: any) => {
+  return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+});
+
   return {
     form,
     onSubmit,
@@ -147,6 +151,7 @@ export const useContact = () => {
     error,
     refetch,
     newContact,
+    sortedContacts,
     handleDeleteContact,
   };
 };

@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter } from "@/app/_components/ui/card";
 import { Separator } from "@/app/_components/ui/separator";
 import { Textarea } from "@/app/_components/ui/textarea";
 import { Mail, Phone } from "lucide-react";
+import { format } from "date-fns";
 
 interface ContactItemProps {
   contact: Contact;
@@ -26,13 +27,14 @@ const ContactItem = ({ contact }: ContactItemProps) => {
           </div>
         </div>
         <br />
-        <p className="border-none shadow-none p-0 text-gray-600">{contact.message}</p>
+        <p className="border-none shadow-none p-0 text-gray-600">
+          {contact.message}
+        </p>
       </CardContent>
       <Separator className="opacity-20" />
       <CardFooter className="justify-end p-2 m-0">
         <p className="text-sm text-gray-500">
-          {/* {formatDate(contact.created_at)} */}
-          Insirir data
+          {format(new Date(contact.created_at), "dd/MM/yyyy HH:mm")}
         </p>
       </CardFooter>
     </Card>
