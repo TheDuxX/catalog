@@ -1,30 +1,36 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "./ui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "./ui/breadcrumb";
 
 interface ProductProps {
-    product: {
-        id: string;
-        name: string;
-        description: string;
-        reference: string;
-        status: boolean;
-        date: Date;
-        price: number;
-        categoryId: string;
-        markId: string;
-        imageUrls: string[];
-        views: number | null;
-        category: {
-            id: string;
-            name: string;
-        };
-        mark: {
-            id: string;
-            name: string;
-        };
-    }
+  product: {
+    id: string;
+    name: string;
+    description: string;
+    reference: string;
+    status: boolean;
+    date: Date;
+    price: number;
+    categoryId: string;
+    markId: string;
+    imageUrls: string[];
+    views: number | null;
+    category: {
+      id: string;
+      name: string;
+    };
+    mark: {
+      id: string;
+      name: string;
+    };
+  };
 }
 
-const LinksRoute = ({product} : ProductProps) => {
+const LinksRoute = ({ product }: ProductProps) => {
   return (
     <>
       <Breadcrumb className="">
@@ -38,13 +44,17 @@ const LinksRoute = ({product} : ProductProps) => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/products">
+            <BreadcrumbLink
+              href={`/products/search?query=${product.mark.name}`}
+            >
               {product.mark.name}
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/products">
+            <BreadcrumbLink
+              href={`/products/search?query=${product.category.name}`}
+            >
               {product.category.name}
             </BreadcrumbLink>
           </BreadcrumbItem>
