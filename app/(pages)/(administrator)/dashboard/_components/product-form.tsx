@@ -275,7 +275,7 @@ const ProductForm = () => {
                 <FormField
                   control={form.control}
                   name="price"
-                  render={({ field }) => {
+                  render={() => {
                     return (
                       <FormItem className="w-1/2">
                         <FormLabel>Preço</FormLabel>
