@@ -25,8 +25,8 @@ import {
   Users2,
   FilterIcon,
   ImageIcon,
-  ChevronUp,
-  ChevronDown,
+  SquareMousePointer,
+  Mail,
 } from "lucide-react";
 import Profile from "./profile";
 import { useUserViewModel } from "../_viewmodels/useUser";
@@ -35,7 +35,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/app/_components/ui/collapsible";
-import Link from "next/link";
 
 const items = [
   {
@@ -76,6 +75,11 @@ const settings = [
     url: "/dashboard/settings/banners",
     icon: ImageIcon,
   },
+  {
+    title: "Mensagens",
+    url: "/dashboard/settings/contacts",
+    icon: Mail,
+  },
 ];
 
 const AppSidebar = () => {
@@ -85,13 +89,13 @@ const AppSidebar = () => {
   const avatar = isLoading ? (
     "Carregando..."
   ) : (
-    <>
+    <SidebarMenuButton asChild className="rounded-full overflow-hidden p-0 ">
       {user?.avatar ? (
         <img src={user.avatar} alt="Avatar" />
       ) : (
-        <User2 className="w-full h-full p-2 stroke-1 bg-white rounded-full shadow" />
+        <User2 className="w-full h-full p-2 stroke-1 bg-white" />
       )}
-    </>
+    </SidebarMenuButton>
   );
 
   return (
@@ -121,10 +125,7 @@ const AppSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu className="">
               {items.map((item) => (
-                <SidebarMenuItem
-                  key={item.title}
-                  className="rounded-full"
-                >
+                <SidebarMenuItem key={item.title} className="rounded-full">
                   <SidebarMenuButton asChild>
                     <a
                       href={item.url}
@@ -138,10 +139,10 @@ const AppSidebar = () => {
               ))}
               <Collapsible defaultOpen>
                 <SidebarMenuItem className="">
-                  <CollapsibleTrigger asChild >
+                  <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="rounded-full hover:font-semibold cursor-default">
                       <Bolt />
-                      <span>Configurações</span>
+                      {state !== "collapsed" && <span>configurações</span>}
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
@@ -157,7 +158,9 @@ const AppSidebar = () => {
                               className="flex items-center gap-2 hover:rounded-full hover:font-semibold p-4 text-nowrap"
                             >
                               <item.icon className="stroke-1" />
-                              {item.title}
+                              {state !== "collapsed" && (
+                                <span>{item.title}</span>
+                              )}
                             </a>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
@@ -172,7 +175,15 @@ const AppSidebar = () => {
       </SidebarContent>
       <SidebarFooter className="">
         <SidebarMenu className="p-0 w-full ">
-          <SidebarMenuItem className="p-0 w-full transition-all">
+          <SidebarMenuItem className="p-0 pt-2 w-full transition-all border-t border-border/30">
+            <SidebarMenuButton asChild>
+              <a href="/">
+                <SquareMousePointer />
+                {state !== "collapsed" && <span>Acessar o Site</span>}
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem className="p-0 w-full transition-all duration-300">
             {state === "collapsed" ? avatar : <Profile isCollapsed={state} />}
           </SidebarMenuItem>
         </SidebarMenu>
