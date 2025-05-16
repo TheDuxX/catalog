@@ -1,6 +1,6 @@
 "use client";
 import { Input } from "@/app/_components/ui/input";
-import { useauthResetViewModel } from "../_view-model/useAuthReset";
+import { useAuthResetViewModel } from "../_view-model/useAuthReset";
 import { Button } from "@/app/_components/ui/button";
 
 export function ResetPasswordView() {
