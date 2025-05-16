@@ -2,15 +2,6 @@
 import { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import { useIsMobile } from "@/app/_lib/useIsMobile";
-
-type BannersProps = {
-  id?: string;
-  name: string;
-  image_url: string;
-  is_visible: boolean;
-  created_at: Date;
-};
 
 interface ProductItemProps {
   product: {

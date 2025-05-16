@@ -1,4 +1,3 @@
-import { useFilters } from "@/app/_utils/filters-context";
 import { createClient } from "@/app/_utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 

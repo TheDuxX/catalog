@@ -2,27 +2,13 @@
 
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/app/_components/ui/tabs";
 import { useAuthViewModel } from "../_view-model/useAuthViewModels";
-import { Loader2 } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Card } from "@/app/_components/ui/card";
 
 export function AuthForm() {
-  const {
-    formData,
-    isLoading,
-    errors,
-    handleChange,
-    validateAndLogin,
-    validateAndSignup,
-    redirect,
-  } = useAuthViewModel();
+  const { formData, errors, handleChange, validateAndLogin, redirect } =
+    useAuthViewModel();
 
   return (
     <Card>

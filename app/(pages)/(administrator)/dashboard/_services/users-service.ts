@@ -1,5 +1,3 @@
-import { createSupabaseClient } from "@/app/_utils/supabase/client";
-
 export type UserData = {
   id: string;
   username: string | null;

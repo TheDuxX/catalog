@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   BannerProps,
   bulkUpdate as updateBanners,
-  create as createBanner,
   getBanners,
   remove as removeBanner,
   create,
@@ -50,7 +49,7 @@ export const useBannersViewModel = () => {
       toast.success("Banner criado com sucesso.");
       setIsDirty(false);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toast.error(`Erro ao criar banner: ${error.message}`);
     },
   });
@@ -62,7 +61,7 @@ export const useBannersViewModel = () => {
       toast.success("Banner deletado com sucesso.");
       setIsDirty(false);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toast.error(`Erro ao deletar banner: ${error.message}`);
     },
   });
@@ -74,7 +73,8 @@ export const useBannersViewModel = () => {
       toast.success("Alterações salvas com sucesso.");
       setIsDirty(false);
     },
-    onError: (error: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onError: (error) => {
       toast.error(`Erro ao salvar alterações: ${error.message}`);
     },
   });

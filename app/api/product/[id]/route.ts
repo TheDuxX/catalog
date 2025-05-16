@@ -4,11 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 interface Params {
   params: { id: string };
 }
-type Context = {
-  params: {
-    id: string;
-  };
-};
 
 export async function GET(
   req: Request,

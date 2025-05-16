@@ -21,7 +21,7 @@ export const useDashboardItem = () => {
   const sortedProducts = [...products].sort((a, b) => {
     if (!sortOrder) return 0;
     const [key, order] = sortOrder.split(":");
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const compareValues = (valA: any, valB: any) => {
       if (typeof valA === "string") {
         return valA.localeCompare(valB);

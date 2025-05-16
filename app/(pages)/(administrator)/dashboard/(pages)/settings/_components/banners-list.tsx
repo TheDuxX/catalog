@@ -2,14 +2,7 @@
 
 import React, { useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ImagePlus,
-  Trash2,
-  GripVertical,
-  Save,
-  PlusCircle,
-  Plus,
-} from "lucide-react";
+import { Trash2, GripVertical, Save, PlusCircle } from "lucide-react";
 import {
   DndContext,
   useSensor,
@@ -18,6 +11,7 @@ import {
   KeyboardSensor,
   closestCenter,
   DragOverlay,
+  DragEndEvent,
 } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { AlertCircle } from "lucide-react";
@@ -44,14 +38,12 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
-import { Label } from "@/app/_components/ui/label";
 
 // Componente para exibir um único banner (item arrastável)
 const SortableBannerItem = ({
@@ -179,7 +171,6 @@ const BannerList = () => {
         if (!target) return undefined;
         const element = target.closest("[data-id]");
         if (!element) return undefined;
-        const id = element.getAttribute("data-id");
         const rect = element.getBoundingClientRect();
         return {
           x: rect.left + rect.width / 2,
@@ -188,9 +179,9 @@ const BannerList = () => {
       },
     })
   );
-
   const handleDragEnd = useCallback(
-    (event: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (event: DragEndEvent) => {
       const { active, over } = event;
 
       if (active.id !== over?.id) {

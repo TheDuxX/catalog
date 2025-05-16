@@ -1,7 +1,6 @@
 "use client";
 
 import { logout } from "@/app/(pages)/(auth)/login/actions";
-import { Button } from "@/app/_components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,11 +13,7 @@ import { useUserViewModel } from "../_viewmodels/useUser";
 import { Skeleton } from "@/app/_components/ui/skeleton";
 import Image from "next/image";
 
-type ProfileProps = {
-  isCollapsed: string;
-};
-
-const Profile = ({ isCollapsed }: ProfileProps) => {
+const Profile = () => {
   const { user, isLoading, redirectToProfile } = useUserViewModel();
 
   const username = isLoading

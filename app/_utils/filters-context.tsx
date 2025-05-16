@@ -21,10 +21,6 @@ export const FiltersProvider = ({ children }: { children: React.ReactNode }) => 
   const [itemCount, setItemCount] = useState<number>(10);
   const [filterStatus, setFilterStatus] = useState<"all" | "active" | "disabled">("active");
 
-  const resetFilters = () => {
-    setFilterStatus("all");
-  };
-
   return (
     <FiltersContext.Provider
       value={{

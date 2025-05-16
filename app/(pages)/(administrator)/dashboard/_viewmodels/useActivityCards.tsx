@@ -32,7 +32,7 @@ export const useActivitycards = () => {
 
         // Ordenar os dados por data
         const sortedData = activityData.sort(
-          (a: any, b: any) =>
+          (a: Activity, b: Activity) =>
             new Date(a.date).getTime() - new Date(b.date).getTime()
         );
 
@@ -46,13 +46,11 @@ export const useActivitycards = () => {
 
         const prev7DaysStart = new Date(prev7DaysEnd);
         prev7DaysStart.setDate(prev7DaysEnd.getDate() - 6);
-
-        const last7Days = sortedData.filter((item: any) => {
+        const last7Days = sortedData.filter((item: Activity) => {
           const itemDate = new Date(item.date);
           return itemDate >= last7DaysStart && itemDate <= last7DaysEnd;
         });
-
-        const prev7Days = sortedData.filter((item: any) => {
+        const prev7Days = sortedData.filter((item: Activity) => {
           const itemDate = new Date(item.date);
           return itemDate >= prev7DaysStart && itemDate <= prev7DaysEnd;
         });

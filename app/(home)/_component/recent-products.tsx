@@ -4,15 +4,7 @@ import { useHome } from "../_viewmodel/useHome";
 import { Skeleton } from "@/app/_components/ui/skeleton";
 
 const RecentProducts = () => {
-  const {
-    recentProducts,
-    products,
-    formattedPrice,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useHome();
+  const { recentProducts, formattedPrice, isLoading } = useHome();
 
   if (isLoading)
     return (

@@ -1,8 +1,6 @@
 import { Contact } from "@/app/(pages)/(geral)/contact/_service/contact-service";
-import { useContact } from "@/app/(pages)/(geral)/contact/_viewmodel/useContact";
 import { Card, CardContent, CardFooter } from "@/app/_components/ui/card";
 import { Separator } from "@/app/_components/ui/separator";
-import { Textarea } from "@/app/_components/ui/textarea";
 import { Mail, Phone } from "lucide-react";
 import { format } from "date-fns";
 
@@ -11,7 +9,6 @@ interface ContactItemProps {
 }
 
 const ContactItem = ({ contact }: ContactItemProps) => {
-  const { formatDate } = useContact();
   return (
     <Card className="bg-white p-2">
       <CardContent className="p-2 space-y-2">

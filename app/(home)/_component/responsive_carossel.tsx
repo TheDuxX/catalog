@@ -2,7 +2,6 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useBannersViewModel } from "@/app/(pages)/(administrator)/dashboard/(pages)/settings/_viewmodels/useBanners";
-import { Skeleton } from "@/app/_components/ui/skeleton";
 
 const ResponsiveCarousel = () => {
   const { banners, isLoading, error } = useBannersViewModel();

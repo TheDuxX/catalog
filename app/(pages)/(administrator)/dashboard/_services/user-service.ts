@@ -1,6 +1,5 @@
 import { createSupabaseClient } from "@/app/_utils/supabase/client";
 
-
 export type UserData = {
   id: string;
   email: string;
@@ -46,7 +45,7 @@ export const uploadAvatar = async (
 
   const supabase = await createSupabaseClient();
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("avatars")
     .upload(filePath, file, { upsert: true });
 
@@ -57,4 +56,3 @@ export const uploadAvatar = async (
     .getPublicUrl(filePath);
   return [publicUrl.publicUrl];
 };
-

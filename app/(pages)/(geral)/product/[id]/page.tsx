@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import ProductDetailService from "./_component/product-details";
 
 interface ProdctDetailsPageProps {

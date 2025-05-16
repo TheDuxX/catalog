@@ -1,4 +1,4 @@
-import { SidebarProvider, SidebarTrigger } from "@/app/_components/ui/sidebar";
+import { SidebarProvider } from "@/app/_components/ui/sidebar";
 import AppSidebar from "./_components/app-sidebar";
 
 export default function HomeLayout({

@@ -18,7 +18,8 @@ export async function getBanners() {
 
   if (!response.ok) {
     const { error } = await response.json();
-    throw new Error("Erro ao buscar banners");
+
+    throw new Error("Erro ao buscar banners", error);
   }
 
   return response.json();
@@ -64,7 +65,7 @@ export async function bulkUpdate(banners: Partial<BannerProps>[]) {
     const data = await res.json();
     console.log("Resposta da API:", data);
     return data;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Erro na função bulkUpdate:", error);
     throw error;
   }

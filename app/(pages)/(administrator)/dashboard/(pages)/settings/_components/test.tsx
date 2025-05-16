@@ -41,7 +41,7 @@ import { useUsersList } from "../../../_viewmodels/useUsers";
 import Image from "next/image";
 const TextTable = () => {
   const { data: logs, isLoading, error, refetch } = useLogList();
-  const { data: users, isLoading: isLoadingUsers } = useUsersList();
+  const { data: users } = useUsersList();
 
   const [sorting, setSorting] = useState<SortingState>([
     { id: "created_at", desc: true },

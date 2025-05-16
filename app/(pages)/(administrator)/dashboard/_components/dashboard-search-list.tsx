@@ -33,8 +33,7 @@ interface SearchProductsParams {
 }
 
 const DashboardList = ({ products }: SearchProductsParams) => {
-  const { loading, itemOrientation, hasProducts } = useDashboardItem();
-  formattedPrice;
+  const { loading } = useDashboardItem();
 
   if (loading) {
     return (

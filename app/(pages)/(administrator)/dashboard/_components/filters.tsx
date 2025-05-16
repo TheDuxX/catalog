@@ -1,5 +1,5 @@
 "use client";
-import { Columns, FilterIcon, Rows } from "lucide-react";
+import { FilterIcon } from "lucide-react";
 import {
   Sheet,
   SheetClose,
@@ -18,23 +18,12 @@ const Filters = () => {
   const {
     categories,
     isLoadingCategories,
-    isErrorCategories,
-    errorCategories,
-    refetchCategories,
     marks,
     isLoadingMarks,
-    isErrorMarks,
-    errorMarks,
-    refetchMarks,
-    itemOrientation,
     sortOrder,
-    itemCount,
     selectedCategories,
     selectedMarks,
-    filterStatus,
-    toggleOrientation,
     setSortOrder,
-    setItemCount,
     handleFilterApply,
     handleResetFilters,
     setSelectedCategories,
@@ -43,7 +32,7 @@ const Filters = () => {
 
   if (isLoadingCategories || isLoadingMarks)
     return (
-      <div>       
+      <div>
         <Skeleton className="md:w-2/3 w-full h-5 py-2" />
         <Skeleton className="md:w-2/3 w-full h-5 py-2" />
       </div>

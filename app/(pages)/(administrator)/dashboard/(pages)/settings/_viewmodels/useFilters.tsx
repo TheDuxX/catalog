@@ -54,7 +54,7 @@ export const useCategoriesMutations = () => {
 
   const deleteCategory = useMutation({
     mutationFn: (id: string) => categoryService.remove(id),
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryclient.invalidateQueries({ queryKey: ["categories"] });
       toast.success("Categoria deletada com sucesso.");
     },
@@ -68,7 +68,7 @@ export const useCategoriesMutations = () => {
 };
 
 // DEFINIÇÃO DO DATA TABLE
-export const categoriesSettingTable = () => {
+export const useCategoriesSettingTable  = () => {
   const [categorySorting, setCategorySorting] = useState<SortingState>([
     {
       id: "product_count",
@@ -180,7 +180,7 @@ export const useMarksMutations = () => {
 
   const deleteMark = useMutation({
     mutationFn: (id: string) => markService.remove(id),
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryclient.invalidateQueries({ queryKey: ["marks"] });
       toast.success("Marca deletada com sucesso.");
     },
@@ -193,7 +193,7 @@ export const useMarksMutations = () => {
   return { createMark, updateMark, deleteMark };
 };
 
-export const marksSettingTable = () => {
+export const useMarksSettingTable = () => {
   const [markSorting, setMarkSorting] = useState<SortingState>([
     {
       id: "product_count",

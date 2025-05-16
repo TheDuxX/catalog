@@ -9,9 +9,7 @@ import {
 import { Loader2 } from "lucide-react";
 
 const DashboardList = () => {
-  const { loading, itemOrientation, products, hasProducts } =
-    useDashboardItem();
-  formattedPrice;
+  const { loading, products } = useDashboardItem();
 
   if (loading) {
     return (

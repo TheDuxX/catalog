@@ -8,18 +8,6 @@ const useConfirmNavigation = (shouldWarn: boolean) => {
   useEffect(() => {
     if (!shouldWarn) return;
 
-    const handleRouteChange = (url: string) => {
-      const confirmLeave = window.confirm(
-        "Você tem alterações não salvas. Deseja sair da página?"
-      );
-      if (!confirmLeave) {
-        // impedir navegação forçada (não possível diretamente com next/navigation)
-        // mas podemos forçar reload na mesma rota
-        router.push(window.location.pathname);
-      }
-    };
-
-    // next/navigation não tem 'events' como next/router, então precisamos workaround
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = "";

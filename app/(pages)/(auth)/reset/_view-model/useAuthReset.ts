@@ -4,7 +4,7 @@ import { resetPassword } from "../../login/actions";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-export function useauthResetViewModel() {
+export function useAuthResetViewModel() {
   const [formData, setFormData] = useState({ email: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const router = useRouter();

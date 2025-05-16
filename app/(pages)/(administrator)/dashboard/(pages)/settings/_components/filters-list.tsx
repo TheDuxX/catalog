@@ -1,10 +1,9 @@
 "use client";
 import { Card, CardContent, CardHeader } from "@/app/_components/ui/card";
 import {
-  categoriesSettingTable,
-  marksSettingTable,
+  useCategoriesSettingTable as categoriesSettingTable,
+  useMarksSettingTable as marksSettingTable,
   useCategoriesMutations,
-  useFiltersCategory,
   useMarksMutations,
 } from "../_viewmodels/useFilters";
 import {
@@ -17,39 +16,12 @@ import {
 } from "@/app/_components/ui/table";
 import { flexRender } from "@tanstack/react-table";
 import { Button } from "@/app/_components/ui/button";
-import {
-  Check,
-  CircleX,
-  Pencil,
-  PencilIcon,
-  Plus,
-  PlusCircleIcon,
-  PlusIcon,
-  Trash2Icon,
-} from "lucide-react";
+import { Check, CircleX, Pencil, PlusIcon, Trash2Icon } from "lucide-react";
 import { Input } from "@/app/_components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/app/_components/ui/dropdown-menu";
-import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 
 const SettingsFilters = () => {
   const {
-    data: categories,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useFiltersCategory();
-
-  const {
     categoriesTable,
-    isCategoryEditing,
-    setIsCategoryEditing,
     editingCategoryId,
     setEditingCategoryId,
     editedCategoryName,
@@ -62,8 +34,6 @@ const SettingsFilters = () => {
 
   const {
     marksTable,
-    isMarkEditing,
-    setIsMarkEditing,
     editingMarkId,
     setEditingMarkId,
     editedMarkName,

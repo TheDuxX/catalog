@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MessageCircleQuestionIcon, Minus, Plus } from "lucide-react";
 import {
   Tooltip,
@@ -22,13 +22,7 @@ const ProductDetailService = ({ id }: { id: string }) => {
 const ProductDetailContent = ({ id }: { id: string }) => {
   const [quantity, setQuantity] = useState(1);
 
-  const {
-    data: product,
-    isLoading: loading,
-    isError: error,
-    error: errorData,
-    refetch: refetchProduct,
-  } = useQuery({
+  const { data: product, isLoading: loading } = useQuery({
     queryKey: ["product", id],
     queryFn: () => getProductById(id),
     enabled: !!id,

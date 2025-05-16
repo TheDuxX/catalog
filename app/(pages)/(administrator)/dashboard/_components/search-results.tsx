@@ -3,7 +3,7 @@ import { useSearchResults } from "../_viewmodels/useSearchResults";
 import DashboardList from "./dashboard-search-list";
 
 const SearchResults = () => {
-  const { query, products, loading } = useSearchResults();
+  const { products, loading } = useSearchResults();
 
   console.log("Produtos encontrados: ", products);
 

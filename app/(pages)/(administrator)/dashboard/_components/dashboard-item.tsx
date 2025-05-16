@@ -2,7 +2,6 @@
 
 import { Card, CardContent } from "@/app/_components/ui/card";
 import Image from "next/image";
-import { useDashboardItem } from "../_viewmodels/useDashboardList";
 import { useItemService } from "../_viewmodels/useItemService";
 
 interface ProductProps {

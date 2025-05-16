@@ -2,23 +2,10 @@
 import { Contact } from "@/app/(pages)/(geral)/contact/_service/contact-service";
 import { useContact } from "@/app/(pages)/(geral)/contact/_viewmodel/useContact";
 import { Card, CardContent, CardTitle } from "@/app/_components/ui/card";
-import {
-  Table,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/app/_components/ui/table";
-import { flexRender } from "@tanstack/react-table";
 import ContactItem from "./contact-item";
 
 const ContactsList = () => {
-  const {
-    contacts,
-    sortedContacts,
-    isLoading,
-    handleDeleteContact,
-    formatPhone,
-  } = useContact();
+  const { contacts, sortedContacts, isLoading } = useContact();
 
   if (isLoading) return <div>Loading...</div>;
   console.log(contacts);

@@ -36,6 +36,19 @@ export default function CreateProductPage() {
     formatToCurrency,
   } = useCreateProduct();
 
+  const [displayValue, setDisplayValue] = useState(
+    form.getValues("price") ? formatToCurrency(form.getValues("price")) : ""
+  );
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    const numericString = raw.replace(/\D/g, "");
+    const valueAsNumber = Number(numericString) / 100;
+
+    form.setValue("price", valueAsNumber);
+    setDisplayValue(formatToCurrency(valueAsNumber));
+  };
+
   if (isLoading) {
     return (
       <div className="w-2/3 flex flex-col gap-2">
@@ -142,28 +155,6 @@ export default function CreateProductPage() {
               control={form.control}
               name="price"
               render={({ field }) => {
-                const [displayValue, setDisplayValue] = useState(
-                  field.value ? formatToCurrency(field.value) : ""
-                );
-
-                const handleChange = (
-                  e: React.ChangeEvent<HTMLInputElement>
-                ) => {
-                  const raw = e.target.value;
-
-                  // Remove tudo que não for número
-                  const numericString = raw.replace(/\D/g, "");
-
-                  // Converte para número com centavos
-                  const valueAsNumber = Number(numericString) / 100;
-
-                  // Atualiza o valor real do form
-                  field.onChange(valueAsNumber);
-
-                  // Atualiza o que está sendo exibido
-                  setDisplayValue(formatToCurrency(valueAsNumber));
-                };
-
                 return (
                   <FormItem className="w-1/2">
                     <FormLabel>Preço</FormLabel>
@@ -173,7 +164,7 @@ export default function CreateProductPage() {
                         inputMode="numeric"
                         placeholder="R$ 0,00"
                         value={displayValue}
-                        onChange={handleChange}
+                        onChange={handlePriceChange}
                       />
                     </FormControl>
                     <FormMessage />

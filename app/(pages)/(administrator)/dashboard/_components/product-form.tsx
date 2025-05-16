@@ -39,6 +39,7 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import SortableImage from "./sortableImage";
+import { Category, Mark } from "../(pages)/settings/_services/filters-service";
 
 const ProductForm = () => {
   const { id } = useParams();
@@ -57,6 +58,19 @@ const ProductForm = () => {
     resetForm,
   } = useProductForm({ id: String(id) });
   const sensors = useSensors(useSensor(PointerSensor));
+
+  const [displayValue, setDisplayValue] = useState(
+    form.getValues("price") ? formatToCurrency(form.getValues("price")) : ""
+  );
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    const numericString = raw.replace(/\D/g, "");
+    const valueAsNumber = Number(numericString) / 100;
+
+    form.setValue("price", valueAsNumber);
+    setDisplayValue(formatToCurrency(valueAsNumber));
+  };
 
   if (isLoading || !product) {
     return (
@@ -106,7 +120,7 @@ const ProductForm = () => {
               <FormField
                 control={form.control}
                 name="imageUrls"
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
                     <FormLabel className="font-semibold">
                       Imagens do produto
@@ -262,18 +276,6 @@ const ProductForm = () => {
                   control={form.control}
                   name="price"
                   render={({ field }) => {
-                    const [displayValue, setDisplayValue] = useState(
-                      product.price ? formatToCurrency(product.price) : ""
-                    );
-                    const handleChange = (
-                      e: React.ChangeEvent<HTMLInputElement>
-                    ) => {
-                      const raw = e.target.value;
-                      const numericString = raw.replace(/\D/g, "");
-                      const valueAsNumber = Number(numericString) / 100;
-                      field.onChange(valueAsNumber);
-                      setDisplayValue(formatToCurrency(valueAsNumber));
-                    };
                     return (
                       <FormItem className="w-1/2">
                         <FormLabel>Preço</FormLabel>
@@ -281,9 +283,9 @@ const ProductForm = () => {
                           <Input
                             type="text"
                             inputMode="numeric"
-                            placeholder={displayValue}
-                            disabled={edit}
-                            onChange={handleChange}
+                            placeholder="R$ 0,00"
+                            value={displayValue}
+                            onChange={handlePriceChange}
                           />
                         </FormControl>
                         <FormMessage />
@@ -328,7 +330,7 @@ const ProductForm = () => {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {categories?.map((category: any) => (
+                            {categories?.map((category: Category) => (
                               <SelectItem key={category.id} value={category.id}>
                                 {category.name}
                               </SelectItem>
@@ -356,7 +358,7 @@ const ProductForm = () => {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {marks?.map((mark: any) => (
+                            {marks?.map((mark: Mark) => (
                               <SelectItem key={mark.id} value={mark.id}>
                                 {mark.name}
                               </SelectItem>

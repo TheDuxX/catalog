@@ -5,11 +5,10 @@ import { productSchema } from "../_schemas/product-schema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { uploadImages } from "../_services/uploadImages";
 import { createProduct } from "../_services/createProduct-service";
 import { useRouter } from "next/navigation";
-import { fetchCategory, fetchMark } from "../_services/category-mark-service";
 import { useQuery } from "@tanstack/react-query";
 import {
   categoryService,
@@ -21,13 +20,7 @@ export function useCreateProduct() {
 
   const router = useRouter();
 
-  const {
-    data: categories,
-    isLoading: categoriesLoading,
-    isError: categoriesError,
-    error: categoriesErrorData,
-    refetch: refetchCategories,
-  } = useQuery({
+  const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: () => categoryService.getAll(),
     staleTime: 5 * 60 * 1000,
@@ -35,13 +28,7 @@ export function useCreateProduct() {
     refetchOnWindowFocus: false,
   });
 
-  const {
-    data: marks,
-    isLoading: marksLoading,
-    isError: marksError,
-    error: marksErrorData,
-    refetch: refetchMarks,
-  } = useQuery({
+  const { data: marks, isLoading: marksLoading } = useQuery({
     queryKey: ["marks"],
     queryFn: () => markService.getAll(),
     staleTime: 5 * 60 * 1000,

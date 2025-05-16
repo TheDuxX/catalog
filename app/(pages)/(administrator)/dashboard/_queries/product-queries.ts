@@ -1,7 +1,6 @@
 // src/app/(pages)/(administrator)/dashboard/_queries/product-queries.ts
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { getProductById, updateProduct } from "../_services/product-service";
-import { fetchCategory, fetchMark } from "../_services/category-mark-service";
 import { createProduct } from "../_services/createProduct-service";
 import { deleteImages, uploadImages } from "../_services/uploadImages";
 

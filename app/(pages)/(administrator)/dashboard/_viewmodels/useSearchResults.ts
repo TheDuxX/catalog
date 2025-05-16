@@ -5,7 +5,7 @@ import { fetchSearchResults } from "../_services/search-service";
 export const useSearchResults = () => {
   const searchParams = useSearchParams();
   const query = searchParams!.get("query") || "";
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [products, setProducts] = useState<any[] | null>(null);
   const [loading, setLoading] = useState(true);
 

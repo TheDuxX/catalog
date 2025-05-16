@@ -11,7 +11,6 @@ import SearchBar from "./search";
 
 const List = () => {
   const { loading, products } = useDashboardItem();
-  formattedPrice;
 
   if (loading) {
     return (

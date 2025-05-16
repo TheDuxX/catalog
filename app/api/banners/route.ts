@@ -60,7 +60,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   console.log(publicUrl);
 
-  const { data, error } = await supabase.from("banners").insert({
+  const { error } = await supabase.from("banners").insert({
     name: name,
     image_url: publicUrl,
     is_visible: true,

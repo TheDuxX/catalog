@@ -35,6 +35,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/app/_components/ui/collapsible";
+import Link from "next/link";
 
 const items = [
   {
@@ -177,10 +178,10 @@ const AppSidebar = () => {
         <SidebarMenu className="p-0 w-full ">
           <SidebarMenuItem className="p-0 pt-2 w-full transition-all border-t border-border/30">
             <SidebarMenuButton asChild>
-              <a href="/">
+              <Link href="/">
                 <SquareMousePointer />
                 {state !== "collapsed" && <span>Acessar o Site</span>}
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem className="p-0 w-full transition-all duration-300">

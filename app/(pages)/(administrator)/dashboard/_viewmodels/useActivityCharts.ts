@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { fetchActivities } from "../_services/activity-service";
 import { ChartConfig } from "@/app/_components/ui/chart";
-import { set } from "react-hook-form";
 
 type Activity = {
   date: string;
@@ -22,7 +21,8 @@ export const useActivityCharts = () => {
         const activityData = await fetchActivities();
 
         const sortedData = activityData.sort(
-          (a: any, b: any) =>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (a: Activity, b: Activity) =>
             new Date(a.date).getTime() - new Date(b.date).getTime()
         );
 

@@ -4,8 +4,7 @@ import { useauthResetViewModel } from "../_view-model/useAuthReset";
 import { Button } from "@/app/_components/ui/button";
 
 export function ResetPasswordView() {
-  const { formData, errors, handleChange, validateEmail } =
-    useauthResetViewModel();
+  const { formData, handleChange, validateEmail } = useauthResetViewModel();
 
   return (
     <form action={validateEmail} className="flex flex-col gap-2">

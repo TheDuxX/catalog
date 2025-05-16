@@ -80,7 +80,7 @@ export const useUserViewModel = () => {
 
       return updateUser(payload);
     },
-    onSuccess: (updatedUser) => {
+    onSuccess: () => {
       toast.success("Perfil atualizado com sucesso!");
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },

@@ -1,15 +1,5 @@
 "use client";
-import {
-  ArrowDown,
-  ArrowUp,
-  BadgeDollarSign,
-  BoxIcon,
-  Eye,
-  Plus,
-  PlusCircle,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
+import { BadgeDollarSign, BoxIcon, Eye, Plus } from "lucide-react";
 import {
   trendingMarks,
   useActivitycards,

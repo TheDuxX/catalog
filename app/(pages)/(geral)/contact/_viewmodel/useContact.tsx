@@ -1,20 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { Contact, getContacts } from "../_service/contact-service";
+import { getContacts } from "../_service/contact-service";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-} from "@tanstack/react-table";
 
 export const useContact = () => {
   const formSchema = z.object({
@@ -134,10 +123,10 @@ export const useContact = () => {
 
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sortedContacts = contacts?.slice().sort((a: any, b: any) => {
-  return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-});
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
 
   return {
     form,

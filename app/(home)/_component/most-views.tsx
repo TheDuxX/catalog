@@ -7,12 +7,8 @@ import { Skeleton } from "@/app/_components/ui/skeleton";
 const MostViews = () => {
   const {
     sortedProducts,
-    products,
     formattedPrice,
     isLoading,
-    isError,
-    error,
-    refetch,
   } = useHome();
 
   if (isLoading)

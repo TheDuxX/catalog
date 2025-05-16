@@ -18,14 +18,7 @@ import { ImagePlus, User2 } from "lucide-react";
 
 const UserForm = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const {
-    user,
-    form,
-    updateProfile,
-    isLoading,
-    refetchUser: fetchUser,
-    redirectToProfile,
-  } = useUserViewModel();
+  const { form, updateProfile, isLoading } = useUserViewModel();
 
   return (
     <Card className="w-2/3 min-w-[30%] bg-white">

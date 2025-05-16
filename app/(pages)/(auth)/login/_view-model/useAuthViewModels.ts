@@ -10,7 +10,6 @@ import {
 } from "../_models/authSchema";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { set } from "zod";
 
 export function useAuthViewModel() {
   const [formData, setFormData] = useState({
@@ -108,9 +107,10 @@ export function useAuthViewModel() {
       console.error("Erro ao atualizar a senha:", error);
     }
   };
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatErrors = (error: any) => {
     const fieldErrors: Record<string, string> = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error.errors.forEach((err: any) => {
       if (err.path[0]) fieldErrors[err.path[0]] = err.message;
     });

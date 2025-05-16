@@ -8,7 +8,6 @@ import DashboardItem from "./dashboard-item";
 
 const DashboardMostView = () => {
   const { products, loading } = useDashboardItem();
-  formattedPrice;
 
   if (loading) {
     return (

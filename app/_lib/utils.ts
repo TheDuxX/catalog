@@ -1,6 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { createSupabaseClient } from "../_utils/supabase/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -29,62 +28,7 @@ export const getErrorMessage = (
   return errorMessage;
 };
 
-export const convertDecimalToNumber = (decimal: Decimal): number => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const convertDecimalToNumber = (decimal: any): number => {
   return parseFloat(decimal.toString()); // Converter Decimal para string e depois para número
-};
-
-export const FindManyProducts = async (): Promise<any[]> => {
-  const supabase = createSupabaseClient();
-  const { data: products, error } = await supabase
-    .from("product")
-    .select("*, category:categories(*), mark:marks(*)");
-
-  if (error) {
-    console.error("Erro ao buscar produtos:", error);
-    throw new Error("Erro ao buscar produtos");
-  }
-
-  return products || []; // Certifique-se de que está retornando os produtos
-};
-
-export const FindManyCategories = async (): Promise<any[]> => {
-  const supabase = createSupabaseClient();
-  const { data: categories, error } = await supabase
-    .from("category")
-    .select("*");
-
-  if (error) {
-    console.error("Erro ao buscar categorias:", error);
-    throw new Error("Erro ao buscar categorias");
-  }
-
-  return categories || [];
-};
-
-export const FindManyMark = async () => {
-  const supabase = createSupabaseClient();
-  const { data: marks, error } = await supabase.from("marks").select("*");
-
-  if (error) {
-    console.error("Erro ao buscar marcas:", error);
-    throw new Error("Erro ao buscar marcas");
-  }
-
-  return marks || [];
-};
-
-// Função para encontrar um produto específico com base no ID
-export const FindUniqueProduct = async (id: string): Promise<any | null> => {
-  const supabase = createSupabaseClient();
-  let { data: product, error } = await supabase
-    .from("product")
-    .select(`*, category(*), mark(*)`)
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    console.error("Erro ao buscar produto:", error);
-  }
-
-  return product || null;
 };

@@ -44,7 +44,7 @@ export function useProductForm({ id }: ProductFormProps) {
     },
   });
 
-  const { setValue, reset } = form;
+  const { reset } = form;
 
   const { data: product, isPending: productLoading } = useProductQuery(id);
   const updateMutation = useUpdateProductMutation();
@@ -52,13 +52,7 @@ export function useProductForm({ id }: ProductFormProps) {
   const deleteImagesMutation = useDeleteImagesMutation();
   const uploadImagesMutation = useUploadImagesMutation();
 
-  const {
-    data: categories,
-    isLoading: categoriesLoading,
-    isError: categoriesError,
-    error: categoriesErrorData,
-    refetch: refetchCategories,
-  } = useQuery({
+  const { data: categories, isLoading: categoriesLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: () => categoryService.getAll(),
     staleTime: 5 * 60 * 1000,
@@ -66,13 +60,7 @@ export function useProductForm({ id }: ProductFormProps) {
     refetchOnWindowFocus: false,
   });
 
-  const {
-    data: marks,
-    isLoading: marksLoading,
-    isError: marksError,
-    error: marksErrorData,
-    refetch: refetchMarks,
-  } = useQuery({
+  const { data: marks, isLoading: marksLoading } = useQuery({
     queryKey: ["marks"],
     queryFn: () => markService.getAll(),
     staleTime: 5 * 60 * 1000,

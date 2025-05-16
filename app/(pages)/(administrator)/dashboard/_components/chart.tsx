@@ -8,8 +8,7 @@ import { ChartContainer } from "@/app/_components/ui/chart";
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis } from "recharts";
 
 const MetricCharts = () => {
-  const { activity, lastWeeks, loading } = useActivityCharts();
-  chartConfig;
+  const { lastWeeks, loading } = useActivityCharts();  
 
   if (loading)
     return (
@@ -36,7 +35,7 @@ const MetricCharts = () => {
                 tickMargin={5}
                 axisLine={false}
                 tickFormatter={(value) => {
-                  const [year, month, day] = value.split("-");
+                  const [month, day] = value.split("-");
                   return `${day}/${month}`;
                 }}
               />
@@ -49,7 +48,7 @@ const MetricCharts = () => {
                   boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
                 }}
                 labelFormatter={(label) => {
-                  const [year, month, day] = label.split("-");
+                  const [month, day] = label.split("-");
                   return `${day}/${month}`;
                 }}
                 formatter={(value, name) => [
@@ -83,7 +82,7 @@ const MetricCharts = () => {
                 tickMargin={5}
                 axisLine={false}
                 tickFormatter={(value) => {
-                  const [year, month, day] = value.split("-");
+                  const [month, day] = value.split("-");
                   return `${day}/${month}`;
                 }}
               />
@@ -96,7 +95,7 @@ const MetricCharts = () => {
                   boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
                 }}
                 labelFormatter={(label) => {
-                  const [year, month, day] = label.split("-");
+                  const [month, day] = label.split("-");
                   return `${day}/${month}`;
                 }}
                 formatter={(value, name) => [
