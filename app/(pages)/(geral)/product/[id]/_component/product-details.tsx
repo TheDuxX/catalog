@@ -12,33 +12,27 @@ import ResponsiveCarousel from "./responsive_carossel";
 import SaleButton from "./sale-button";
 import { Skeleton } from "@/app/_components/ui/skeleton";
 import { Button } from "@/app/_components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { getProductById } from "@/app/(pages)/(administrator)/dashboard/_services/product-service";
 
 const ProductDetailService = ({ id }: { id: string }) => {
   return <ProductDetailContent id={id} />;
 };
 
 const ProductDetailContent = ({ id }: { id: string }) => {
-  const [product, setProduct] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const res = await fetch(`/api/product/${id}`);
-        if (!res.ok) throw new Error("Erro ao buscar produto");
-
-        const data = await res.json();
-        setProduct(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [id]);
+  const {
+    data: product,
+    isLoading: loading,
+    isError: error,
+    error: errorData,
+    refetch: refetchProduct,
+  } = useQuery({
+    queryKey: ["product", id],
+    queryFn: () => getProductById(id),
+    enabled: !!id,
+  });
 
   if (loading) return <LoadingProduct />;
   if (!product)
