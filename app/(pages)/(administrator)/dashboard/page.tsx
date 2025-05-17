@@ -1,3 +1,4 @@
+"use client";
 import MetricCards from "./_components/cards";
 import MetricCharts from "./_components/chart";
 import DashboardHeader from "./_components/dashboard-header";
