@@ -1,12 +1,14 @@
 import ProductDetailService from "./_component/product-details";
 
-interface ProductDetailsPageProps {
-  params: {
-    id: string;
-  };
+interface PageParams {
+  id: string;
 }
 
-const ProductDetailPage = ({ params }: ProductDetailsPageProps) => {
+interface PageProps {
+  params: PageParams;
+}
+
+const ProductDetailPage = ({ params }: PageProps) => {
   const { id } = params;
 
   return (
