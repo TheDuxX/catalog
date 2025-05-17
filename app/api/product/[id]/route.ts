@@ -40,9 +40,11 @@ export async function GET(
   });
 }
 
-// PUT: Atualizar produto
-export async function PUT(req: NextRequest, { params }: { params: Params }) {
-  const id = params.id;
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
   const supabase = await createClient();
   const body = await req.json();
 
@@ -60,8 +62,11 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
 }
 
 // DELETE: Remover produto
-export async function DELETE(req: NextRequest, { params }: { params: Params }) {
-  const id = params.id;
+export async function DELETE(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
   const supabase = await createClient();
 
   const { error } = await supabase.from("product").delete().eq("id", id);
