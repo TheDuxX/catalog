@@ -2,17 +2,17 @@ import { createClient } from "@/app/_utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Params {
-  params: { id: string };
+  id: string; // Defina o tipo do seu parâmetro dinâmico 'id'
 }
 
-export async function PUT(req: NextRequest, { params }: Params) {
+export async function PUT(req: NextRequest, { params }: { params: Params }) {
   const id = params.id;
 
   const supabase = await createClient();
 
   const { data, error } = await supabase.rpc("increment_column", {
     row_id: id,
-    increment_by: 1, 
+    increment_by: 1,
   });
 
   if (error) {
