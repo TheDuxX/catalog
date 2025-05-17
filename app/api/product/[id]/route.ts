@@ -1,9 +1,5 @@
 import { createClient } from "@/app/_utils/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
-
-interface Params {
-  id: string; // Defina o tipo do seu parâmetro dinâmico 'id'
-}
+import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
