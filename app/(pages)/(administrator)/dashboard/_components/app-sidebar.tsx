@@ -185,7 +185,7 @@ const AppSidebar = () => {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem className="p-0 w-full transition-all duration-300">
-            {state === "collapsed" ? avatar : <Profile isCollapsed={state} />}
+            {state === "collapsed" ? avatar : <Profile />}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
