@@ -5,7 +5,7 @@ interface Params {
   id: string; // Defina o tipo do seu parâmetro dinâmico 'id'
 }
 
-export async function PUT(req: NextRequest, { params }: { params: Params }) {
+export async function PUT({ params }: { params: Params }) {
   const id = params.id;
 
   const supabase = await createClient();
