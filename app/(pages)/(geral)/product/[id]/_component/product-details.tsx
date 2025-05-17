@@ -14,9 +14,13 @@ import { Skeleton } from "@/app/_components/ui/skeleton";
 import { Button } from "@/app/_components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getProductById } from "@/app/(pages)/(administrator)/dashboard/_services/product-service";
+import { useParams } from "next/navigation";
 
-const ProductDetailService = ({ id }: { id: string }) => {
-  return <ProductDetailContent id={id} />;
+const ProductDetailService = () => {
+  const params = useParams();
+  const id = params?.id;
+
+  return <ProductDetailContent id={id as string} />;
 };
 
 const ProductDetailContent = ({ id }: { id: string }) => {
