@@ -1,3 +1,4 @@
+"use client";
 import LogsList from "../../_components/log-list";
 
 const LogsPage = () => {

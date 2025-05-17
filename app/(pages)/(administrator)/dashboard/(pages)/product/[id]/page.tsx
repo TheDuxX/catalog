@@ -1,4 +1,5 @@
-import ProductForm from "../../../_components/product-form"
+"use client";
+import ProductForm from "../../../_components/product-form";
 
 const EditPage = () => {
   return (

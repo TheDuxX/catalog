@@ -1,3 +1,4 @@
+"use client"
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Log } from "../_services/logs-service";
 import { badgeColors, formatedDateandHour } from "../_viewmodels/useLogList";

@@ -1,5 +1,5 @@
+"use client";
 import UserForm from "../../../../_components/userForm";
-
 
 const SettingsProfile = () => {
   return (

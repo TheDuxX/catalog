@@ -1,3 +1,4 @@
+"use client";
 import CreateProductPage from "./_components/form";
 
 const NewProductPage = () => {
