@@ -4,8 +4,6 @@ import {
   ChevronDown,
   ChevronUp,
   MessageCircleQuestionIcon,
-  Minus,
-  Plus,
 } from "lucide-react";
 import {
   Tooltip,
