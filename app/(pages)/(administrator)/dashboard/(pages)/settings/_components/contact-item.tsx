@@ -1,3 +1,4 @@
+"use client";
 import { Contact } from "@/app/(pages)/(geral)/contact/_service/contact-service";
 import { Card, CardContent, CardFooter } from "@/app/_components/ui/card";
 import { Separator } from "@/app/_components/ui/separator";

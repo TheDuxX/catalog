@@ -1,10 +1,10 @@
 "use client";
 import { Input } from "@/app/_components/ui/input";
-import { useauthResetViewModel } from "../_view-model/useAuthReset";
+import { useAuthResetViewModel } from "../_view-model/useAuthReset";
 import { Button } from "@/app/_components/ui/button";
 
 export function ResetPasswordView() {
-  const { formData, handleChange, validateEmail } = useauthResetViewModel();
+  const { formData, handleChange, validateEmail } = useAuthResetViewModel();
 
   return (
     <form action={validateEmail} className="flex flex-col gap-2">

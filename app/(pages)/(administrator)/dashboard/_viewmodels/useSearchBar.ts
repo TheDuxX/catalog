@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +13,9 @@ export const useSearchBar = () => {
   const handleSearchSubmit = () => {
     if (searchTerm.trim() === "") return;
 
-    router.push(`/dashboard/products/search?query=${encodeURIComponent(searchTerm)}`);
+    router.push(
+      `/dashboard/products/search?query=${encodeURIComponent(searchTerm)}`
+    );
   };
 
   return {

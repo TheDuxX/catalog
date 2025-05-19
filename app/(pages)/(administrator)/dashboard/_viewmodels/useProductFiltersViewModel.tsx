@@ -1,5 +1,4 @@
-// app/(pages)/(catalog)/_viewmodels/useProductFiltersViewModel.ts
-
+"use client";
 import { useFilters } from "@/app/_utils/filters-context";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";

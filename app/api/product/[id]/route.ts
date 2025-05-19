@@ -1,9 +1,5 @@
 import { createClient } from "@/app/_utils/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
-
-interface Params {
-  params: { id: string };
-}
+import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
@@ -40,9 +36,11 @@ export async function GET(
   });
 }
 
-// PUT: Atualizar produto
-export async function PUT(req: NextRequest, { params }: Params) {
-  const id = params.id;
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
   const supabase = await createClient();
   const body = await req.json();
 
@@ -60,8 +58,11 @@ export async function PUT(req: NextRequest, { params }: Params) {
 }
 
 // DELETE: Remover produto
-export async function DELETE(req: NextRequest, { params }: Params) {
-  const id = params.id;
+export async function DELETE(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
   const supabase = await createClient();
 
   const { error } = await supabase.from("product").delete().eq("id", id);
