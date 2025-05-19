@@ -1,6 +1,12 @@
 "use client";
 import { useState } from "react";
-import { MessageCircleQuestionIcon, Minus, Plus } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  MessageCircleQuestionIcon,
+  Minus,
+  Plus,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +31,8 @@ const ProductDetailService = () => {
 };
 
 const ProductDetailContent = ({ id }: { id: string }) => {
+  const [expand, setExpand] = useState(false);
+
   const { data: product, isLoading: loading } = useQuery({
     queryKey: ["product", id],
     queryFn: () => getProductById(id),
@@ -98,9 +106,27 @@ const ProductDetailContent = ({ id }: { id: string }) => {
             </div>
             <SaleButton product={product} />
             <div className="flex flex-col gap-1 mt-2">
-              <h2 className="font-semibold text-lg">Descrição</h2>
+              <div className="flex flex-row items-center justify-between">
+                <h2 className="font-semibold text-lg">Descrição</h2>
+                {/* adicionar condicional para exibir o botão, se o texto for muito longo */}
+                {product.description.length > 300 ? (
+                  <Button
+                    variant="button"
+                    size="sm"
+                    onClick={() => setExpand(!expand)}
+                  >
+                    {expand ? <ChevronUp /> : <ChevronDown />}
+                  </Button>
+                ) : (
+                  <></>
+                )}
+              </div>
               <Separator className="bg-secondary" />
-              <p className="bg-transparent h-auto min-h-16 overscroll-auto ">
+              <p
+                className={`bg-transparent h-auto min-h-16 overscroll-auto text-justify ${
+                  expand ? "line-clamp-none" : "line-clamp-5"
+                }`}
+              >
                 {product.description}
               </p>
             </div>
