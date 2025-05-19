@@ -1,10 +1,13 @@
 "use client";
+import { Suspense } from "react";
 import DashboardList from "../../_components/dashboard-list";
 
 const DashboardProductsPage = () => {
   return (
     <>
-      <DashboardList />
+      <Suspense>
+        <DashboardList />
+      </Suspense>
     </>
   );
 };
