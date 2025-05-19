@@ -8,6 +8,7 @@ import {
 import Filters from "../(pages)/(administrator)/dashboard/_components/filters";
 import Item from "./item";
 import SearchBar from "./search";
+import { Suspense } from "react";
 
 const List = () => {
   const { loading, products } = useDashboardItem();
@@ -36,7 +37,9 @@ const List = () => {
   return (
     <div className="flex flex-col gap-2 px-2">
       <div className="flex flex-row gap-2 justify-end">
-        <SearchBar />
+        <Suspense>
+          <SearchBar />
+        </Suspense>
         <Filters />
       </div>
       <div className="grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 w-full gap-2">
