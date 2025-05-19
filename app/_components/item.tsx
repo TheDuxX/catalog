@@ -32,7 +32,7 @@ const Item = ({ product, formattedPrice }: ProductProps) => {
 
   return (
     <Card
-      className="p-0 md:min-w-[100px] w-full bg-white hover:shadow-md hover:translate-y-[-5px] transition-all cursor-pointer"
+      className="p-0 md:min-w-[100px] min-w-[160px] w-full bg-white hover:shadow-md hover:translate-y-[-5px] transition-all cursor-pointer"
       onClick={() => handleClick(product.id)}
     >
       <CardContent className={`p-1 flex flex-col justify-between`}>
@@ -58,7 +58,7 @@ const Item = ({ product, formattedPrice }: ProductProps) => {
             </small>
           </div>
           <h3
-            className={`scroll-m-20 text-sm md:text-base lg:text-lg sm:font-semibold tracking-tight`}
+            className={`scroll-m-20 text-md md:text-base lg:text-lg font-semibold tracking-tight`}
           >
             {formattedPrice}
           </h3>

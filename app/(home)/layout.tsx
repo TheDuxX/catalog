@@ -10,9 +10,11 @@ export default function HomeLayout({
     <>
       <div className="flex flex-col min-h-screen">
         <Header />
-        <div className="flex-grow">{children}</div>
+        <div className="flex-grow justify-between flex flex-col">
+          {children}
+          <Footer />
+        </div>
       </div>
-      <Footer />
     </>
   );
 }
