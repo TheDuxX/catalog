@@ -15,6 +15,7 @@ import { Button } from "@/app/_components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { getProductById } from "@/app/(pages)/(administrator)/dashboard/_services/product-service";
 import { useParams } from "next/navigation";
+import { Separator } from "@/app/_components/ui/separator";
 
 const ProductDetailService = () => {
   const params = useParams();
@@ -24,8 +25,6 @@ const ProductDetailService = () => {
 };
 
 const ProductDetailContent = ({ id }: { id: string }) => {
-  const [quantity, setQuantity] = useState(1);
-
   const { data: product, isLoading: loading } = useQuery({
     queryKey: ["product", id],
     queryFn: () => getProductById(id),
@@ -44,35 +43,37 @@ const ProductDetailContent = ({ id }: { id: string }) => {
           <div className="w-full h-auto rounded-md">
             <ResponsiveCarousel product={product} />
           </div>
-          <div className="w-full flex flex-col justify-between gap-2 p-2">
+          <div className="w-full flex flex-col gap-2 p-2">
             <h2 className="font-semibold text-4xl">{product.name}</h2>
-            <div className="flex flex-row gap-2 lg:w-[80%] w-full justify-between items-center pb-2">
+            <div className="flex flex-col gap-1 lg:w-[80%] w-full items-start pb-2">
               <p>
                 <strong>Marca: </strong>
-                {product.mark?.name || "N/A"}
+                {product.mark?.name}
               </p>
               <p>
                 <strong>Categoria: </strong>
-                {product.category?.name || "N/A"}
+                {product.category?.name}
               </p>
               <p>
                 <strong>Ref: </strong>
                 {product.reference}
               </p>
             </div>
-            <p className="bg-transparent h-auto min-h-32 overscroll-auto ">
-              {product.description}
-            </p>
+            <Separator className="bg-secondary" />
             <div className="w-full flex justify-between items-center gap-4">
-              <div className="font-semibold text-4xl md:flex md:flex-row md:items-baseline md:gap-2 ">
+              <div className="font-semibold text-4xl flex flex-row items-center gap-4 ">
                 <h2>
                   {new Intl.NumberFormat("pt-BR", {
                     style: "currency",
                     currency: "BRL",
                   }).format(product.price)}
                 </h2>
-                <small className="text-sm font-normal text-start">
-                  à vista / un.
+                <small className="text-sm font-normal text-start line-clamp-2 text-pretty">
+                  ou em até 6x de{" "}
+                  {new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(product.price / 6)}
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
@@ -94,28 +95,15 @@ const ProductDetailContent = ({ id }: { id: string }) => {
                   </TooltipProvider>
                 </small>
               </div>
-              <div className="w-1/3">
-                <div className="w-full border border-secondary rounded-md flex gap-2 justify-between items-center p-2">
-                  <Button
-                    variant={"ghost"}
-                    className="p-0 hover:bg-transparent"
-                    disabled={quantity <= 1}
-                    onClick={() => setQuantity(quantity - 1)}
-                  >
-                    <Minus />
-                  </Button>
-                  <p>{quantity}</p>
-                  <Button
-                    variant={"ghost"}
-                    className="p-0 hover:bg-transparent"
-                    onClick={() => setQuantity(quantity + 1)}
-                  >
-                    <Plus />
-                  </Button>
-                </div>
-              </div>
             </div>
-            <SaleButton product={product} quantity={quantity} />
+            <SaleButton product={product} />
+            <div className="flex flex-col gap-1 mt-2">
+              <h2 className="font-semibold text-lg">Descrição</h2>
+              <Separator className="bg-secondary" />
+              <p className="bg-transparent h-auto min-h-16 overscroll-auto ">
+                {product.description}
+              </p>
+            </div>
           </div>
         </div>
       </div>
