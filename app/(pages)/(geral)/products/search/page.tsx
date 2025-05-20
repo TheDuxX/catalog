@@ -1,5 +1,5 @@
-import SearchResults from "@/app/(pages)/(administrator)/dashboard/_components/search-results";
 import SearchBar from "@/app/_components/search";
+import SearchResults from "@/app/_components/search-results";
 import { Suspense } from "react";
 
 const SearchPage = () => {
