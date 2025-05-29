@@ -44,17 +44,6 @@ export async function PUT(
   const supabase = await createClient();
   const body = await req.json();
 
-  const { data: updatedProduct, error: productError } = await supabase
-    .from("product")
-    .select("*")
-    .eq("id", id)
-    .select()
-    .single();
-
-  if (productError) {
-    return NextResponse.json({ error: productError.message }, { status: 500 });
-  }
-
   const { data, error } = await supabase
     .from("product")
     .update(body)
