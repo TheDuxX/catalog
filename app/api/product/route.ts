@@ -15,5 +15,36 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return NextResponse.json(
+      { error: "Usuário não autenticado" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const { error: logError } = await supabase.from("action_logs").insert({
+      action: "create",
+      entity: "product",
+      entity_id: data.id, // ID da categoria criada
+      user_id: user.id, // ID do usuário autenticado!
+      details: `Criou o produto ${data.name}`,
+    });
+
+    if (logError) {
+      console.error(
+        "Erro ao registrar log de criação de produto:",
+        logError.message
+      );
+    }
+  } catch (logException) {
+    console.error("Exceção ao tentar registrar log:", logException);
+  }
+
   return NextResponse.json(data, { status: 200 });
 }

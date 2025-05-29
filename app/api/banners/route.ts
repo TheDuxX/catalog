@@ -60,14 +60,49 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   console.log(publicUrl);
 
-  const { error } = await supabase.from("banners").insert({
-    name: name,
-    image_url: publicUrl,
-    is_visible: true,
-  });
+  const { data: createdBanner, error } = await supabase
+    .from("banners")
+    .insert({
+      name: name,
+      image_url: publicUrl,
+      is_visible: true,
+    })
+    .select()
+    .single();
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return NextResponse.json(
+      { error: "Usuário não autenticado" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const { error: logError } = await supabase.from("action_logs").insert({
+      action: "create",
+      entity: "banners",
+      entity_id: createdBanner.id,
+      user_id: user.id,
+      details: `Criou o banner "${createdBanner.name}"`,
+    });
+
+    if (logError) {
+      console.error(
+        "Erro ao registrar log de criação de banner:",
+        logError.message
+      );
+    }
+  } catch (logException) {
+    console.error("Exceção ao tentar registrar log:", logException);
   }
 
   return NextResponse.json(
@@ -90,12 +125,47 @@ export async function PUT(request: Request) {
     ...(banner.order !== undefined && { order: banner.order }),
   }));
 
-  const { error } = await supabase.from("banners").upsert(updates, {
-    onConflict: "id",
-  });
+  const { data: updatedBanners, error } = await supabase
+    .from("banners")
+    .upsert(updates, {
+      onConflict: "id",
+    })
+    .select()
+    .single();
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return NextResponse.json(
+      { error: "Usuário não autenticado" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const { error: logError } = await supabase.from("action_logs").insert({
+      action: "update",
+      entity: "banners",
+      entity_id: updatedBanners.id,
+      user_id: user.id,
+      details: `Atualizou a posição do banner ${updatedBanners.name} para ${updatedBanners.order}ª`,
+    });
+
+    if (logError) {
+      console.error(
+        "Erro ao registrar log de atualização de banner:",
+        logError.message
+      );
+    }
+  } catch (logException) {
+    console.error("Exceção ao tentar registrar log:", logException);
   }
 
   return NextResponse.json(
@@ -109,7 +179,6 @@ export async function DELETE(req: NextRequest) {
   const body = await req.json();
   const { id } = body;
 
-  // Primeiro, busca o banner pelo ID para pegar o caminho da imagem
   const { data: banner, error: fetchError } = await supabase
     .from("banners")
     .select("image_url")
@@ -120,7 +189,6 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: fetchError.message }, { status: 500 });
   }
 
-  // Extrai o caminho real da imagem (caso seja URL pública)
   const filePath = banner?.image_url?.split(
     "/storage/v1/object/public/banners/"
   )[1];
@@ -138,11 +206,46 @@ export async function DELETE(req: NextRequest) {
     }
   }
 
-  // Depois, deleta o registro no banco
-  const { error } = await supabase.from("banners").delete().eq("id", id);
+  const { data: deletedBanner, error } = await supabase
+    .from("banners")
+    .delete()
+    .eq("id", id)
+    .select()
+    .single();
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return NextResponse.json(
+      { error: "Usuário não autenticado" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const { error: logError } = await supabase.from("action_logs").insert({
+      action: "delete",
+      entity: "banners",
+      entity_id: deletedBanner.id,
+      user_id: user.id,
+      details: `Deletou o banner "${deletedBanner.name}"`,
+    });
+
+    if (logError) {
+      console.error(
+        "Erro ao registrar log de exclusão de banner:",
+        logError.message
+      );
+    }
+  } catch (logException) {
+    console.error("Exceção ao tentar registrar log:", logException);
   }
 
   return NextResponse.json(
