@@ -35,9 +35,9 @@ const Item = ({ product, formattedPrice }: ProductProps) => {
       className="p-0 md:min-w-[100px] min-w-[160px] w-full bg-white hover:shadow-md hover:translate-y-[-5px] transition-all cursor-pointer"
       onClick={() => handleClick(product.id)}
     >
-      <CardContent className={`p-1 flex flex-col justify-between`}>
+      <CardContent className={`p-2 flex flex-col justify-between`}>
         <div
-          className={`relative min-w-[100px] w-full aspect-square rounded-md`}
+          className={`relative min-w-[100px] w-full aspect-square rounded-md overflow-hidden`}
         >
           <Image
             src={product.imageUrls[0]}
