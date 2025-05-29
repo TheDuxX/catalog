@@ -143,7 +143,7 @@ const AppSidebar = () => {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="rounded-full hover:font-semibold cursor-default">
                       <Bolt />
-                      {state !== "collapsed" && <span>configurações</span>}
+                      {state !== "collapsed" && <span>Configurações</span>}
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
