@@ -20,7 +20,7 @@ export async function getProductById(id: string) {
 }
 
 export async function updateProduct(id: string, data: ProductSchemaType) {
-  console.log("Dados",data);
+  console.log("Dados", data);
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
@@ -48,4 +48,23 @@ export async function deleteProduct(id: string) {
   }
 
   return res.json();
+}
+
+export async function addViews(id: string) {
+  console.log("addViews", id);
+  const res = await fetch(`${BASE_URL}`, {
+    method: "PUT",
+    body: JSON.stringify({ id }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    const { error } = await res.json();
+    throw new Error(error || "Erro ao atualizar produto");
+  } else {
+    console.log("addViews", res);
+    return res.json();
+  }
 }

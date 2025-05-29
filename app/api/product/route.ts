@@ -48,3 +48,20 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json(data, { status: 200 });
 }
+
+export async function PUT(req: NextRequest) {
+  const supabase = await createClient();
+  const body = await req.json();
+  const { id } = body;
+
+  const { data, error } = await supabase.rpc("increment_column", {
+    p_row_id: id,
+    p_increment_by: 1,
+  });
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json(data, { status: 200 });
+}
