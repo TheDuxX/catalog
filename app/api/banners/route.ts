@@ -125,11 +125,9 @@ export async function PUT(request: Request) {
     ...(banner.order !== undefined && { order: banner.order }),
   }));
 
-  const { data: updatedBanners, error } = await supabase
-    .from("banners")
-    .upsert(updates, {
-      onConflict: "id",
-    });
+  const { error } = await supabase.from("banners").upsert(updates, {
+    onConflict: "id",
+  });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
