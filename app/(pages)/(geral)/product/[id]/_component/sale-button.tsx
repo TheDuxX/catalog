@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/app/_components/ui/button";
+import { fetchSales } from "@/app/_service/sales.service";
 import { usePathname } from "next/navigation";
 
 interface ProductProps {
@@ -46,7 +47,10 @@ const SaleButton = ({ product }: ProductProps) => {
     <Button
       variant="secondary"
       className="text-lg font-semibold p-6"
-      onClick={() => window.open(whatsappUrl, "_blank")}
+      onClick={() => {
+        fetchSales();
+        window.open(whatsappUrl, "_blank");
+      }}
     >
       Enviar pedido
     </Button>
