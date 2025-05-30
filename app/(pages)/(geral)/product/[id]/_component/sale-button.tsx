@@ -41,7 +41,7 @@ const SaleButton = ({ product }: ProductProps) => {
     `Olá, tenho interesse em comprar ${product.name}, ${product.mark.name} ${formattedPrice}. Confira aqui: ${siteUrl}${pathname}`
   );
 
-  const whatsappUrl = `https://api.whatsapp.com/send?phone=+5542999114876&text=${message}`;
+  const whatsappUrl = `https://api.whatsapp.com/send?phone=+5542999898418&text=${message}`;
 
   return (
     <Button
