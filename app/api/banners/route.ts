@@ -129,9 +129,7 @@ export async function PUT(request: Request) {
     .from("banners")
     .upsert(updates, {
       onConflict: "id",
-    })
-    .select()
-    .single();
+    });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -153,9 +151,9 @@ export async function PUT(request: Request) {
     const { error: logError } = await supabase.from("action_logs").insert({
       action: "update",
       entity: "banners",
-      entity_id: updatedBanners.id,
+      entity_id: null,
       user_id: user.id,
-      details: `Atualizou a posição do banner ${updatedBanners.name} para ${updatedBanners.order}ª`,
+      details: `Atualizou a posição dos banners`,
     });
 
     if (logError) {
