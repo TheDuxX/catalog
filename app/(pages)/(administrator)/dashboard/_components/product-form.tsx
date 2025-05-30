@@ -56,6 +56,7 @@ const ProductForm = () => {
     handleChangeStatus,
     handleRemoveImage,
     resetForm,
+    handleDeleteProduct,
   } = useProductForm({ id: String(id) });
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -407,6 +408,14 @@ const ProductForm = () => {
               onClick={handleChangeStatus}
             >
               {product.status ? "Desativar" : "Ativar"}
+            </Button>
+            <Button
+              type="button"
+              variant={"destructive"}
+              className={`py-2 px-6 mt-4`}
+              onClick={() => handleDeleteProduct(product.id)}
+            >
+              <p>Excluir</p>
             </Button>
           </div>
         </form>

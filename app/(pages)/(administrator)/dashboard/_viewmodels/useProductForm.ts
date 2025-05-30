@@ -14,6 +14,7 @@ import {
   useCreateProductMutation,
   useDeleteImagesMutation,
   useUploadImagesMutation,
+  useDeleteProductMutation,
 } from "../_queries/product-queries";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -49,6 +50,7 @@ export function useProductForm({ id }: ProductFormProps) {
   const { data: product, isPending: productLoading } = useProductQuery(id);
   const updateMutation = useUpdateProductMutation();
   const createMutation = useCreateProductMutation();
+  const deleteMutation = useDeleteProductMutation();
   const deleteImagesMutation = useDeleteImagesMutation();
   const uploadImagesMutation = useUploadImagesMutation();
 
@@ -171,6 +173,15 @@ export function useProductForm({ id }: ProductFormProps) {
     });
   }
 
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      await deleteMutation.mutateAsync(id);
+      router.push("/dashboard/products");
+    } catch (err) {
+      console.error("Erro ao deletar produto", err);
+    }
+  };
+
   return {
     product,
     form,
@@ -193,5 +204,6 @@ export function useProductForm({ id }: ProductFormProps) {
     reset,
     handleRemoveImage,
     resetForm,
+    handleDeleteProduct,
   };
 }
