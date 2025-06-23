@@ -6,9 +6,10 @@ import {
 } from "../_viewmodels/useActivityCharts";
 import { ChartContainer } from "@/app/_components/ui/chart";
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis } from "recharts";
+import { format } from "date-fns";
 
 const MetricCharts = () => {
-  const { lastWeeks, loading } = useActivityCharts();  
+  const { lastWeeks, loading } = useActivityCharts();
 
   if (loading)
     return (
@@ -35,8 +36,7 @@ const MetricCharts = () => {
                 tickMargin={5}
                 axisLine={false}
                 tickFormatter={(value) => {
-                  const [month, day] = value.split("-");
-                  return `${day}/${month}`;
+                  return format(new Date(value), "dd/MM");
                 }}
               />
               <Tooltip
@@ -82,8 +82,7 @@ const MetricCharts = () => {
                 tickMargin={5}
                 axisLine={false}
                 tickFormatter={(value) => {
-                  const [month, day] = value.split("-");
-                  return `${day}/${month}`;
+                  return format(new Date(value), "dd/MM");
                 }}
               />
               <Tooltip
